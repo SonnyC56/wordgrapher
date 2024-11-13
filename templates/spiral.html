@@ -121,12 +121,9 @@
                 const x = centerX + (radius + wobble) * Math.cos(angle);
                 const y = centerY + (radius + wobble) * Math.sin(angle);
                 
-                // Create artistic blur effect
+                // Create abstract shape effect
                 ctx.globalAlpha = 0.7 + (Math.random() * 0.3);
-                ctx.font = `${fontSize}px "Times New Roman"`;
                 ctx.fillStyle = gradient;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
                 
                 ctx.save();
                 ctx.translate(x, y);
@@ -135,16 +132,22 @@
                 const rotationOffset = (Math.random() - 0.5) * 0.5;
                 ctx.rotate(angle + Math.PI/2 + rotationOffset);
                 
-                // Draw character with subtle shadow for depth
+                // Draw abstract shape with subtle shadow
                 ctx.shadowColor = baseColor + "66";
                 ctx.shadowBlur = 4;
                 ctx.shadowOffsetX = 2;
                 ctx.shadowOffsetY = 2;
-                ctx.fillText(char, 0, 0);
                 
-                // Draw a faded copy for artistic effect
-                ctx.globalAlpha = 0.2;
-                ctx.fillText(char, 1, 1);
+                // Draw main circle
+                ctx.beginPath();
+                ctx.arc(0, 0, fontSize/2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw smaller overlapping circle for depth
+                ctx.globalAlpha = 0.3;
+                ctx.beginPath();
+                ctx.arc(1, 1, fontSize/3, 0, Math.PI * 2);
+                ctx.fill();
                 
                 ctx.restore();
             });
