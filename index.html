@@ -40,8 +40,6 @@
                         <div class="mb-3">
                             <label for="tension" class="form-label">Line Smoothness:</label>
                             <input type="range" class="form-control" id="tension" min="0" max="1" step="0.1" value="0.1">
-                            <label for="lineHeight" class="form-label mt-3">Line Graph Height:</label>
-                            <input type="range" class="form-control" id="lineHeight" min="100" max="600" step="50" value="400">
                         </div>
                     </div>
                 </div>
@@ -91,13 +89,12 @@
             if (!chart) {
                 document.getElementById('graphContainer').style.display = 'block';
                 
-                const chartHeight = document.getElementById('lineHeight').value;
                 const canvas = document.getElementById('asciiGraph');
                 const lineOnlyCanvas = document.getElementById('lineOnlyGraph');
                 
-                // Set both canvas heights
-                canvas.height = chartHeight;
-                lineOnlyCanvas.height = chartHeight;
+                // Set fixed canvas dimensions
+                canvas.height = 400;
+                lineOnlyCanvas.height = 400;
                 canvas.width = 800;
                 lineOnlyCanvas.width = 800;
                 
@@ -214,11 +211,9 @@
         // Add event listeners for real-time updates
         document.getElementById('text').addEventListener('input', updateGraph);
         document.getElementById('tension').addEventListener('input', updateGraph);
-        document.getElementById('lineHeight').addEventListener('input', updateGraph);
 
         function resetForm() {
             document.getElementById('text').value = '';
-            document.getElementById('lineHeight').value = '400';
             document.getElementById('graphContainer').style.display = 'none';
             if (chart) {
                 chart.destroy();
