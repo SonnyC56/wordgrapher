@@ -72,37 +72,84 @@
             const charFreq = getCharFrequency(text);
             const maxFreq = Math.max(...Object.values(charFreq));
             const tightness = document.getElementById('spiralTightness').value;
-            const textColor = document.getElementById('colorPicker').value;
+            const baseColor = document.getElementById('colorPicker').value;
             
-            let angle = 0;
-            let radius = 0;
-            const spacing = 20;
+            // Create gradient for depth effect
+            const gradient = ctx.createRadialGradient(
+                centerX, centerY, 0,
+                centerX, centerY, canvas.width/2
+            );
+            gradient.addColorStop(0, baseColor + "99");
+            gradient.addColorStop(1, baseColor);
 
-            text.split('').forEach((char, i) => {
-                // Calculate font size based on character frequency
-                const frequency = charFreq[char.toLowerCase()];
-                const fontSize = 12 + (frequency / maxFreq) * 24;
-                
-                // Update position
-                angle += tightness;
-                radius += spacing / (2 * Math.PI);
-                
+            ctx.globalCompositeOperation = 'source-over';
+            let angle = Math.random() * Math.PI; // Random starting angle
+            let radius = 10;
+            const maxRadius = Math.min(canvas.width, canvas.height) * 0.4;
+
+            // Draw flowing background spiral
+            ctx.beginPath();
+            ctx.strokeStyle = baseColor + "33";
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 200; i++) {
                 const x = centerX + radius * Math.cos(angle);
                 const y = centerY + radius * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+                angle += tightness * 0.3;
+                radius += 2;
+            }
+            ctx.stroke();
+
+            // Reset for characters
+            angle = Math.random() * Math.PI;
+            radius = 10;
+
+            text.split('').forEach((char, i) => {
+                const frequency = charFreq[char.toLowerCase()];
+                const fontSize = 8 + (frequency / maxFreq) * 32;
                 
-                // Draw character
-                ctx.font = `${fontSize}px Arial`;
-                ctx.fillStyle = textColor;
+                // Add some controlled randomness to position
+                const wobble = Math.sin(i * 0.1) * 5;
+                angle += tightness * (1 + Math.random() * 0.2);
+                radius += 3 + Math.random() * 2;
+                
+                if (radius > maxRadius) {
+                    radius = maxRadius * (0.5 + Math.random() * 0.2);
+                }
+
+                const x = centerX + (radius + wobble) * Math.cos(angle);
+                const y = centerY + (radius + wobble) * Math.sin(angle);
+                
+                // Create artistic blur effect
+                ctx.globalAlpha = 0.7 + (Math.random() * 0.3);
+                ctx.font = `${fontSize}px "Times New Roman"`;
+                ctx.fillStyle = gradient;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 
-                // Rotate each character to follow the spiral
                 ctx.save();
                 ctx.translate(x, y);
-                ctx.rotate(angle + Math.PI/2);
+                
+                // Add slight random rotation for organic feel
+                const rotationOffset = (Math.random() - 0.5) * 0.5;
+                ctx.rotate(angle + Math.PI/2 + rotationOffset);
+                
+                // Draw character with subtle shadow for depth
+                ctx.shadowColor = baseColor + "66";
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
                 ctx.fillText(char, 0, 0);
+                
+                // Draw a faded copy for artistic effect
+                ctx.globalAlpha = 0.2;
+                ctx.fillText(char, 1, 1);
+                
                 ctx.restore();
             });
+            
+            ctx.globalAlpha = 1.0;
         }
 
         function downloadVisualization() {
