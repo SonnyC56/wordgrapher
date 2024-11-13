@@ -12,11 +12,36 @@
     <style>
         .main-content {
             margin: 20px auto;
-            max-width: 1300px;
+            max-width: 100%;
+            padding: 0 15px;
+        }
+        @media (min-width: 1300px) {
+            .main-content {
+                max-width: 1300px;
+            }
         }
         #graphContainer, #lineOnlyContainer {
             display: none;
             margin-top: 20px;
+            width: 100%;
+            overflow-x: auto;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+        }
+        .btn {
+            margin: 5px;
+            white-space: nowrap;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -91,11 +116,15 @@
                 const canvas = document.getElementById('asciiGraph');
                 const lineOnlyCanvas = document.getElementById('lineOnlyGraph');
                 
-                // Set fixed canvas dimensions
-                canvas.height = 400;
-                lineOnlyCanvas.height = 400;
-                canvas.width = 800;
-                lineOnlyCanvas.width = 800;
+                // Set responsive canvas dimensions
+                const containerWidth = canvas.parentElement.offsetWidth;
+                const canvasWidth = Math.min(800, containerWidth - 20); // 20px for padding
+                const aspectRatio = 2; // width/height ratio
+                
+                canvas.width = canvasWidth;
+                canvas.height = canvasWidth / aspectRatio;
+                lineOnlyCanvas.width = canvasWidth;
+                lineOnlyCanvas.height = canvasWidth / aspectRatio;
                 
                 chart = new Chart(ctx, {
                 type: 'line',

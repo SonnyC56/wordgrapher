@@ -13,10 +13,31 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             background-color: #f8f9fa;
+            max-width: 100%;
+            height: auto !important;
         }
         .main-content {
             margin: 20px auto;
-            max-width: 800px;
+            max-width: 100%;
+            padding: 0 15px;
+        }
+        @media (min-width: 800px) {
+            .main-content {
+                max-width: 800px;
+            }
+        }
+        .btn {
+            margin: 5px;
+            white-space: nowrap;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
