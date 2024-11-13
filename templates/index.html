@@ -38,15 +38,9 @@
                             <label for="text" class="form-label">Enter your text:</label>
                             <textarea class="form-control" id="text" rows="3" required></textarea>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="heightScale" class="form-label">Graph Height Scale:</label>
-                                <input type="range" class="form-control" id="heightScale" min="0.5" max="2" step="0.1" value="1">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="tension" class="form-label">Line Smoothness:</label>
-                                <input type="range" class="form-control" id="tension" min="0" max="1" step="0.1" value="0.1">
-                            </div>
+                        <div class="mb-3">
+                            <label for="tension" class="form-label">Line Smoothness:</label>
+                            <input type="range" class="form-control" id="tension" min="0" max="1" step="0.1" value="0.1">
                         </div>
                     </div>
                 </div>
@@ -92,7 +86,6 @@
             const asciiValues = Array.from(text.toLowerCase()).map(char => char.charCodeAt(0));
             const labels = Array.from({length: asciiValues.length}, (_, i) => i + 1);
             const tension = parseFloat(document.getElementById('tension').value);
-            const heightScale = parseFloat(document.getElementById('heightScale').value);
 
             const ctx = document.getElementById('asciiGraph').getContext('2d');
             
@@ -117,11 +110,6 @@
                         y: {
                             suggestedMin: Math.min(...asciiValues) * 0.9,
                             suggestedMax: Math.max(...asciiValues) * 1.1,
-                            ticks: {
-                                callback: function(value) {
-                                    return value * heightScale;
-                                }
-                            },
                             title: {
                                 display: true,
                                 text: 'ASCII Value'
@@ -149,9 +137,6 @@
                 chart.data.labels = labels;
                 chart.data.datasets[0].data = asciiValues;
                 chart.data.datasets[0].tension = tension;
-                chart.options.scales.y.ticks.callback = function(value) {
-                    return value * heightScale;
-                };
                 chart.update();
             }
         }
@@ -222,7 +207,6 @@
         // Add event listeners for real-time updates
         document.getElementById('text').addEventListener('input', updateGraph);
         document.getElementById('tension').addEventListener('input', updateGraph);
-        document.getElementById('heightScale').addEventListener('input', updateGraph);
 
         function resetForm() {
             document.getElementById('text').value = '';
