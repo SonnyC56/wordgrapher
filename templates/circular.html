@@ -175,6 +175,90 @@
                 drawCircularVisualization(document.getElementById('text').value)
             );
         });
+
+        // Draw the black version
+        const blackCanvas = document.getElementById('blackGraph');
+        const blackCtx = blackCanvas.getContext('2d');
+        
+        // Copy the visualization but in black
+        function drawBlackVisualization(text) {
+            const radius = 250;
+            const centerX = blackCanvas.width / 2;
+            const centerY = blackCanvas.height / 2;
+            
+            // Clear canvas
+            blackCtx.clearRect(0, 0, blackCanvas.width, blackCanvas.height);
+            
+            if (!text) return;
+
+            // Create positions for all letters A-Z
+            const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+            const positions = {};
+            
+            // Calculate positions for each letter
+            alphabet.forEach((char, index) => {
+                const angle = (-Math.PI/2) + (index / alphabet.length) * Math.PI * 2;
+                positions[char] = {
+                    x: centerX + radius * Math.cos(angle),
+                    y: centerY + radius * Math.sin(angle)
+                };
+            });
+            
+            // Draw all nodes in black
+            Object.entries(positions).forEach(([char, pos]) => {
+                blackCtx.beginPath();
+                blackCtx.arc(pos.x, pos.y, 15, 0, Math.PI * 2);
+                blackCtx.fillStyle = '#000';
+                blackCtx.fill();
+            });
+
+            // Draw connections
+            const phi = (1 + Math.sqrt(5)) / 2;
+            const angleIncrement = Math.PI * 2 * (1 - 1/phi);
+            
+            blackCtx.strokeStyle = '#000';
+            blackCtx.lineWidth = 2;
+            
+            for (let i = 0; i < text.length - 1; i++) {
+                const char1 = text[i].toLowerCase();
+                const char2 = text[i + 1].toLowerCase();
+                
+                if (positions[char1] && positions[char2]) {
+                    const start = positions[char1];
+                    const end = positions[char2];
+                    
+                    const angle = angleIncrement * i;
+                    const spiralRadius = radius * (1 - i/(text.length * 2));
+                    
+                    const ctrl1X = centerX + Math.cos(angle) * spiralRadius;
+                    const ctrl1Y = centerY + Math.sin(angle) * spiralRadius;
+                    const ctrl2X = centerX + Math.cos(angle + angleIncrement) * spiralRadius;
+                    const ctrl2Y = centerY + Math.sin(angle + angleIncrement) * spiralRadius;
+                    
+                    blackCtx.beginPath();
+                    blackCtx.moveTo(start.x, start.y);
+                    blackCtx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, end.x, end.y);
+                    blackCtx.stroke();
+                }
+            }
+        }
+
+        // Update both visualizations when text changes
+        document.getElementById('text').addEventListener('input', (e) => {
+            cancelAnimationFrame(animationFrame);
+            animationFrame = requestAnimationFrame(() => {
+                drawCircularVisualization(e.target.value);
+                drawBlackVisualization(e.target.value);
+            });
+        });
+
+        document.getElementById('colorPicker').addEventListener('input', (e) => {
+            cancelAnimationFrame(animationFrame);
+            animationFrame = requestAnimationFrame(() => {
+                drawCircularVisualization(document.getElementById('text').value);
+                drawBlackVisualization(document.getElementById('text').value);
+            });
+        });
     </script>
 </body>
 </html>
