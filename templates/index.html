@@ -39,20 +39,15 @@
                             <textarea class="form-control" id="text" rows="3" required></textarea>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="minY" class="form-label">Min Y Value:</label>
-                                <input type="number" class="form-control" id="minY" value="0">
+                            <div class="col-md-6">
+                                <label for="heightScale" class="form-label">Graph Height Scale:</label>
+                                <input type="range" class="form-control" id="heightScale" min="0.5" max="2" step="0.1" value="1">
                             </div>
-                            <div class="col-md-4">
-                                <label for="maxY" class="form-label">Max Y Value:</label>
-                                <input type="number" class="form-control" id="maxY" value="150">
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="tension" class="form-label">Line Smoothness:</label>
                                 <input type="range" class="form-control" id="tension" min="0" max="1" step="0.1" value="0.1">
                             </div>
                         </div>
-                        <button onclick="generateGraph()" class="btn btn-primary">Generate Graph</button>
                     </div>
                 </div>
 
@@ -83,21 +78,26 @@
     <script>
         let chart = null;
 
-        function generateGraph() {
+        function updateGraph() {
             const text = document.getElementById('text').value;
-            if (!text) return;
+            if (!text) {
+                if (chart) {
+                    chart.destroy();
+                    chart = null;
+                }
+                document.getElementById('graphContainer').style.display = 'none';
+                return;
+            }
 
             const asciiValues = Array.from(text.toLowerCase()).map(char => char.charCodeAt(0));
             const labels = Array.from({length: asciiValues.length}, (_, i) => i + 1);
             const tension = parseFloat(document.getElementById('tension').value);
-            const minY = parseInt(document.getElementById('minY').value);
-            const maxY = parseInt(document.getElementById('maxY').value);
+            const heightScale = parseFloat(document.getElementById('heightScale').value);
 
             const ctx = document.getElementById('asciiGraph').getContext('2d');
             
-            if (chart) {
-                chart.destroy();
-            }
+            if (!chart) {
+                document.getElementById('graphContainer').style.display = 'block';
 
             chart = new Chart(ctx, {
                 type: 'line',
@@ -115,8 +115,13 @@
                     responsive: true,
                     scales: {
                         y: {
-                            min: minY,
-                            max: maxY,
+                            suggestedMin: Math.min(...asciiValues) * 0.9,
+                            suggestedMax: Math.max(...asciiValues) * 1.1,
+                            ticks: {
+                                callback: function(value) {
+                                    return value * heightScale;
+                                }
+                            },
                             title: {
                                 display: true,
                                 text: 'ASCII Value'
@@ -139,7 +144,16 @@
             });
 
             document.getElementById('originalText').textContent = text;
-            document.getElementById('graphContainer').style.display = 'block';
+            } else {
+                // Update existing chart
+                chart.data.labels = labels;
+                chart.data.datasets[0].data = asciiValues;
+                chart.data.datasets[0].tension = tension;
+                chart.options.scales.y.ticks.callback = function(value) {
+                    return value * heightScale;
+                };
+                chart.update();
+            }
         }
 
         function downloadGraph() {
@@ -204,6 +218,11 @@
             // Cleanup
             tempChart.destroy();
         }
+
+        // Add event listeners for real-time updates
+        document.getElementById('text').addEventListener('input', updateGraph);
+        document.getElementById('tension').addEventListener('input', updateGraph);
+        document.getElementById('heightScale').addEventListener('input', updateGraph);
 
         function resetForm() {
             document.getElementById('text').value = '';
