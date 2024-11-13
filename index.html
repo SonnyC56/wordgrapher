@@ -72,14 +72,20 @@
                 <div id="graphContainer" class="card mt-4 mb-4">
                     <div class="card-body">
                         <div class="text-center mb-3">
-                            <button onclick="downloadGraph()" class="btn btn-success">Download Full Graph</button>
-                            <button onclick="downloadLineOnly()" class="btn btn-info">Download Line Only</button>
-                            <button onclick="resetForm()" class="btn btn-primary">Create Another Graph</button>
+                            <div class="mb-3">
+                                <div class="form-check form-switch d-inline-block">
+                                    <input class="form-check-input" type="checkbox" id="showFullGraph">
+                                    <label class="form-check-label" for="showFullGraph">Show Full Graph</label>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="downloadGraph()" class="btn btn-success">Download Full Graph</button>
+                                <button onclick="downloadLineOnly()" class="btn btn-info">Download Line Only</button>
+                                <button onclick="resetForm()" class="btn btn-primary">Create Another Graph</button>
+                            </div>
                         </div>
                         <div class="text-center">
-                            <canvas id="asciiGraph"></canvas>
-                        </div>
-                        <div class="text-center mt-4">
+                            <canvas id="asciiGraph" style="display: none;"></canvas>
                             <canvas id="lineOnlyGraph"></canvas>
                         </div>
                     </div>
@@ -113,16 +119,16 @@
             if (!chart) {
                 document.getElementById('graphContainer').style.display = 'block';
                 
-                const canvas = document.getElementById('asciiGraph');
+                const fullCanvas = document.getElementById('asciiGraph');
                 const lineOnlyCanvas = document.getElementById('lineOnlyGraph');
-                
+            
                 // Set responsive canvas dimensions
-                const containerWidth = canvas.parentElement.offsetWidth;
+                const containerWidth = fullCanvas.parentElement.offsetWidth;
                 const canvasWidth = Math.min(800, containerWidth - 20); // 20px for padding
                 const aspectRatio = 2; // width/height ratio
-                
-                canvas.width = canvasWidth;
-                canvas.height = canvasWidth / aspectRatio;
+            
+                fullCanvas.width = canvasWidth;
+                fullCanvas.height = canvasWidth / aspectRatio;
                 lineOnlyCanvas.width = canvasWidth;
                 lineOnlyCanvas.height = canvasWidth / aspectRatio;
                 
@@ -239,6 +245,10 @@
         // Add event listeners for real-time updates
         document.getElementById('text').addEventListener('input', updateGraph);
         document.getElementById('tension').addEventListener('input', updateGraph);
+        document.getElementById('showFullGraph').addEventListener('change', function(e) {
+            const fullGraph = document.getElementById('asciiGraph');
+            fullGraph.style.display = e.target.checked ? 'block' : 'none';
+        });
 
         function resetForm() {
             document.getElementById('text').value = '';
