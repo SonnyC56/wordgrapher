@@ -149,7 +149,6 @@
         }
 
         function downloadLineOnly() {
-            // Create a temporary canvas with transparent background
             const originalCanvas = document.getElementById('asciiGraph');
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = originalCanvas.width;
@@ -157,51 +156,54 @@
             
             const tempCtx = tempCanvas.getContext('2d');
             
-            // Copy the current chart configuration
+            // Set white background
+            tempCtx.fillStyle = 'white';
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            
+            // Create new chart with minimal styling
             const tempChart = new Chart(tempCtx, {
                 type: 'line',
-                data: chart.data,
+                data: {
+                    labels: chart.data.labels,
+                    datasets: [{
+                        data: chart.data.datasets[0].data,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: chart.data.datasets[0].tension,
+                        pointRadius: 0,
+                        borderWidth: 3,
+                        fill: false
+                    }]
+                },
                 options: {
-                    ...chart.options,
+                    responsive: true,
+                    maintainAspectRatio: true,
                     plugins: {
-                        ...chart.options.plugins,
-                        background: {
-                            color: 'transparent'
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false
                         }
                     },
                     scales: {
-                        ...chart.options.scales,
                         x: {
-                            ...chart.options.scales.x,
-                            grid: {
-                                display: false
-                            },
-                            border: {
-                                display: false
-                            }
+                            display: false
                         },
                         y: {
-                            ...chart.options.scales.y,
-                            grid: {
-                                display: false
-                            },
-                            border: {
-                                display: false
-                            }
+                            display: false
                         }
                     }
                 }
             });
             
-            // Force render and download
-            tempChart.render();
-            const link = document.createElement('a');
-            link.download = 'word_graph_line_only.png';
-            link.href = tempCanvas.toDataURL('image/png');
-            link.click();
-            
-            // Cleanup
-            tempChart.destroy();
+            // Wait for chart animation to complete
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.download = 'word_graph_line_only.png';
+                link.href = tempCanvas.toDataURL('image/png');
+                link.click();
+                tempChart.destroy();
+            }, 100);
         }
 
         // Add event listeners for real-time updates
