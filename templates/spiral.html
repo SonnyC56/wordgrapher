@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spiral Word Visualization</title>
+    <title>Binary Code Visualization</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         canvas {
             border: 1px solid #ddd;
             border-radius: 4px;
+            background: #000;
         }
         .main-content {
             margin: 20px auto;
@@ -19,7 +20,7 @@
 <body>
     <div class="main-content">
         <div class="text-center mb-4">
-            <h1>Spiral Word Visualization</h1>
+            <h1>Binary Code Visualization</h1>
             <a href="index.html" class="btn btn-outline-secondary">Back to Word Grapher</a>
         </div>
 
@@ -34,8 +35,8 @@
                     <input type="color" class="form-control form-control-color" id="colorPicker" value="#4B0082">
                 </div>
                 <div class="mb-3">
-                    <label for="spiralTightness" class="form-label">Spiral Tightness:</label>
-                    <input type="range" class="form-control" id="spiralTightness" min="0.1" max="1" step="0.1" value="0.5">
+                    <label for="gridSize" class="form-label">Grid Size:</label>
+                    <input type="range" class="form-control" id="gridSize" min="4" max="16" step="2" value="8">
                 </div>
             </div>
         </div>
@@ -62,97 +63,49 @@
             return freq;
         }
 
-        function drawSpiralVisualization(text) {
+        function charToBinary(char) {
+            return char.charCodeAt(0).toString(2).padStart(8, '0');
+        }
+
+        function drawBinaryVisualization(text) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             if (!text) return;
 
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
             const charFreq = getCharFrequency(text);
             const maxFreq = Math.max(...Object.values(charFreq));
-            const tightness = document.getElementById('spiralTightness').value;
             const baseColor = document.getElementById('colorPicker').value;
+            const gridSize = parseInt(document.getElementById('gridSize').value);
             
-            // Create gradient for depth effect
-            const gradient = ctx.createRadialGradient(
-                centerX, centerY, 0,
-                centerX, centerY, canvas.width/2
-            );
-            gradient.addColorStop(0, baseColor + "99");
-            gradient.addColorStop(1, baseColor);
-
-            ctx.globalCompositeOperation = 'source-over';
-            let angle = Math.random() * Math.PI; // Random starting angle
-            let radius = 10;
-            const maxRadius = Math.min(canvas.width, canvas.height) * 0.4;
-
-            // Draw flowing background spiral
-            ctx.beginPath();
-            ctx.strokeStyle = baseColor + "33";
-            ctx.lineWidth = 2;
-            for (let i = 0; i < 200; i++) {
-                const x = centerX + radius * Math.cos(angle);
-                const y = centerY + radius * Math.sin(angle);
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-                angle += tightness * 0.3;
-                radius += 2;
-            }
-            ctx.stroke();
-
-            // Reset for characters
-            angle = Math.random() * Math.PI;
-            radius = 10;
-
-            text.split('').forEach((char, i) => {
+            const cellSize = canvas.width / gridSize;
+            const dotSize = cellSize * 0.8;
+            
+            let row = 0;
+            let col = 0;
+            
+            text.split('').forEach((char) => {
+                const binary = charToBinary(char);
                 const frequency = charFreq[char.toLowerCase()];
-                const fontSize = 8 + (frequency / maxFreq) * 32;
+                const opacity = 0.3 + (frequency / maxFreq) * 0.7;
                 
-                // Add some controlled randomness to position
-                const wobble = Math.sin(i * 0.1) * 5;
-                angle += tightness * (1 + Math.random() * 0.2);
-                radius += 3 + Math.random() * 2;
-                
-                if (radius > maxRadius) {
-                    radius = maxRadius * (0.5 + Math.random() * 0.2);
-                }
-
-                const x = centerX + (radius + wobble) * Math.cos(angle);
-                const y = centerY + (radius + wobble) * Math.sin(angle);
-                
-                // Create abstract shape effect
-                ctx.globalAlpha = 0.7 + (Math.random() * 0.3);
-                ctx.fillStyle = gradient;
-                
-                ctx.save();
-                ctx.translate(x, y);
-                
-                // Add slight random rotation for organic feel
-                const rotationOffset = (Math.random() - 0.5) * 0.5;
-                ctx.rotate(angle + Math.PI/2 + rotationOffset);
-                
-                // Draw abstract shape with subtle shadow
-                ctx.shadowColor = baseColor + "66";
-                ctx.shadowBlur = 4;
-                ctx.shadowOffsetX = 2;
-                ctx.shadowOffsetY = 2;
-                
-                // Draw main circle
-                ctx.beginPath();
-                ctx.arc(0, 0, fontSize/2, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Draw smaller overlapping circle for depth
-                ctx.globalAlpha = 0.3;
-                ctx.beginPath();
-                ctx.arc(1, 1, fontSize/3, 0, Math.PI * 2);
-                ctx.fill();
-                
-                ctx.restore();
+                binary.split('').forEach((bit, i) => {
+                    if (bit === '1') {
+                        const x = col * cellSize + cellSize/2;
+                        const y = row * cellSize + cellSize/2;
+                        
+                        ctx.beginPath();
+                        ctx.fillStyle = `${baseColor}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`;
+                        ctx.arc(x, y, dotSize/2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    
+                    col++;
+                    if (col >= gridSize) {
+                        col = 0;
+                        row++;
+                    }
+                });
             });
-            
-            ctx.globalAlpha = 1.0;
         }
 
         function downloadVisualization() {
