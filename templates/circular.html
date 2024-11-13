@@ -75,7 +75,7 @@
             // Calculate positions for each letter
             alphabet.forEach((char, index) => {
                 // Start at top (-π/2) and go clockwise
-                const angle = (-Math.PI/2) + (index / uniqueChars.length) * Math.PI * 2;
+                const angle = (-Math.PI/2) + (index / alphabet.length) * Math.PI * 2;
                 positions[char] = {
                     x: centerX + radius * Math.cos(angle),
                     y: centerY + radius * Math.sin(angle)
