@@ -94,12 +94,14 @@
                 ctx.fillText(char, pos.x, pos.y);
             });
 
-            // Draw connections between repeated characters
+            // Draw connections using Fibonacci spiral pattern
             const lineColor = document.getElementById('colorPicker').value;
             ctx.strokeStyle = lineColor;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-
+            ctx.lineWidth = 2;
+            
+            const phi = (1 + Math.sqrt(5)) / 2; // Golden ratio
+            const angleIncrement = Math.PI * 2 * (1 - 1/phi); // Golden angle
+            
             for (let i = 0; i < text.length - 1; i++) {
                 const char1 = text[i].toLowerCase();
                 const char2 = text[i + 1].toLowerCase();
@@ -108,25 +110,29 @@
                     const start = positions[char1];
                     const end = positions[char2];
                     
-                    // Draw curved line
+                    // Calculate spiral control points
+                    const angle = angleIncrement * i;
+                    const spiralRadius = radius * (1 - i/(text.length * 2));
+                    
+                    const ctrl1X = centerX + Math.cos(angle) * spiralRadius;
+                    const ctrl1Y = centerY + Math.sin(angle) * spiralRadius;
+                    const ctrl2X = centerX + Math.cos(angle + angleIncrement) * spiralRadius;
+                    const ctrl2Y = centerY + Math.sin(angle + angleIncrement) * spiralRadius;
+                    
+                    // Draw curved line using bezier curve
                     ctx.beginPath();
                     ctx.moveTo(start.x, start.y);
-                    
-                    // Calculate control point for curve
-                    const midX = (start.x + end.x) / 2;
-                    const midY = (start.y + end.y) / 2;
-                    const distance = Math.sqrt(
-                        Math.pow(end.x - start.x, 2) + 
-                        Math.pow(end.y - start.y, 2)
-                    );
-                    
-                    // Pull the curve toward the center more for longer distances
-                    const pullToward = Math.min(0.5, distance / 1000);
-                    const ctrlX = midX + (centerX - midX) * pullToward;
-                    const ctrlY = midY + (centerY - midY) * pullToward;
-                    
-                    ctx.quadraticCurveTo(ctrlX, ctrlY, end.x, end.y);
+                    ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, end.x, end.y);
                     ctx.stroke();
+                    
+                    // Add glow effect
+                    ctx.save();
+                    ctx.shadowColor = lineColor;
+                    ctx.shadowBlur = 10;
+                    ctx.strokeStyle = lineColor;
+                    ctx.globalAlpha = 0.3;
+                    ctx.stroke();
+                    ctx.restore();
                 }
             }
         }
