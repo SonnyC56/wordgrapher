@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morse Code Visualization</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        canvas {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+        }
+        .main-content {
+            margin: 20px auto;
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="text-center mb-4">
+            <h1>Morse Code Visualization</h1>
+            <a href="index.html" class="btn btn-outline-secondary">Back to Word Grapher</a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="text" class="form-label">Enter your text:</label>
+                    <textarea class="form-control" id="text" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="dotColor" class="form-label">Dot Color:</label>
+                    <input type="color" class="form-control form-control-color" id="dotColor" value="#0275d8">
+                    <label for="dashColor" class="form-label ms-3">Dash Color:</label>
+                    <input type="color" class="form-control form-control-color" id="dashColor" value="#5cb85c">
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <canvas id="morseGraph" width="800" height="400"></canvas>
+        </div>
+
+        <div class="text-center mt-3">
+            <button onclick="downloadVisualization()" class="btn btn-success">Download Image</button>
+        </div>
+    </div>
+
+    <script>
+        const MORSE_CODE = {
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+            'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+            'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+            'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+            'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---',
+            '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
+            '8': '---..', '9': '----.', ' ': ' '
+        };
+
+        const canvas = document.getElementById('morseGraph');
+        const ctx = canvas.getContext('2d');
+        let animationFrame;
+
+        function textToMorse(text) {
+            return text.toUpperCase().split('').map(char => 
+                MORSE_CODE[char] || char
+            ).join(' ');
+        }
+
+        function drawMorseVisualization(text) {
+            // Clear canvas
+            ctx.fillStyle = '#f8f9fa';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            if (!text) return;
+
+            const morse = textToMorse(text);
+            const dotColor = document.getElementById('dotColor').value;
+            const dashColor = document.getElementById('dashColor').value;
+            
+            const unitSize = 20;
+            const spacing = 10;
+            let x = 50;
+            let y = 50;
+            const lineHeight = 40;
+            
+            morse.split('').forEach(char => {
+                if (char === '.') {
+                    ctx.beginPath();
+                    ctx.arc(x + unitSize/2, y, unitSize/2, 0, Math.PI * 2);
+                    ctx.fillStyle = dotColor;
+                    ctx.fill();
+                    x += unitSize + spacing;
+                } else if (char === '-') {
+                    ctx.fillStyle = dashColor;
+                    ctx.fillRect(x, y - unitSize/4, unitSize * 3, unitSize/2);
+                    x += (unitSize * 3) + spacing;
+                } else if (char === ' ') {
+                    x += unitSize * 2;
+                }
+                
+                // Wrap to next line if needed
+                if (x > canvas.width - 100) {
+                    x = 50;
+                    y += lineHeight;
+                }
+            });
+        }
+
+        function downloadVisualization() {
+            const link = document.createElement('a');
+            link.download = 'morse_visualization.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Add event listeners for real-time updates
+        document.getElementById('text').addEventListener('input', (e) => {
+            cancelAnimationFrame(animationFrame);
+            animationFrame = requestAnimationFrame(() => drawMorseVisualization(e.target.value));
+        });
+
+        ['dotColor', 'dashColor'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                cancelAnimationFrame(animationFrame);
+                animationFrame = requestAnimationFrame(() => 
+                    drawMorseVisualization(document.getElementById('text').value)
+                );
+            });
+        });
+    </script>
+</body>
+</html>
