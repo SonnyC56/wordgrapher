@@ -23,6 +23,11 @@
     <div class="main-content">
         <div class="text-center mb-4">
             <h1>Circular Word Visualization 📈</h1>
+            <p class="lead">
+                This visualization creates an elegant circular representation of text using mathematical principles.
+                Characters are arranged in a circle, connected by Fibonacci spiral curves that follow the golden ratio (φ ≈ 1.618),
+                creating a natural and aesthetically pleasing flow between letters.
+            </p>
             <a href="../index.html" class="btn btn-outline-secondary">Back to Word Grapher</a>
         </div>
 
@@ -68,7 +73,8 @@
             
             // Calculate positions for each unique character
             uniqueChars.forEach((char, index) => {
-                const angle = (index / uniqueChars.length) * Math.PI * 2;
+                // Start at top (-π/2) and go clockwise
+                const angle = (-Math.PI/2) + (index / uniqueChars.length) * Math.PI * 2;
                 positions[char] = {
                     x: centerX + radius * Math.cos(angle),
                     y: centerY + radius * Math.sin(angle)
