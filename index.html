@@ -90,19 +90,18 @@
             
             if (!chart) {
                 document.getElementById('graphContainer').style.display = 'block';
-                document.getElementById('lineOnlyContainer').style.display = 'block';
-
-            const chartHeight = document.getElementById('lineHeight').value;
-            const canvas = document.getElementById('asciiGraph');
-            const lineOnlyCanvas = document.getElementById('lineOnlyGraph');
-            
-            // Set both canvas heights
-            canvas.height = chartHeight;
-            lineOnlyCanvas.height = chartHeight;
-            canvas.width = 800;
-            lineOnlyCanvas.width = 800;
-            
-            chart = new Chart(ctx, {
+                
+                const chartHeight = document.getElementById('lineHeight').value;
+                const canvas = document.getElementById('asciiGraph');
+                const lineOnlyCanvas = document.getElementById('lineOnlyGraph');
+                
+                // Set both canvas heights
+                canvas.height = chartHeight;
+                lineOnlyCanvas.height = chartHeight;
+                canvas.width = 800;
+                lineOnlyCanvas.width = 800;
+                
+                chart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
