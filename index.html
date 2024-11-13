@@ -99,8 +99,14 @@
                 document.getElementById('lineOnlyContainer').style.display = 'block';
 
             const chartHeight = document.getElementById('lineHeight').value;
-            document.getElementById('asciiGraph').style.height = `${chartHeight}px`;
-            document.getElementById('lineOnlyGraph').style.height = `${chartHeight}px`;
+            const canvas = document.getElementById('asciiGraph');
+            const lineOnlyCanvas = document.getElementById('lineOnlyGraph');
+            
+            // Set both canvas heights
+            canvas.height = chartHeight;
+            lineOnlyCanvas.height = chartHeight;
+            canvas.width = 800;
+            lineOnlyCanvas.width = 800;
             
             chart = new Chart(ctx, {
                 type: 'line',
@@ -115,7 +121,8 @@
                     }]
                 },
                 options: {
-                    responsive: true,
+                    responsive: false,
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             suggestedMin: Math.min(...asciiValues) * 0.9,
@@ -160,8 +167,8 @@
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
+                    responsive: false,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
                             display: false
