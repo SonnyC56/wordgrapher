@@ -40,6 +40,8 @@
                         <div class="mb-3">
                             <label for="tension" class="form-label">Line Smoothness:</label>
                             <input type="range" class="form-control" id="tension" min="0" max="1" step="0.1" value="0.1">
+                            <label for="aspectRatio" class="form-label mt-3">Line Graph Aspect Ratio:</label>
+                            <input type="range" class="form-control" id="aspectRatio" min="0.25" max="4" step="0.25" value="2">
                         </div>
                     </div>
                 </div>
@@ -91,11 +93,12 @@
                 const canvas = document.getElementById('asciiGraph');
                 const lineOnlyCanvas = document.getElementById('lineOnlyGraph');
                 
-                // Set fixed canvas dimensions
+                // Set canvas dimensions based on aspect ratio
+                const aspectRatio = parseFloat(document.getElementById('aspectRatio').value);
                 canvas.height = 400;
                 lineOnlyCanvas.height = 400;
                 canvas.width = 800;
-                lineOnlyCanvas.width = 800;
+                lineOnlyCanvas.width = 800 * aspectRatio;
                 
                 chart = new Chart(ctx, {
                 type: 'line',
@@ -210,6 +213,7 @@
         // Add event listeners for real-time updates
         document.getElementById('text').addEventListener('input', updateGraph);
         document.getElementById('tension').addEventListener('input', updateGraph);
+        document.getElementById('aspectRatio').addEventListener('input', updateGraph);
 
         function resetForm() {
             document.getElementById('text').value = '';
