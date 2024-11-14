@@ -208,6 +208,24 @@
                         y: {
                             display: false
                         }
+                    },
+                    animation: {
+                        onComplete: function(animation) {
+                            const ctx = this.ctx;
+                            const data = this.data.datasets[0].data;
+                            const min = Math.min(...data);
+                            const max = Math.max(...data);
+                            
+                            ctx.font = '12px Arial';
+                            ctx.fillStyle = '#666';
+                            ctx.textAlign = 'right';
+                            
+                            // Add min value at the bottom
+                            ctx.fillText(min, 30, this.chartArea.bottom - 5);
+                            
+                            // Add max value at the top
+                            ctx.fillText(max, 30, this.chartArea.top + 15);
+                        }
                     }
                 }
             });
