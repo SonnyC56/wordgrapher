@@ -271,6 +271,17 @@
             }
         }
 
+        // Load text from URL params if present
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const text = urlParams.get('text');
+            if (text) {
+                document.getElementById('text').value = text;
+                drawCircularVisualization(text);
+                drawBlackVisualization(text);
+            }
+        });
+
         // Update both visualizations when text changes
         document.getElementById('text').addEventListener('input', (e) => {
             cancelAnimationFrame(animationFrame);
