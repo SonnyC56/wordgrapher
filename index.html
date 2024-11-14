@@ -84,7 +84,7 @@
                             </div>
                             <div>
                                 <button onclick="downloadLineOnly()" class="btn btn-info">Download Line Only</button>
-                                <button onclick="downloadGraph()" class="btn btn-success">Download Full Graph</button>
+                                <button onclick="downloadGraph()" class="btn btn-success" id="downloadFullBtn" style="display: none;">Download Full Graph</button>
                                 <button onclick="resetForm()" class="btn btn-primary">Create Another Graph</button>
                             </div>
                         </div>
@@ -269,7 +269,9 @@
         document.getElementById('tension').addEventListener('input', updateGraph);
         document.getElementById('showFullGraph').addEventListener('change', function(e) {
             const fullGraph = document.getElementById('asciiGraph');
+            const downloadFullBtn = document.getElementById('downloadFullBtn');
             fullGraph.style.display = e.target.checked ? 'block' : 'none';
+            downloadFullBtn.style.display = e.target.checked ? 'inline-block' : 'none';
         });
 
         function resetForm() {
