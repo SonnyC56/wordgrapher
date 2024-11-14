@@ -50,8 +50,8 @@
     <div class="main-content mt-5">
         <h1 class="text-center mb-4">Word Grapher 📈</h1>
         <div class="text-center mb-4">
-            <a href="templates/circular.html" class="btn btn-outline-primary me-2">Try Circular Visualization</a>
-            <a href="templates/morse.html" class="btn btn-outline-primary">Try Morse Code Visualization</a>
+            <a href="templates/circular.html" target="_blank" class="btn btn-outline-primary me-2">Try Circular Visualization</a>
+            <a href="templates/morse.html" target="_blank" class="btn btn-outline-primary">Try Morse Code Visualization</a>
         </div>
 
         <div class="row justify-content-center">
@@ -69,6 +69,10 @@
                                 <input type="range" class="form-control" id="tension" min="0" max="1" step="0.1" value="0.1" style="background-color: #f8f9fa;">
                                 <span class="ms-2">max</span>
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lineColor" class="form-label">Line Color:</label>
+                            <input type="color" class="form-control form-control-color" id="lineColor" value="#4BC0C0">
                         </div>
                     </div>
                 </div>
@@ -143,7 +147,7 @@
                     datasets: [{
                         label: 'ASCII Values',
                         data: asciiValues,
-                        borderColor: 'rgb(75, 192, 192)',
+                        borderColor: document.getElementById('lineColor').value,
                         tension: tension,
                         pointRadius: 5
                     }]
@@ -187,7 +191,7 @@
                     labels: labels,
                     datasets: [{
                         data: asciiValues,
-                        borderColor: 'rgb(75, 192, 192)',
+                        borderColor: document.getElementById('lineColor').value,
                         tension: tension,
                         pointRadius: 0,
                         borderWidth: 3,
@@ -250,6 +254,7 @@
         // Add event listeners for real-time updates
         document.getElementById('text').addEventListener('input', updateGraph);
         document.getElementById('tension').addEventListener('input', updateGraph);
+        document.getElementById('lineColor').addEventListener('input', updateGraph);
         document.getElementById('showFullGraph').addEventListener('change', function(e) {
             const fullGraph = document.getElementById('asciiGraph');
             const downloadFullBtn = document.getElementById('downloadFullBtn');
