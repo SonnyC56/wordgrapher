@@ -68,8 +68,8 @@
     <div class="main-content mt-5">
         <h1 class="text-center mb-4">Word Grapher 📈</h1>
         <div class="text-center mb-4">
-            <a href="templates/circular.html" target="_blank" class="btn btn-outline-primary me-2" onclick="return openWithText(this)">Try Circular Visualization</a>
-            <a href="templates/morse.html" target="_blank" class="btn btn-outline-primary" onclick="return openWithText(this)">Try Morse Code Visualization</a>
+            <a href="templates/circular.html" class="btn btn-outline-primary me-2" onclick="return openWithText(this)">Try Circular Visualization</a>
+            <a href="templates/morse.html" class="btn btn-outline-primary" onclick="return openWithText(this)">Try Morse Code Visualization</a>
         </div>
 
         <div class="row justify-content-center">
@@ -84,6 +84,14 @@
                             <div class="d-flex align-items-center">
                                 <label for="lineColor" class="form-label mb-0 me-2">Line Color:</label>
                                 <input type="color" class="form-control form-control-color" id="lineColor" value="#4BC0C0">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="cleanText">
+                                <label class="form-check-label" for="cleanText">
+                                    Remove spaces and punctuation
+                                </label>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -153,8 +161,15 @@
             }
         });
 
+        function cleanInputText(text) {
+            return text.replace(/[^a-zA-Z0-9]/g, '');
+        }
+
         function updateGraph() {
-            const text = document.getElementById('text').value;
+            let text = document.getElementById('text').value;
+            if (document.getElementById('cleanText').checked) {
+                text = cleanInputText(text);
+            }
             if (!text) {
                 if (chart) {
                     chart.destroy();

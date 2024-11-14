@@ -78,6 +78,14 @@
                     <label for="dashColor" class="form-label ms-3">Dash Color:</label>
                     <input type="color" class="form-control form-control-color" id="dashColor" value="#5cb85c">
                 </div>
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="cleanText">
+                        <label class="form-check-label" for="cleanText">
+                            Remove spaces and punctuation
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -129,7 +137,12 @@
             ).join(' ');
         }
 
-        function drawMorseVisualization(text) {
+        function cleanInputText(text) {
+            return text.replace(/[^a-zA-Z0-9]/g, '');
+        }
+
+        function drawMorseVisualization(inputText) {
+            let text = document.getElementById('cleanText').checked ? cleanInputText(inputText) : inputText;
             // Clear canvas
             ctx.fillStyle = '#f8f9fa';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
