@@ -329,16 +329,8 @@
             }
         });
 
-        // Update both visualizations when text changes
-        document.getElementById('text').addEventListener('input', (e) => {
-            cancelAnimationFrame(animationFrame);
-            animationFrame = requestAnimationFrame(() => {
-                drawCircularVisualization(e.target.value);
-                drawBlackVisualization(e.target.value);
-            });
-        });
-
-        document.getElementById('colorPicker').addEventListener('input', (e) => {
+        // Update both visualizations when inputs change
+        ['text', 'colorPicker', 'cleanText'].forEach(id => {
             cancelAnimationFrame(animationFrame);
             animationFrame = requestAnimationFrame(() => {
                 drawCircularVisualization(document.getElementById('text').value);

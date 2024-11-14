@@ -315,9 +315,9 @@
         }
 
         // Add event listeners for real-time updates
-        document.getElementById('text').addEventListener('input', updateGraph);
-        document.getElementById('tension').addEventListener('input', updateGraph);
-        document.getElementById('lineColor').addEventListener('input', updateGraph);
+        ['text', 'tension', 'lineColor', 'cleanText'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateGraph);
+        });
         document.getElementById('showFullGraph').addEventListener('change', function(e) {
             const fullGraph = document.getElementById('asciiGraph');
             const downloadFullBtn = document.getElementById('downloadFullBtn');

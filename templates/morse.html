@@ -200,12 +200,7 @@
         });
 
         // Add event listeners for real-time updates
-        document.getElementById('text').addEventListener('input', (e) => {
-            cancelAnimationFrame(animationFrame);
-            animationFrame = requestAnimationFrame(() => drawMorseVisualization(e.target.value));
-        });
-
-        ['dotColor', 'dashColor'].forEach(id => {
+        ['text', 'dotColor', 'dashColor', 'cleanText'].forEach(id => {
             document.getElementById(id).addEventListener('input', () => {
                 cancelAnimationFrame(animationFrame);
                 animationFrame = requestAnimationFrame(() => 
