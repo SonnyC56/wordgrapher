@@ -227,12 +227,14 @@
                 chart.data.labels = labels;
                 chart.data.datasets[0].data = asciiValues;
                 chart.data.datasets[0].tension = tension;
+                chart.data.datasets[0].borderColor = document.getElementById('lineColor').value;
                 chart.update();
                 
                 // Update line-only chart
                 window.lineOnlyChart.data.labels = labels;
                 window.lineOnlyChart.data.datasets[0].data = asciiValues;
                 window.lineOnlyChart.data.datasets[0].tension = tension;
+                window.lineOnlyChart.data.datasets[0].borderColor = document.getElementById('lineColor').value;
                 window.lineOnlyChart.update();
             }
         }
