@@ -225,6 +225,18 @@
               <label class="form-check-label" for="showLabels">Show labels</label>
             </div>
             <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rainbowMode" />
+              <label class="form-check-label" for="rainbowMode">
+                Rainbow Links
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="orbitMode" />
+              <label class="form-check-label" for="orbitMode">
+                Orbit Animation
+              </label>
+            </div>
+            <div class="form-check">
               <input class="form-check-input" type="checkbox" id="ignoreCase" checked />
               <label class="form-check-label" for="ignoreCase">Ignore case</label>
             </div>
@@ -275,6 +287,8 @@
       const canvas = document.getElementById("chordGraph");
       const ctx = canvas.getContext("2d");
       let animationFrame;
+      let orbitFrameId = null;
+      let orbitPhase = 0;
 
       const ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -386,7 +400,7 @@
         const nodeRadius = Math.min(canvas.width, canvas.height) * 0.37;
         const nodeDotRadius = Math.max(6, Math.round(nodeRadius * 0.035));
 
-        const angleOffset = -Math.PI / 2;
+        const angleOffset = -Math.PI / 2 + orbitPhase;
         const positions = new Map();
         nodes.forEach((char, index) => {
           const angle = angleOffset + (index / nodes.length) * Math.PI * 2;
@@ -402,6 +416,7 @@
         const curveFactor = parseFloat(document.getElementById("curve").value);
         const lineOpacity = parseFloat(document.getElementById("lineOpacity").value);
         const showLabels = document.getElementById("showLabels").checked;
+        const rainbowMode = document.getElementById("rainbowMode").checked;
 
         const maxCount = Math.max(
           1,
@@ -418,7 +433,9 @@
 
           const width = 1 + (transition.count / maxCount) * 7;
           ctx.lineWidth = width;
-          ctx.strokeStyle = asRgba(lineColor, lineOpacity);
+          ctx.strokeStyle = rainbowMode
+            ? `hsla(${(orbitPhase * 120 + transition.count * 33) % 360}, 88%, 54%, ${lineOpacity})`
+            : asRgba(lineColor, lineOpacity);
           ctx.lineCap = "round";
 
           ctx.beginPath();
@@ -489,9 +506,26 @@
 
       function scheduleDraw() {
         cancelAnimationFrame(animationFrame);
-        animationFrame = requestAnimationFrame(() =>
-          drawChord(document.getElementById("text").value)
-        );
+        animationFrame = requestAnimationFrame(() => {
+          drawChord(document.getElementById("text").value);
+          syncOrbitAnimation();
+        });
+      }
+
+      function syncOrbitAnimation() {
+        const orbitMode = document.getElementById("orbitMode").checked;
+        if (orbitMode && !orbitFrameId) {
+          const animate = () => {
+            orbitPhase = (orbitPhase + 0.0025) % (Math.PI * 2);
+            drawChord(document.getElementById("text").value);
+            orbitFrameId = requestAnimationFrame(animate);
+          };
+          orbitFrameId = requestAnimationFrame(animate);
+        }
+        if (!orbitMode && orbitFrameId) {
+          cancelAnimationFrame(orbitFrameId);
+          orbitFrameId = null;
+        }
       }
 
       function downloadVisualization() {
@@ -540,11 +574,17 @@
         "curve",
         "lineOpacity",
         "showLabels",
+        "rainbowMode",
+        "orbitMode",
         "ignoreCase",
         "cleanText",
       ].forEach((id) => {
         const eventName =
-          id === "showLabels" || id === "ignoreCase" || id === "cleanText"
+          id === "showLabels" ||
+          id === "ignoreCase" ||
+          id === "cleanText" ||
+          id === "rainbowMode" ||
+          id === "orbitMode"
             ? "change"
             : "input";
         document.getElementById(id).addEventListener(eventName, scheduleDraw);

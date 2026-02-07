@@ -222,6 +222,34 @@
               </label>
             </div>
           </div>
+          <div class="mb-3">
+            <label for="contrast" class="form-label"
+              >Contrast: <span id="contrastValue">1</span>x</label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="contrast"
+              min="0.5"
+              max="2.5"
+              step="0.1"
+              value="1"
+            />
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="pulseMode" />
+              <label class="form-check-label" for="pulseMode">
+                Pulse Heights
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="scanlineMode" />
+              <label class="form-check-label" for="scanlineMode">
+                Scanline Animation
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -262,6 +290,8 @@
       const canvas = document.getElementById("barcodeGraph");
       const ctx = canvas.getContext("2d");
       let animationFrame;
+      let pulseFrameId = null;
+      let pulsePhase = 0;
 
       function cleanInputText(text) {
         return text.replace(/[^a-zA-Z0-9]/g, "");
@@ -322,6 +352,9 @@
         const heightScale = parseFloat(
           document.getElementById("heightScale").value
         );
+        const contrast = parseFloat(document.getElementById("contrast").value);
+        const pulseMode = document.getElementById("pulseMode").checked;
+        const scanlineMode = document.getElementById("scanlineMode").checked;
         const startColor = document.getElementById("startColor").value;
         const endColor = document.getElementById("endColor").value;
 
@@ -330,8 +363,14 @@
         const barWidth = Math.max(1, Math.floor(availableWidth / asciiValues.length));
 
         asciiValues.forEach((value, index) => {
-          const t = (value - min) / range;
-          const barHeight = Math.max(20, t * (canvas.height - 40) * heightScale);
+          const t = Math.pow((value - min) / range, contrast);
+          let barHeight = Math.max(20, t * (canvas.height - 40) * heightScale);
+          if (pulseMode) {
+            barHeight = Math.max(
+              20,
+              barHeight + Math.sin(index * 0.5 + pulsePhase) * 12
+            );
+          }
           const x = index * (barWidth + barGap);
           const y = canvas.height - barHeight;
           ctx.fillStyle = lerpColor(startColor, endColor, t);
@@ -344,13 +383,41 @@
         ctx.moveTo(0, canvas.height - 20);
         ctx.lineTo(canvas.width, canvas.height - 20);
         ctx.stroke();
+
+        if (scanlineMode) {
+          const lineY = ((pulsePhase * 36) % (canvas.height + 80)) - 40;
+          const gradient = ctx.createLinearGradient(0, lineY - 25, 0, lineY + 25);
+          gradient.addColorStop(0, "rgba(14, 165, 233, 0)");
+          gradient.addColorStop(0.5, "rgba(14, 165, 233, 0.22)");
+          gradient.addColorStop(1, "rgba(14, 165, 233, 0)");
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, lineY - 25, canvas.width, 50);
+        }
+      }
+
+      function syncPulseAnimation() {
+        const pulseMode = document.getElementById("pulseMode").checked;
+        const scanlineMode = document.getElementById("scanlineMode").checked;
+        if ((pulseMode || scanlineMode) && !pulseFrameId) {
+          const animate = () => {
+            pulsePhase += 0.08;
+            drawBarcode(document.getElementById("text").value);
+            pulseFrameId = requestAnimationFrame(animate);
+          };
+          pulseFrameId = requestAnimationFrame(animate);
+        }
+        if (!pulseMode && !scanlineMode && pulseFrameId) {
+          cancelAnimationFrame(pulseFrameId);
+          pulseFrameId = null;
+        }
       }
 
       function scheduleDraw() {
         cancelAnimationFrame(animationFrame);
-        animationFrame = requestAnimationFrame(() =>
-          drawBarcode(document.getElementById("text").value)
-        );
+        animationFrame = requestAnimationFrame(() => {
+          drawBarcode(document.getElementById("text").value);
+          syncPulseAnimation();
+        });
       }
 
       function downloadVisualization() {
@@ -389,21 +456,37 @@
         if (text) {
           document.getElementById("text").value = text;
         }
+        document.getElementById("contrastValue").textContent =
+          document.getElementById("contrast").value;
         scheduleDraw();
       });
 
-      ["text", "startColor", "endColor", "barGap", "heightScale", "cleanText"].forEach(
-        (id) => {
-          const eventName = id === "cleanText" ? "change" : "input";
-          document.getElementById(id).addEventListener(eventName, scheduleDraw);
-        }
-      );
+      [
+        "text",
+        "startColor",
+        "endColor",
+        "barGap",
+        "heightScale",
+        "cleanText",
+        "contrast",
+        "pulseMode",
+        "scanlineMode",
+      ].forEach((id) => {
+        const eventName =
+          id === "cleanText" || id === "pulseMode" || id === "scanlineMode"
+            ? "change"
+            : "input";
+        document.getElementById(id).addEventListener(eventName, scheduleDraw);
+      });
 
       document.getElementById("barGap").addEventListener("input", (e) => {
         document.getElementById("barGapValue").textContent = e.target.value;
       });
       document.getElementById("heightScale").addEventListener("input", (e) => {
         document.getElementById("heightScaleValue").textContent = e.target.value;
+      });
+      document.getElementById("contrast").addEventListener("input", (event) => {
+        document.getElementById("contrastValue").textContent = event.target.value;
       });
 
       function goBack(link) {

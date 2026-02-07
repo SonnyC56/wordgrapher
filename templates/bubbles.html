@@ -211,6 +211,16 @@
               <label class="form-check-label" for="showCounts">Show counts</label>
             </div>
             <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="wobbleMode" />
+              <label class="form-check-label" for="wobbleMode">
+                Wobble Animation
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="glassMode" />
+              <label class="form-check-label" for="glassMode">Glass Shine</label>
+            </div>
+            <div class="form-check">
               <input class="form-check-input" type="checkbox" id="ignoreCase" checked />
               <label class="form-check-label" for="ignoreCase">Ignore case</label>
             </div>
@@ -261,6 +271,8 @@
       const canvas = document.getElementById("bubbleGraph");
       const ctx = canvas.getContext("2d");
       let animationFrame;
+      let wobbleFrameId = null;
+      let wobblePhase = 0;
 
       function cleanInputText(text) {
         return text.replace(/[^a-zA-Z0-9]/g, "");
@@ -423,6 +435,8 @@
         const startColor = document.getElementById("startColor").value;
         const endColor = document.getElementById("endColor").value;
         const showCounts = document.getElementById("showCounts").checked;
+        const wobbleMode = document.getElementById("wobbleMode").checked;
+        const glassMode = document.getElementById("glassMode").checked;
 
         const bubbles = placeBubbles(items);
         const max = Math.max(1, bubbles.length - 1);
@@ -436,14 +450,35 @@
             rgb.g - 30
           )}, ${Math.max(0, rgb.b - 30)}, 0.95)`;
           const textColor = contrastColor(rgb);
+          const wobbleX = wobbleMode
+            ? Math.cos(wobblePhase + index * 0.7) * 2.5
+            : 0;
+          const wobbleY = wobbleMode
+            ? Math.sin(wobblePhase + index * 0.7) * 2.5
+            : 0;
+          const drawX = bubble.x + wobbleX;
+          const drawY = bubble.y + wobbleY;
 
           ctx.beginPath();
-          ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+          ctx.arc(drawX, drawY, bubble.radius, 0, Math.PI * 2);
           ctx.fillStyle = fill;
           ctx.fill();
           ctx.lineWidth = 2;
           ctx.strokeStyle = stroke;
           ctx.stroke();
+
+          if (glassMode) {
+            ctx.beginPath();
+            ctx.arc(
+              drawX - bubble.radius * 0.2,
+              drawY - bubble.radius * 0.25,
+              bubble.radius * 0.35,
+              0,
+              Math.PI * 2
+            );
+            ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+            ctx.fill();
+          }
 
           ctx.fillStyle = textColor;
           ctx.textAlign = "center";
@@ -451,12 +486,12 @@
 
           const charFontSize = Math.max(12, Math.floor(bubble.radius * 0.48));
           ctx.font = `600 ${charFontSize}px Arial`;
-          ctx.fillText(String(bubble.char).toUpperCase(), bubble.x, bubble.y - 5);
+          ctx.fillText(String(bubble.char).toUpperCase(), drawX, drawY - 5);
 
           if (showCounts) {
             const countFontSize = Math.max(10, Math.floor(bubble.radius * 0.22));
             ctx.font = `${countFontSize}px Arial`;
-            ctx.fillText(`${bubble.count}`, bubble.x, bubble.y + charFontSize * 0.45);
+            ctx.fillText(`${bubble.count}`, drawX, drawY + charFontSize * 0.45);
           }
         });
 
@@ -469,9 +504,26 @@
 
       function scheduleDraw() {
         cancelAnimationFrame(animationFrame);
-        animationFrame = requestAnimationFrame(() =>
-          drawBubbles(document.getElementById("text").value)
-        );
+        animationFrame = requestAnimationFrame(() => {
+          drawBubbles(document.getElementById("text").value);
+          syncWobbleAnimation();
+        });
+      }
+
+      function syncWobbleAnimation() {
+        const wobbleMode = document.getElementById("wobbleMode").checked;
+        if (wobbleMode && !wobbleFrameId) {
+          const animate = () => {
+            wobblePhase += 0.08;
+            drawBubbles(document.getElementById("text").value);
+            wobbleFrameId = requestAnimationFrame(animate);
+          };
+          wobbleFrameId = requestAnimationFrame(animate);
+        }
+        if (!wobbleMode && wobbleFrameId) {
+          cancelAnimationFrame(wobbleFrameId);
+          wobbleFrameId = null;
+        }
       }
 
       function downloadVisualization() {
@@ -519,11 +571,17 @@
         "maxBubbles",
         "bubblePadding",
         "showCounts",
+        "wobbleMode",
+        "glassMode",
         "ignoreCase",
         "cleanText",
       ].forEach((id) => {
         const eventName =
-          id === "showCounts" || id === "ignoreCase" || id === "cleanText"
+          id === "showCounts" ||
+          id === "wobbleMode" ||
+          id === "glassMode" ||
+          id === "ignoreCase" ||
+          id === "cleanText"
             ? "change"
             : "input";
         document.getElementById(id).addEventListener(eventName, scheduleDraw);

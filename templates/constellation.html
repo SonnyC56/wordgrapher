@@ -228,10 +228,28 @@
               value="14"
             />
           </div>
+          <div class="mb-3">
+            <label for="lineWidth" class="form-label"
+              >Line Width: <span id="lineWidthValue">2</span>px</label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="lineWidth"
+              min="1"
+              max="8"
+              step="1"
+              value="2"
+            />
+          </div>
           <div class="mb-3 d-flex flex-wrap gap-3">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="showLabels" checked />
               <label class="form-check-label" for="showLabels">Show labels</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="twinkleMode" />
+              <label class="form-check-label" for="twinkleMode">Twinkle</label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="cleanText" />
@@ -280,6 +298,8 @@
       const canvas = document.getElementById("constellationGraph");
       const ctx = canvas.getContext("2d");
       let animationFrame;
+      let twinkleFrameId = null;
+      let twinklePhase = 0;
 
       const CHAR_SET = "abcdefghijklmnopqrstuvwxyz0123456789";
       const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
@@ -383,12 +403,14 @@
         const starColor = document.getElementById("starColor").value;
         const lineColor = document.getElementById("lineColor").value;
         const glow = parseInt(document.getElementById("glow").value, 10);
+        const lineWidth = parseInt(document.getElementById("lineWidth").value, 10);
         const curve = parseFloat(document.getElementById("curve").value);
         const showLabels = document.getElementById("showLabels").checked;
+        const twinkleMode = document.getElementById("twinkleMode").checked;
 
         // Draw connection path
         ctx.save();
-        ctx.lineWidth = 2;
+        ctx.lineWidth = lineWidth;
         ctx.strokeStyle = lineColor;
         ctx.globalAlpha = 0.85;
         ctx.shadowColor = lineColor;
@@ -442,7 +464,12 @@
           const pos = positions[char];
           const isUsed = used.has(char);
           const radius = isUsed ? 5 : 2.5;
-          const alpha = isUsed ? 0.95 : 0.35;
+          const alphaBase = isUsed ? 0.95 : 0.35;
+          const twinkle =
+            twinkleMode && isUsed
+              ? 0.2 * Math.sin(twinklePhase + pos.x * 0.03 + pos.y * 0.02)
+              : 0;
+          const alpha = Math.max(0.08, Math.min(1, alphaBase + twinkle));
 
           ctx.globalAlpha = alpha;
           ctx.beginPath();
@@ -485,6 +512,22 @@
         );
       }
 
+      function syncTwinkleAnimation() {
+        const twinkleMode = document.getElementById("twinkleMode").checked;
+        if (twinkleMode && !twinkleFrameId) {
+          const animate = () => {
+            twinklePhase += 0.08;
+            drawConstellation(document.getElementById("text").value);
+            twinkleFrameId = requestAnimationFrame(animate);
+          };
+          twinkleFrameId = requestAnimationFrame(animate);
+        }
+        if (!twinkleMode && twinkleFrameId) {
+          cancelAnimationFrame(twinkleFrameId);
+          twinkleFrameId = null;
+        }
+      }
+
       function downloadVisualization() {
         const link = document.createElement("a");
         link.download = "constellation_visualization.png";
@@ -521,7 +564,10 @@
         if (text) {
           document.getElementById("text").value = text;
         }
+        document.getElementById("lineWidthValue").textContent =
+          document.getElementById("lineWidth").value;
         scheduleDraw();
+        syncTwinkleAnimation();
       });
 
       [
@@ -531,11 +577,19 @@
         "starDensity",
         "curve",
         "glow",
+        "lineWidth",
         "showLabels",
+        "twinkleMode",
         "cleanText",
       ].forEach((id) => {
-        const eventName = id === "cleanText" || id === "showLabels" ? "change" : "input";
-        document.getElementById(id).addEventListener(eventName, scheduleDraw);
+        const eventName =
+          id === "cleanText" || id === "showLabels" || id === "twinkleMode"
+            ? "change"
+            : "input";
+        document.getElementById(id).addEventListener(eventName, () => {
+          scheduleDraw();
+          syncTwinkleAnimation();
+        });
       });
 
       document.getElementById("starDensity").addEventListener("input", (e) => {
@@ -546,6 +600,9 @@
       });
       document.getElementById("glow").addEventListener("input", (e) => {
         document.getElementById("glowValue").textContent = e.target.value;
+      });
+      document.getElementById("lineWidth").addEventListener("input", (event) => {
+        document.getElementById("lineWidthValue").textContent = event.target.value;
       });
 
       function goBack(link) {

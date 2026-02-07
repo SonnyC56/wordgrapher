@@ -235,6 +235,18 @@
               <label class="form-check-label" for="fill">Fill</label>
             </div>
             <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rainbowMode" />
+              <label class="form-check-label" for="rainbowMode">
+                Rainbow Gradient
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="jitterMode" />
+              <label class="form-check-label" for="jitterMode">
+                Jitter Animation
+              </label>
+            </div>
+            <div class="form-check">
               <input class="form-check-input" type="checkbox" id="cleanText" />
               <label class="form-check-label" for="cleanText">
                 Remove spaces and punctuation
@@ -281,6 +293,8 @@
       const canvas = document.getElementById("waveformGraph");
       const ctx = canvas.getContext("2d");
       let animationFrame;
+      let jitterFrameId = null;
+      let jitterPhase = 0;
 
       function cleanInputText(text) {
         return text.replace(/[^a-zA-Z0-9]/g, "");
@@ -393,9 +407,21 @@
         const fillColor = document.getElementById("fillColor").value;
         const mirror = document.getElementById("mirror").checked;
         const fill = document.getElementById("fill").checked;
+        const rainbowMode = document.getElementById("rainbowMode").checked;
+        const jitterMode = document.getElementById("jitterMode").checked;
 
         const padding = 32;
         const points = buildPoints(asciiValues, padding, amplitudeScale);
+        if (jitterMode) {
+          points.top = points.top.map((point, index) => ({
+            x: point.x,
+            y: point.y + Math.sin(index * 0.5 + jitterPhase) * 4,
+          }));
+          points.bottom = points.bottom.map((point, index) => ({
+            x: point.x,
+            y: point.y - Math.sin(index * 0.5 + jitterPhase) * 4,
+          }));
+        }
 
         // Center line
         ctx.save();
@@ -410,8 +436,19 @@
 
         ctx.save();
         ctx.lineWidth = strokeWidth;
-        ctx.strokeStyle = lineColor;
-        ctx.shadowColor = lineColor;
+        const rainbowGradient = ctx.createLinearGradient(
+          padding + Math.sin(jitterPhase) * 40,
+          0,
+          canvas.width - padding + Math.sin(jitterPhase) * 40,
+          0
+        );
+        rainbowGradient.addColorStop(0, "hsl(8, 92%, 56%)");
+        rainbowGradient.addColorStop(0.25, "hsl(48, 92%, 56%)");
+        rainbowGradient.addColorStop(0.5, "hsl(160, 92%, 50%)");
+        rainbowGradient.addColorStop(0.75, "hsl(210, 92%, 56%)");
+        rainbowGradient.addColorStop(1, "hsl(302, 88%, 60%)");
+        ctx.strokeStyle = rainbowMode ? rainbowGradient : lineColor;
+        ctx.shadowColor = rainbowMode ? "rgba(255, 255, 255, 0.8)" : lineColor;
         ctx.shadowBlur = glow;
         ctx.lineJoin = "round";
         ctx.lineCap = "round";
@@ -420,7 +457,7 @@
           ctx.save();
           ctx.shadowBlur = 0;
           ctx.globalAlpha = 0.22;
-          ctx.fillStyle = fillColor;
+          ctx.fillStyle = rainbowMode ? "rgba(59, 130, 246, 0.22)" : fillColor;
 
           drawSmoothLine(points.top);
           const lastBottom = points.bottom[points.bottom.length - 1];
@@ -459,9 +496,27 @@
 
       function scheduleDraw() {
         cancelAnimationFrame(animationFrame);
-        animationFrame = requestAnimationFrame(() =>
-          drawWaveform(document.getElementById("text").value)
-        );
+        animationFrame = requestAnimationFrame(() => {
+          drawWaveform(document.getElementById("text").value);
+          syncJitterAnimation();
+        });
+      }
+
+      function syncJitterAnimation() {
+        const jitterMode = document.getElementById("jitterMode").checked;
+        const rainbowMode = document.getElementById("rainbowMode").checked;
+        if ((jitterMode || rainbowMode) && !jitterFrameId) {
+          const animate = () => {
+            jitterPhase += 0.1;
+            drawWaveform(document.getElementById("text").value);
+            jitterFrameId = requestAnimationFrame(animate);
+          };
+          jitterFrameId = requestAnimationFrame(animate);
+        }
+        if (!jitterMode && !rainbowMode && jitterFrameId) {
+          cancelAnimationFrame(jitterFrameId);
+          jitterFrameId = null;
+        }
       }
 
       function downloadVisualization() {
@@ -512,9 +567,18 @@
         "glow",
         "mirror",
         "fill",
+        "rainbowMode",
+        "jitterMode",
         "cleanText",
       ].forEach((id) => {
-        const eventName = id === "cleanText" || id === "mirror" || id === "fill" ? "change" : "input";
+        const eventName =
+          id === "cleanText" ||
+          id === "mirror" ||
+          id === "fill" ||
+          id === "rainbowMode" ||
+          id === "jitterMode"
+            ? "change"
+            : "input";
         document.getElementById(id).addEventListener(eventName, scheduleDraw);
       });
 

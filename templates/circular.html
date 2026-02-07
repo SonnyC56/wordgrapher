@@ -181,6 +181,48 @@
               </label>
             </div>
           </div>
+          <div class="mb-3">
+            <label for="lineWidth" class="form-label"
+              >Line Width: <span id="lineWidthValue">2</span>px</label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="lineWidth"
+              min="1"
+              max="8"
+              step="1"
+              value="2"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="rotationSpeed" class="form-label"
+              >Rotation Speed: <span id="rotationSpeedValue">2</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="rotationSpeed"
+              min="1"
+              max="10"
+              step="1"
+              value="2"
+            />
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="spinMode" />
+              <label class="form-check-label" for="spinMode">
+                Spin Animation
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rainbowMode" />
+              <label class="form-check-label" for="rainbowMode">
+                Rainbow Links
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -231,6 +273,8 @@
       const blackCanvas = document.getElementById("blackGraph");
       const blackCtx = blackCanvas.getContext("2d");
       let animationFrame;
+      let spinFrameId = null;
+      let spinPhase = 0;
 
       function cleanInputText(text) {
         return text.replace(/[^a-zA-Z0-9]/g, "");
@@ -245,11 +289,14 @@
         blackCanvas.height = size;
       }
 
-      function getPositions(radius, centerX, centerY) {
+      function getPositions(radius, centerX, centerY, rotationOffset) {
         const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
         const positions = {};
         alphabet.forEach((char, index) => {
-          const angle = -Math.PI / 2 + (index / alphabet.length) * Math.PI * 2;
+          const angle =
+            -Math.PI / 2 +
+            rotationOffset +
+            (index / alphabet.length) * Math.PI * 2;
           positions[char] = {
             x: centerX + radius * Math.cos(angle),
             y: centerY + radius * Math.sin(angle),
@@ -270,7 +317,7 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (!text) return;
 
-        const positions = getPositions(radius, centerX, centerY);
+        const positions = getPositions(radius, centerX, centerY, spinPhase);
 
         ctx.font = "16px Arial";
         ctx.textAlign = "center";
@@ -296,8 +343,9 @@
         });
 
         const lineColor = document.getElementById("colorPicker").value;
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 2;
+        const rainbowMode = document.getElementById("rainbowMode").checked;
+        const lineWidth = parseInt(document.getElementById("lineWidth").value, 10);
+        ctx.lineWidth = lineWidth;
 
         const phi = (1 + Math.sqrt(5)) / 2;
         const angleIncrement = Math.PI * 2 * (1 - 1 / phi);
@@ -323,12 +371,16 @@
             ctx.beginPath();
             ctx.moveTo(start.x, start.y);
             ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, end.x, end.y);
+            const segmentColor = rainbowMode
+              ? `hsl(${(i * 24 + spinPhase * 120) % 360}, 92%, 55%)`
+              : lineColor;
+            ctx.strokeStyle = segmentColor;
             ctx.stroke();
 
             ctx.save();
-            ctx.shadowColor = lineColor;
+            ctx.shadowColor = segmentColor;
             ctx.shadowBlur = 10;
-            ctx.strokeStyle = lineColor;
+            ctx.strokeStyle = segmentColor;
             ctx.globalAlpha = 0.3;
             ctx.stroke();
             ctx.restore();
@@ -348,7 +400,7 @@
         blackCtx.clearRect(0, 0, blackCanvas.width, blackCanvas.height);
         if (!text) return;
 
-        const positions = getPositions(radius, centerX, centerY);
+        const positions = getPositions(radius, centerX, centerY, spinPhase);
 
         Object.entries(positions).forEach(([char, pos]) => {
           blackCtx.beginPath();
@@ -361,7 +413,7 @@
         const angleIncrement = Math.PI * 2 * (1 - 1 / phi);
 
         blackCtx.strokeStyle = "#000";
-        blackCtx.lineWidth = 2;
+        blackCtx.lineWidth = parseInt(document.getElementById("lineWidth").value, 10);
 
         for (let i = 0; i < text.length - 1; i++) {
           const char1 = text[i].toLowerCase();
@@ -395,9 +447,31 @@
         drawBlackVisualization(text);
       }
 
+      function syncSpinAnimation() {
+        const spinMode = document.getElementById("spinMode").checked;
+        if (spinMode && !spinFrameId) {
+          const animate = () => {
+            const speed =
+              parseInt(document.getElementById("rotationSpeed").value, 10) *
+              0.0006;
+            spinPhase = (spinPhase + speed) % (Math.PI * 2);
+            drawBoth();
+            spinFrameId = requestAnimationFrame(animate);
+          };
+          spinFrameId = requestAnimationFrame(animate);
+        }
+        if (!spinMode && spinFrameId) {
+          cancelAnimationFrame(spinFrameId);
+          spinFrameId = null;
+        }
+      }
+
       function scheduleDraw() {
         cancelAnimationFrame(animationFrame);
-        animationFrame = requestAnimationFrame(drawBoth);
+        animationFrame = requestAnimationFrame(() => {
+          drawBoth();
+          syncSpinAnimation();
+        });
       }
 
       function downloadVisualization() {
@@ -447,13 +521,39 @@
         if (text) {
           document.getElementById("text").value = text;
         }
+        document.getElementById("lineWidthValue").textContent =
+          document.getElementById("lineWidth").value;
+        document.getElementById("rotationSpeedValue").textContent =
+          document.getElementById("rotationSpeed").value;
         drawBoth();
+        syncSpinAnimation();
       });
 
-      ["text", "colorPicker", "cleanText"].forEach((id) => {
-        const eventName = id === "cleanText" ? "change" : "input";
+      ["text", "colorPicker", "cleanText", "lineWidth", "rainbowMode"].forEach(
+        (id) => {
+          const eventName = id === "cleanText" || id === "rainbowMode"
+            ? "change"
+            : "input";
+          document
+            .getElementById(id)
+            .addEventListener(eventName, scheduleDraw);
+        }
+      );
+
+      ["spinMode", "rotationSpeed"].forEach((id) => {
+        const eventName = id === "spinMode" ? "change" : "input";
         document.getElementById(id).addEventListener(eventName, scheduleDraw);
       });
+
+      document.getElementById("lineWidth").addEventListener("input", (event) => {
+        document.getElementById("lineWidthValue").textContent = event.target.value;
+      });
+      document
+        .getElementById("rotationSpeed")
+        .addEventListener("input", (event) => {
+          document.getElementById("rotationSpeedValue").textContent =
+            event.target.value;
+        });
 
       function goBack(link) {
         const text = document.getElementById("text").value;

@@ -215,6 +215,34 @@
               </label>
             </div>
           </div>
+          <div class="mb-3">
+            <label for="cellGap" class="form-label"
+              >Cell Gap: <span id="cellGapValue">1</span>px</label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="cellGap"
+              min="0"
+              max="8"
+              step="1"
+              value="1"
+            />
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="pulseMode" />
+              <label class="form-check-label" for="pulseMode">
+                Pulse Brightness
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="invertPalette" />
+              <label class="form-check-label" for="invertPalette">
+                Invert Palette
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -255,6 +283,8 @@
       const canvas = document.getElementById("heatmapGraph");
       const ctx = canvas.getContext("2d");
       let animationFrame;
+      let pulseFrameId = null;
+      let pulsePhase = 0;
 
       function cleanInputText(text) {
         return text.replace(/[^a-zA-Z0-9]/g, "");
@@ -320,23 +350,40 @@
 
         const startColor = document.getElementById("startColor").value;
         const endColor = document.getElementById("endColor").value;
+        const invertPalette = document.getElementById("invertPalette").checked;
+        const pulseMode = document.getElementById("pulseMode").checked;
+        const cellGap = parseInt(document.getElementById("cellGap").value, 10);
         const showGlyphs = document.getElementById("showGlyphs").checked;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         asciiValues.forEach((value, index) => {
-          const t = (value - min) / range;
+          const rawT = (value - min) / range;
+          const t = invertPalette ? 1 - rawT : rawT;
           const rgb = lerpColor(startColor, endColor, t);
+          const pulse = pulseMode
+            ? 1 + Math.sin(index * 0.35 + pulsePhase) * 0.12
+            : 1;
+          const pulsedRgb = {
+            r: Math.max(0, Math.min(255, Math.round(rgb.r * pulse))),
+            g: Math.max(0, Math.min(255, Math.round(rgb.g * pulse))),
+            b: Math.max(0, Math.min(255, Math.round(rgb.b * pulse))),
+          };
           const row = Math.floor(index / columns);
           const col = index % columns;
           const x = col * cellSize;
           const y = row * cellSize;
 
-          ctx.fillStyle = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-          ctx.fillRect(x, y, cellSize, cellSize);
+          ctx.fillStyle = `rgb(${pulsedRgb.r}, ${pulsedRgb.g}, ${pulsedRgb.b})`;
+          ctx.fillRect(
+            x + cellGap / 2,
+            y + cellGap / 2,
+            Math.max(0, cellSize - cellGap),
+            Math.max(0, cellSize - cellGap)
+          );
 
           if (showGlyphs) {
-            ctx.fillStyle = getContrastColor(rgb);
+            ctx.fillStyle = getContrastColor(pulsedRgb);
             ctx.font = `${Math.max(10, Math.floor(cellSize * 0.45))}px Arial`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -345,11 +392,28 @@
         });
       }
 
+      function syncPulseAnimation() {
+        const pulseMode = document.getElementById("pulseMode").checked;
+        if (pulseMode && !pulseFrameId) {
+          const animate = () => {
+            pulsePhase += 0.1;
+            drawHeatmap(document.getElementById("text").value);
+            pulseFrameId = requestAnimationFrame(animate);
+          };
+          pulseFrameId = requestAnimationFrame(animate);
+        }
+        if (!pulseMode && pulseFrameId) {
+          cancelAnimationFrame(pulseFrameId);
+          pulseFrameId = null;
+        }
+      }
+
       function scheduleDraw() {
         cancelAnimationFrame(animationFrame);
-        animationFrame = requestAnimationFrame(() =>
-          drawHeatmap(document.getElementById("text").value)
-        );
+        animationFrame = requestAnimationFrame(() => {
+          drawHeatmap(document.getElementById("text").value);
+          syncPulseAnimation();
+        });
       }
 
       function downloadVisualization() {
@@ -388,6 +452,8 @@
         if (text) {
           document.getElementById("text").value = text;
         }
+        document.getElementById("cellGapValue").textContent =
+          document.getElementById("cellGap").value;
         scheduleDraw();
       });
 
@@ -398,13 +464,25 @@
         "columns",
         "showGlyphs",
         "cleanText",
+        "cellGap",
+        "pulseMode",
+        "invertPalette",
       ].forEach((id) => {
-        const eventName = id === "cleanText" || id === "showGlyphs" ? "change" : "input";
+        const eventName =
+          id === "cleanText" ||
+          id === "showGlyphs" ||
+          id === "pulseMode" ||
+          id === "invertPalette"
+            ? "change"
+            : "input";
         document.getElementById(id).addEventListener(eventName, scheduleDraw);
       });
 
       document.getElementById("columns").addEventListener("input", (e) => {
         document.getElementById("columnsValue").textContent = e.target.value;
+      });
+      document.getElementById("cellGap").addEventListener("input", (event) => {
+        document.getElementById("cellGapValue").textContent = event.target.value;
       });
 
       function goBack(link) {

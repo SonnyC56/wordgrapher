@@ -315,9 +315,138 @@
                     <span class="ms-2">max</span>
                   </div>
                 </div>
+                <div class="mb-3">
+                  <label for="strokeWidth" class="form-label"
+                    >Stroke Thickness:
+                    <span id="strokeWidthValue">3</span>px</label
+                  >
+                  <input
+                    type="range"
+                    class="form-control"
+                    id="strokeWidth"
+                    min="1"
+                    max="12"
+                    step="1"
+                    value="3"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="pointSize" class="form-label"
+                    >Point Size: <span id="pointSizeValue">4</span>px</label
+                  >
+                  <input
+                    type="range"
+                    class="form-control"
+                    id="pointSize"
+                    min="0"
+                    max="10"
+                    step="1"
+                    value="4"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="glowStrength" class="form-label"
+                    >Glow Strength:
+                    <span id="glowStrengthValue">12</span></label
+                  >
+                  <input
+                    type="range"
+                    class="form-control"
+                    id="glowStrength"
+                    min="0"
+                    max="30"
+                    step="1"
+                    value="12"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="rainbowSpeed" class="form-label"
+                    >Rainbow Speed:
+                    <span id="rainbowSpeedValue">2</span></label
+                  >
+                  <input
+                    type="range"
+                    class="form-control"
+                    id="rainbowSpeed"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value="2"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="backgroundStyle" class="form-label"
+                    >Canvas Background</label
+                  >
+                  <select class="form-select" id="backgroundStyle">
+                    <option value="none" selected>None</option>
+                    <option value="gradient">Gradient</option>
+                    <option value="grid">Retro Grid</option>
+                  </select>
+                </div>
+                <div class="mb-3 d-flex flex-wrap gap-3">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="enableGlow"
+                      checked
+                    />
+                    <label class="form-check-label" for="enableGlow">
+                      Glow
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="rainbowMode"
+                    />
+                    <label class="form-check-label" for="rainbowMode">
+                      Rainbow Line
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="animateRainbow"
+                      checked
+                    />
+                    <label class="form-check-label" for="animateRainbow">
+                      Animate Rainbow
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="dashedLine"
+                    />
+                    <label class="form-check-label" for="dashedLine">
+                      Dashed Line
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="fillArea"
+                    />
+                    <label class="form-check-label" for="fillArea">
+                      Fill Area
+                    </label>
+                  </div>
+                </div>
                 <div class="d-flex flex-wrap">
                   <button onclick="copyShareLink()" class="btn btn-outline-secondary">
                     Copy Share Link
+                  </button>
+                  <button
+                    onclick="randomizeStyle()"
+                    class="btn btn-outline-primary"
+                  >
+                    Randomize Effects
                   </button>
                   <span id="copyStatus" class="align-self-center text-muted ms-2"></span>
                 </div>
@@ -904,6 +1033,9 @@
     </script>
     <script>
       let chart = null;
+      let lineOnlyChart = null;
+      let rainbowFrameId = null;
+      let rainbowPhase = 0;
 
       const exampleTexts = [
         "HELLO WORLD",
@@ -916,16 +1048,6 @@
         "NEON LETTER WAVES",
       ];
 
-      // Load text from URL params if present
-      window.addEventListener("load", () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const text = urlParams.get("text");
-        if (text) {
-          document.getElementById("text").value = text;
-          updateGraph();
-        }
-      });
-
       function cleanInputText(text) {
         return text.replace(/[^a-zA-Z0-9]/g, "");
       }
@@ -934,9 +1056,200 @@
         document.getElementById("charCount").textContent = text.length;
       }
 
+      function parseHexColor(hex) {
+        const cleaned = hex.replace("#", "");
+        const full =
+          cleaned.length === 3
+            ? cleaned
+                .split("")
+                .map((char) => char + char)
+                .join("")
+            : cleaned;
+        const value = parseInt(full, 16);
+        return {
+          r: (value >> 16) & 255,
+          g: (value >> 8) & 255,
+          b: value & 255,
+        };
+      }
+
+      function toRgba(hex, alpha) {
+        const rgb = parseHexColor(hex);
+        return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+      }
+
+      function randomHexColor() {
+        const value = Math.floor(Math.random() * 0xffffff);
+        return `#${value.toString(16).padStart(6, "0")}`;
+      }
+
+      function getEffects() {
+        return {
+          lineColor: document.getElementById("lineColor").value,
+          tension: parseFloat(document.getElementById("tension").value),
+          strokeWidth: parseInt(document.getElementById("strokeWidth").value, 10),
+          pointSize: parseInt(document.getElementById("pointSize").value, 10),
+          glowStrength: parseInt(document.getElementById("glowStrength").value, 10),
+          rainbowSpeed: parseInt(document.getElementById("rainbowSpeed").value, 10),
+          enableGlow: document.getElementById("enableGlow").checked,
+          rainbowMode: document.getElementById("rainbowMode").checked,
+          animateRainbow: document.getElementById("animateRainbow").checked,
+          dashedLine: document.getElementById("dashedLine").checked,
+          fillArea: document.getElementById("fillArea").checked,
+          backgroundStyle: document.getElementById("backgroundStyle").value,
+        };
+      }
+
+      function getRainbowColor(segmentIndex) {
+        const hue = (segmentIndex * 18 + rainbowPhase) % 360;
+        return `hsl(${hue}, 95%, 56%)`;
+      }
+
+      function syncSliderLabels() {
+        document.getElementById("tensionValue").textContent =
+          document.getElementById("tension").value;
+        document.getElementById("strokeWidthValue").textContent =
+          document.getElementById("strokeWidth").value;
+        document.getElementById("pointSizeValue").textContent =
+          document.getElementById("pointSize").value;
+        document.getElementById("glowStrengthValue").textContent =
+          document.getElementById("glowStrength").value;
+        document.getElementById("rainbowSpeedValue").textContent =
+          document.getElementById("rainbowSpeed").value;
+      }
+
+      const canvasBackgroundPlugin = {
+        id: "canvasBackgroundPlugin",
+        beforeDraw(chartInstance) {
+          const effects = getEffects();
+          const { ctx, chartArea } = chartInstance;
+          if (!chartArea || effects.backgroundStyle === "none") {
+            return;
+          }
+
+          const { left, top, right, bottom, width, height } = chartArea;
+          ctx.save();
+          if (effects.backgroundStyle === "gradient") {
+            const gradient = ctx.createLinearGradient(left, top, right, bottom);
+            gradient.addColorStop(0, "rgba(224, 242, 254, 0.55)");
+            gradient.addColorStop(1, "rgba(254, 240, 138, 0.4)");
+            ctx.fillStyle = gradient;
+            ctx.fillRect(left, top, width, height);
+          } else if (effects.backgroundStyle === "grid") {
+            ctx.fillStyle = "rgba(2, 6, 23, 0.06)";
+            ctx.fillRect(left, top, width, height);
+            ctx.strokeStyle = "rgba(2, 6, 23, 0.13)";
+            ctx.lineWidth = 1;
+            const step = 16;
+            for (let x = left; x <= right; x += step) {
+              ctx.beginPath();
+              ctx.moveTo(x, top);
+              ctx.lineTo(x, bottom);
+              ctx.stroke();
+            }
+            for (let y = top; y <= bottom; y += step) {
+              ctx.beginPath();
+              ctx.moveTo(left, y);
+              ctx.lineTo(right, y);
+              ctx.stroke();
+            }
+          }
+          ctx.restore();
+        },
+      };
+
+      const lineGlowPlugin = {
+        id: "lineGlowPlugin",
+        beforeDatasetDraw(chartInstance) {
+          const effects = getEffects();
+          const ctx = chartInstance.ctx;
+          ctx.save();
+          if (effects.enableGlow && effects.glowStrength > 0) {
+            ctx.shadowBlur = effects.glowStrength;
+            ctx.shadowColor = effects.rainbowMode
+              ? getRainbowColor(0)
+              : effects.lineColor;
+          }
+        },
+        afterDatasetDraw(chartInstance) {
+          chartInstance.ctx.restore();
+        },
+      };
+
+      Chart.register(canvasBackgroundPlugin, lineGlowPlugin);
+
+      function applyDatasetEffects(dataset, hasPoints) {
+        const effects = getEffects();
+        dataset.tension = effects.tension;
+        dataset.borderWidth = effects.strokeWidth;
+        dataset.pointRadius = hasPoints ? effects.pointSize : 0;
+        dataset.pointHoverRadius = hasPoints
+          ? Math.max(2, effects.pointSize + 2)
+          : 0;
+        dataset.borderDash = effects.dashedLine ? [10, 6] : [];
+        dataset.fill = hasPoints ? effects.fillArea : false;
+        dataset.backgroundColor =
+          hasPoints && effects.fillArea
+            ? toRgba(effects.lineColor, 0.18)
+            : "transparent";
+        dataset.borderColor = effects.rainbowMode
+          ? getRainbowColor(0)
+          : effects.lineColor;
+        dataset.segment = {
+          borderColor: (ctx) => {
+            const liveEffects = getEffects();
+            return liveEffects.rainbowMode
+              ? getRainbowColor(ctx.p0DataIndex)
+              : liveEffects.lineColor;
+          },
+        };
+      }
+
+      function sizeCanvases() {
+        const fullCanvas = document.getElementById("asciiGraph");
+        const lineOnlyCanvas = document.getElementById("lineOnlyGraph");
+        const containerWidth = fullCanvas.parentElement.offsetWidth;
+        const canvasWidth = Math.min(800, containerWidth - 20);
+        const aspectRatio = 2;
+        fullCanvas.width = canvasWidth;
+        fullCanvas.height = canvasWidth / aspectRatio;
+        lineOnlyCanvas.width = canvasWidth;
+        lineOnlyCanvas.height = canvasWidth / aspectRatio;
+      }
+
+      function syncRainbowAnimation() {
+        const effects = getEffects();
+        const shouldAnimate =
+          !!chart && effects.rainbowMode && effects.animateRainbow;
+
+        if (shouldAnimate && !rainbowFrameId) {
+          const animate = () => {
+            const speed = parseInt(
+              document.getElementById("rainbowSpeed").value,
+              10
+            );
+            rainbowPhase = (rainbowPhase + speed) % 360;
+            if (chart) {
+              chart.update("none");
+            }
+            if (lineOnlyChart) {
+              lineOnlyChart.update("none");
+            }
+            rainbowFrameId = requestAnimationFrame(animate);
+          };
+          rainbowFrameId = requestAnimationFrame(animate);
+        }
+
+        if (!shouldAnimate && rainbowFrameId) {
+          cancelAnimationFrame(rainbowFrameId);
+          rainbowFrameId = null;
+        }
+      }
+
       function updateGraph() {
         const rawText = document.getElementById("text").value;
         updateCharCount(rawText);
+        syncSliderLabels();
 
         let text = rawText;
         const clean = document.getElementById("cleanText").checked;
@@ -955,52 +1268,36 @@
             chart.destroy();
             chart = null;
           }
-          if (window.lineOnlyChart) {
-            window.lineOnlyChart.destroy();
-            window.lineOnlyChart = null;
+          if (lineOnlyChart) {
+            lineOnlyChart.destroy();
+            lineOnlyChart = null;
           }
           document.getElementById("graphContainer").style.display = "none";
+          syncRainbowAnimation();
           return;
         }
 
         const asciiValues = Array.from(text.toLowerCase()).map((char) =>
           char.charCodeAt(0)
         );
-        const labels = Array.from(
-          { length: asciiValues.length },
-          (_, i) => i + 1
-        );
-        const tension = parseFloat(document.getElementById("tension").value);
-
-        const ctx = document.getElementById("asciiGraph").getContext("2d");
+        const labels = Array.from({ length: asciiValues.length }, (_, i) => i + 1);
+        const effects = getEffects();
 
         if (!chart) {
           document.getElementById("graphContainer").style.display = "block";
+          sizeCanvases();
 
-          const fullCanvas = document.getElementById("asciiGraph");
-          const lineOnlyCanvas = document.getElementById("lineOnlyGraph");
-
-          // Set responsive canvas dimensions
-          const containerWidth = fullCanvas.parentElement.offsetWidth;
-          const canvasWidth = Math.min(800, containerWidth - 20); // 20px for padding
-          const aspectRatio = 2; // width/height ratio
-
-          fullCanvas.width = canvasWidth;
-          fullCanvas.height = canvasWidth / aspectRatio;
-          lineOnlyCanvas.width = canvasWidth;
-          lineOnlyCanvas.height = canvasWidth / aspectRatio;
-
-          chart = new Chart(ctx, {
+          const fullContext = document
+            .getElementById("asciiGraph")
+            .getContext("2d");
+          chart = new Chart(fullContext, {
             type: "line",
             data: {
-              labels: labels,
+              labels,
               datasets: [
                 {
                   label: "ASCII Values",
                   data: asciiValues,
-                  borderColor: document.getElementById("lineColor").value,
-                  tension: tension,
-                  pointRadius: 5,
                 },
               ],
             },
@@ -1032,25 +1329,16 @@
             },
           });
 
-          // Create line-only chart
-          const lineOnlyCtx = document
+          const lineOnlyContext = document
             .getElementById("lineOnlyGraph")
             .getContext("2d");
-          if (window.lineOnlyChart) {
-            window.lineOnlyChart.destroy();
-          }
-          window.lineOnlyChart = new Chart(lineOnlyCtx, {
+          lineOnlyChart = new Chart(lineOnlyContext, {
             type: "line",
             data: {
-              labels: labels,
+              labels,
               datasets: [
                 {
                   data: asciiValues,
-                  borderColor: document.getElementById("lineColor").value,
-                  tension: tension,
-                  pointRadius: 0,
-                  borderWidth: 3,
-                  fill: false,
                 },
               ],
             },
@@ -1077,30 +1365,58 @@
             },
           });
         } else {
-          // Update existing chart
           chart.data.labels = labels;
           chart.data.datasets[0].data = asciiValues;
-          chart.data.datasets[0].tension = tension;
-          chart.data.datasets[0].borderColor =
-            document.getElementById("lineColor").value;
-          chart.update();
+          chart.options.scales.y.suggestedMin = Math.min(...asciiValues) * 0.9;
+          chart.options.scales.y.suggestedMax = Math.max(...asciiValues) * 1.1;
 
-          // Update line-only chart
-          window.lineOnlyChart.data.labels = labels;
-          window.lineOnlyChart.data.datasets[0].data = asciiValues;
-          window.lineOnlyChart.data.datasets[0].tension = tension;
-          window.lineOnlyChart.data.datasets[0].borderColor =
-            document.getElementById("lineColor").value;
-          window.lineOnlyChart.update();
+          lineOnlyChart.data.labels = labels;
+          lineOnlyChart.data.datasets[0].data = asciiValues;
         }
+
+        applyDatasetEffects(chart.data.datasets[0], true);
+        applyDatasetEffects(lineOnlyChart.data.datasets[0], false);
+        lineOnlyChart.data.datasets[0].backgroundColor = "transparent";
+        lineOnlyChart.data.datasets[0].fill = false;
+        lineOnlyChart.data.datasets[0].pointRadius = 0;
+
+        chart.update("none");
+        lineOnlyChart.update("none");
+        syncRainbowAnimation();
+      }
+
+      function randomizeStyle() {
+        document.getElementById("lineColor").value = randomHexColor();
+        document.getElementById("tension").value = (
+          Math.round(Math.random() * 9) / 10
+        ).toFixed(1);
+        document.getElementById("strokeWidth").value = String(
+          Math.floor(Math.random() * 8) + 2
+        );
+        document.getElementById("pointSize").value = String(
+          Math.floor(Math.random() * 8)
+        );
+        document.getElementById("glowStrength").value = String(
+          Math.floor(Math.random() * 26)
+        );
+        document.getElementById("rainbowSpeed").value = String(
+          Math.floor(Math.random() * 8) + 1
+        );
+        document.getElementById("enableGlow").checked = Math.random() > 0.2;
+        document.getElementById("rainbowMode").checked = Math.random() > 0.35;
+        document.getElementById("animateRainbow").checked = Math.random() > 0.25;
+        document.getElementById("dashedLine").checked = Math.random() > 0.55;
+        document.getElementById("fillArea").checked = Math.random() > 0.55;
+        const backgrounds = ["none", "gradient", "grid"];
+        document.getElementById("backgroundStyle").value =
+          backgrounds[Math.floor(Math.random() * backgrounds.length)];
+        updateGraph();
       }
 
       function downloadGraph() {
         const link = document.createElement("a");
         link.download = "word_graph.png";
-        link.href = document
-          .getElementById("asciiGraph")
-          .toDataURL("image/png");
+        link.href = document.getElementById("asciiGraph").toDataURL("image/png");
         link.click();
       }
 
@@ -1133,22 +1449,6 @@
         }, 2000);
       }
 
-      // Add event listeners for real-time updates
-      ["text", "tension", "lineColor", "cleanText"].forEach((id) => {
-        const eventName = id === "cleanText" ? "change" : "input";
-        document.getElementById(id).addEventListener(eventName, updateGraph);
-      });
-      document
-        .getElementById("showFullGraph")
-        .addEventListener("change", function (e) {
-          const fullGraph = document.getElementById("asciiGraph");
-          const downloadFullBtn = document.getElementById("downloadFullBtn");
-          fullGraph.style.display = e.target.checked ? "block" : "none";
-          downloadFullBtn.style.display = e.target.checked
-            ? "inline-block"
-            : "none";
-        });
-
       function resetForm() {
         document.getElementById("text").value = "";
         document.getElementById("graphContainer").style.display = "none";
@@ -1159,16 +1459,22 @@
           chart.destroy();
           chart = null;
         }
-        if (window.lineOnlyChart) {
-          window.lineOnlyChart.destroy();
-          window.lineOnlyChart = null;
+        if (lineOnlyChart) {
+          lineOnlyChart.destroy();
+          lineOnlyChart = null;
         }
+        syncRainbowAnimation();
       }
+
       function openWithText(link) {
         const text = document.getElementById("text").value;
+        const url = new URL(link.href, window.location.origin);
         if (text) {
-          link.href = link.href + "?text=" + encodeURIComponent(text);
+          url.searchParams.set("text", text);
+        } else {
+          url.searchParams.delete("text");
         }
+        link.href = url.toString();
         return true;
       }
 
@@ -1179,6 +1485,64 @@
           .getElementById("graphContainer")
           .scrollIntoView({ behavior: "smooth", block: "start" });
       }
+
+      window.addEventListener("resize", () => {
+        if (!chart || !lineOnlyChart) {
+          return;
+        }
+        sizeCanvases();
+        chart.resize();
+        lineOnlyChart.resize();
+        chart.update("none");
+        lineOnlyChart.update("none");
+      });
+
+      // Load text from URL params if present
+      window.addEventListener("load", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const text = urlParams.get("text");
+        if (text) {
+          document.getElementById("text").value = text;
+        }
+        syncSliderLabels();
+        updateGraph();
+      });
+
+      const liveControlIds = [
+        "text",
+        "tension",
+        "lineColor",
+        "cleanText",
+        "strokeWidth",
+        "pointSize",
+        "glowStrength",
+        "rainbowSpeed",
+        "backgroundStyle",
+        "enableGlow",
+        "rainbowMode",
+        "animateRainbow",
+        "dashedLine",
+        "fillArea",
+      ];
+      liveControlIds.forEach((id) => {
+        const element = document.getElementById(id);
+        const eventName =
+          element.type === "checkbox" || element.tagName === "SELECT"
+            ? "change"
+            : "input";
+        element.addEventListener(eventName, updateGraph);
+      });
+
+      document
+        .getElementById("showFullGraph")
+        .addEventListener("change", function (event) {
+          const fullGraph = document.getElementById("asciiGraph");
+          const downloadFullBtn = document.getElementById("downloadFullBtn");
+          fullGraph.style.display = event.target.checked ? "block" : "none";
+          downloadFullBtn.style.display = event.target.checked
+            ? "inline-block"
+            : "none";
+        });
 
       document.querySelectorAll(".example-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -1193,10 +1557,6 @@
             exampleTexts[Math.floor(Math.random() * exampleTexts.length)];
           applyExample(randomText);
         });
-
-      document.getElementById("tension").addEventListener("input", (e) => {
-        document.getElementById("tensionValue").textContent = e.target.value;
-      });
     </script>
   </body>
 </html>
