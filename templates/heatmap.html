@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Morse Code Visualization - Text to Morse Pattern Generator</title>
+    <title>Text Heatmap Grid - ASCII Intensity Visualization</title>
     <meta
       name="description"
-      content="Convert text to visual morse code patterns. Create colorful dot-dash visualizations from any text with our free online morse code generator."
+      content="Visualize text as a heatmap grid. Each character maps to a colored tile, with optional glyph overlays and instant downloads."
     />
     <meta
       name="keywords"
-      content="morse code generator, morse code visualization, text to morse, morse code patterns, morse code art, morse code converter"
+      content="text heatmap, ascii heatmap, grid visualization, text art, letter grid"
     />
     <meta name="robots" content="index,follow" />
     <meta name="theme-color" content="#0d6efd" />
@@ -19,19 +19,19 @@
     <meta property="og:type" content="website" />
     <meta
       property="og:url"
-      content="https://wordgrapher.com/templates/morse.html"
+      content="https://wordgrapher.com/templates/heatmap.html"
     />
     <meta
       property="og:title"
-      content="Morse Code Visualization - Text to Morse Patterns"
+      content="Text Heatmap Grid - ASCII Intensity Visualization"
     />
     <meta
       property="og:description"
-      content="Transform text into colorful morse code patterns. Free online tool for creating visual morse code art from any text."
+      content="Visualize text as a heatmap grid. Each character maps to a colored tile, with optional glyph overlays."
     />
     <meta
       property="og:image"
-      content="https://wordgrapher.com/morse-preview.svg"
+      content="https://wordgrapher.com/heatmap-preview.svg"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -40,22 +40,22 @@
     <meta property="twitter:card" content="summary_large_image" />
     <meta
       property="twitter:url"
-      content="https://wordgrapher.com/templates/morse.html"
+      content="https://wordgrapher.com/templates/heatmap.html"
     />
     <meta
       property="twitter:title"
-      content="Visual Morse Code Generator"
+      content="Text Heatmap Grid"
     />
     <meta
       property="twitter:description"
-      content="Create beautiful morse code visualizations from text. Free online text-to-morse pattern converter."
+      content="Visualize text as a heatmap grid with optional glyph overlays and instant downloads."
     />
     <meta
       property="twitter:image"
-      content="https://wordgrapher.com/morse-preview.svg"
+      content="https://wordgrapher.com/heatmap-preview.svg"
     />
 
-    <link rel="canonical" href="https://wordgrapher.com/templates/morse.html" />
+    <link rel="canonical" href="https://wordgrapher.com/templates/heatmap.html" />
     <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <script
@@ -88,7 +88,7 @@
       canvas {
         border: 1px solid #ddd;
         border-radius: 4px;
-        background-color: #f8f9fa;
+        background-color: #ffffff;
         max-width: 100%;
         height: auto !important;
       }
@@ -120,10 +120,10 @@
   <body>
     <div class="main-content">
       <div class="text-center mb-4">
-        <h1>Morse Code Visualization</h1>
+        <h1>Text Heatmap Grid</h1>
         <p class="text-muted">
-          Convert text into bold dot-dash patterns with custom colors and
-          downloadable output.
+          Map each character to a colored tile. Adjust the grid density and
+          color gradient for a bold, poster-ready heatmap.
         </p>
         <a
           href="../index.html"
@@ -158,26 +158,53 @@
             <label for="text" class="form-label">Enter your text:</label>
             <textarea class="form-control" id="text" rows="3" required></textarea>
           </div>
-          <div class="mb-3 d-flex flex-wrap align-items-center gap-2">
+          <div class="mb-3 d-flex flex-wrap gap-3">
             <div>
-              <label for="dotColor" class="form-label">Dot Color:</label>
+              <label for="startColor" class="form-label">Gradient Start:</label>
               <input
                 type="color"
                 class="form-control form-control-color"
-                id="dotColor"
-                value="#0275d8"
-                aria-label="Choose dot color"
+                id="startColor"
+                value="#f97316"
+                aria-label="Choose gradient start color"
               />
             </div>
             <div>
-              <label for="dashColor" class="form-label">Dash Color:</label>
+              <label for="endColor" class="form-label">Gradient End:</label>
               <input
                 type="color"
                 class="form-control form-control-color"
-                id="dashColor"
-                value="#5cb85c"
-                aria-label="Choose dash color"
+                id="endColor"
+                value="#0ea5e9"
+                aria-label="Choose gradient end color"
               />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="columns" class="form-label"
+              >Columns: <span id="columnsValue">16</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="columns"
+              min="6"
+              max="30"
+              step="1"
+              value="16"
+            />
+          </div>
+          <div class="mb-3">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="showGlyphs"
+                checked
+              />
+              <label class="form-check-label" for="showGlyphs">
+                Show letters on tiles
+              </label>
             </div>
           </div>
           <div class="mb-3">
@@ -193,7 +220,7 @@
 
       <div class="text-center mt-4">
         <div class="container-fluid">
-          <canvas id="morseGraph" class="img-fluid"></canvas>
+          <canvas id="heatmapGraph" class="img-fluid"></canvas>
         </div>
       </div>
 
@@ -212,9 +239,9 @@
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "Morse Code Visualization",
-        "description": "Convert text to visual morse code patterns and create colorful dot-dash visualizations.",
-        "url": "https://wordgrapher.com/templates/morse.html",
+        "name": "Text Heatmap Grid",
+        "description": "Visualize text as a heatmap grid with optional glyph overlays and instant downloads.",
+        "url": "https://wordgrapher.com/templates/heatmap.html",
         "applicationCategory": "Visualization Tool",
         "operatingSystem": "Any",
         "offers": {
@@ -225,57 +252,9 @@
       }
     </script>
     <script>
-      const MORSE_CODE = {
-        A: ".-",
-        B: "-...",
-        C: "-.-.",
-        D: "-..",
-        E: ".",
-        F: "..-.",
-        G: "--.",
-        H: "....",
-        I: "..",
-        J: ".---",
-        K: "-.-",
-        L: ".-..",
-        M: "--",
-        N: "-.",
-        O: "---",
-        P: ".--.",
-        Q: "--.-",
-        R: ".-.",
-        S: "...",
-        T: "-",
-        U: "..-",
-        V: "...-",
-        W: ".--",
-        X: "-..-",
-        Y: "-.--",
-        Z: "--..",
-        0: "-----",
-        1: ".----",
-        2: "..---",
-        3: "...--",
-        4: "....-",
-        5: ".....",
-        6: "-....",
-        7: "--...",
-        8: "---..",
-        9: "----.",
-        " ": " ",
-      };
-
-      const canvas = document.getElementById("morseGraph");
+      const canvas = document.getElementById("heatmapGraph");
       const ctx = canvas.getContext("2d");
       let animationFrame;
-
-      function textToMorse(text) {
-        return text
-          .toUpperCase()
-          .split("")
-          .map((char) => MORSE_CODE[char] || char)
-          .join(" ");
-      }
 
       function cleanInputText(text) {
         return text.replace(/[^a-zA-Z0-9]/g, "");
@@ -287,70 +266,81 @@
         canvas.width = width;
       }
 
-      function measureLines(morse, width, unitSize, spacing) {
-        let x = 40;
-        let lines = 1;
-        morse.split("").forEach((char) => {
-          if (char === ".") {
-            x += unitSize + spacing;
-          } else if (char === "-") {
-            x += unitSize * 3 + spacing;
-          } else if (char === " ") {
-            x += unitSize * 2;
-          }
-          if (x > width - 60) {
-            lines += 1;
-            x = 40;
-          }
-        });
-        return lines;
+      function hexToRgb(hex) {
+        const normalized = hex.replace("#", "");
+        const value =
+          normalized.length === 3
+            ? normalized
+                .split("")
+                .map((c) => c + c)
+                .join("")
+            : normalized;
+        const intValue = parseInt(value, 16);
+        return {
+          r: (intValue >> 16) & 255,
+          g: (intValue >> 8) & 255,
+          b: intValue & 255,
+        };
       }
 
-      function drawMorseVisualization(inputText) {
+      function lerpColor(start, end, t) {
+        const startRgb = hexToRgb(start);
+        const endRgb = hexToRgb(end);
+        const r = Math.round(startRgb.r + (endRgb.r - startRgb.r) * t);
+        const g = Math.round(startRgb.g + (endRgb.g - startRgb.g) * t);
+        const b = Math.round(startRgb.b + (endRgb.b - startRgb.b) * t);
+        return { r, g, b };
+      }
+
+      function getContrastColor(rgb) {
+        const luminance = 0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b;
+        return luminance > 140 ? "#0f172a" : "#f8fafc";
+      }
+
+      function drawHeatmap(inputText) {
+        const rawText = inputText;
         const text = document.getElementById("cleanText").checked
-          ? cleanInputText(inputText)
-          : inputText;
+          ? cleanInputText(rawText)
+          : rawText;
 
         resizeCanvas();
-        ctx.fillStyle = "#f8f9fa";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (!text) return;
 
-        const morse = textToMorse(text);
-        const dotColor = document.getElementById("dotColor").value;
-        const dashColor = document.getElementById("dashColor").value;
+        const asciiValues = Array.from(text).map((char) => char.charCodeAt(0));
+        const min = Math.min(...asciiValues);
+        const max = Math.max(...asciiValues);
+        const range = Math.max(1, max - min);
 
-        const unitSize = 20;
-        const spacing = 10;
-        const lineHeight = 40;
-        const lines = measureLines(morse, canvas.width, unitSize, spacing);
-        canvas.height = Math.max(220, 40 + lines * lineHeight);
+        const columns = parseInt(document.getElementById("columns").value, 10);
+        const cellSize = Math.max(12, Math.floor(canvas.width / columns));
+        const rows = Math.ceil(asciiValues.length / columns);
+        canvas.height = Math.max(240, rows * cellSize);
 
-        ctx.fillStyle = "#f8f9fa";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const startColor = document.getElementById("startColor").value;
+        const endColor = document.getElementById("endColor").value;
+        const showGlyphs = document.getElementById("showGlyphs").checked;
 
-        let x = 40;
-        let y = 50;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        morse.split("").forEach((char) => {
-          if (char === ".") {
-            ctx.beginPath();
-            ctx.arc(x + unitSize / 2, y, unitSize / 2, 0, Math.PI * 2);
-            ctx.fillStyle = dotColor;
-            ctx.fill();
-            x += unitSize + spacing;
-          } else if (char === "-") {
-            ctx.fillStyle = dashColor;
-            ctx.fillRect(x, y - unitSize / 4, unitSize * 3, unitSize / 2);
-            x += unitSize * 3 + spacing;
-          } else if (char === " ") {
-            x += unitSize * 2;
-          }
+        asciiValues.forEach((value, index) => {
+          const t = (value - min) / range;
+          const rgb = lerpColor(startColor, endColor, t);
+          const row = Math.floor(index / columns);
+          const col = index % columns;
+          const x = col * cellSize;
+          const y = row * cellSize;
 
-          if (x > canvas.width - 60) {
-            x = 40;
-            y += lineHeight;
+          ctx.fillStyle = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+          ctx.fillRect(x, y, cellSize, cellSize);
+
+          if (showGlyphs) {
+            ctx.fillStyle = getContrastColor(rgb);
+            ctx.font = `${Math.max(10, Math.floor(cellSize * 0.45))}px Arial`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text[index], x + cellSize / 2, y + cellSize / 2);
           }
         });
       }
@@ -358,13 +348,13 @@
       function scheduleDraw() {
         cancelAnimationFrame(animationFrame);
         animationFrame = requestAnimationFrame(() =>
-          drawMorseVisualization(document.getElementById("text").value)
+          drawHeatmap(document.getElementById("text").value)
         );
       }
 
       function downloadVisualization() {
         const link = document.createElement("a");
-        link.download = "morse_visualization.png";
+        link.download = "heatmap_visualization.png";
         link.href = canvas.toDataURL("image/png");
         link.click();
       }
@@ -391,7 +381,6 @@
 
       window.addEventListener("resize", scheduleDraw);
 
-      // Load text from URL params if present
       window.addEventListener("load", () => {
         resizeCanvas();
         const urlParams = new URLSearchParams(window.location.search);
@@ -402,9 +391,20 @@
         scheduleDraw();
       });
 
-      ["text", "dotColor", "dashColor", "cleanText"].forEach((id) => {
-        const eventName = id === "cleanText" ? "change" : "input";
+      [
+        "text",
+        "startColor",
+        "endColor",
+        "columns",
+        "showGlyphs",
+        "cleanText",
+      ].forEach((id) => {
+        const eventName = id === "cleanText" || id === "showGlyphs" ? "change" : "input";
         document.getElementById(id).addEventListener(eventName, scheduleDraw);
+      });
+
+      document.getElementById("columns").addEventListener("input", (e) => {
+        document.getElementById("columnsValue").textContent = e.target.value;
       });
 
       function goBack(link) {

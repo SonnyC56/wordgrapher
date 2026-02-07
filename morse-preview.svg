@@ -1,0 +1,35 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0f172a" />
+      <stop offset="1" stop-color="#334155" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)" />
+  <text x="70" y="120" fill="#ffffff" font-family="Arial, sans-serif" font-size="60" font-weight="700">
+    Morse Code Visualization
+  </text>
+  <text x="70" y="175" fill="#cbd5f5" font-family="Arial, sans-serif" font-size="26">
+    Dot-dash patterns in color
+  </text>
+  <g transform="translate(120,260)">
+    <circle cx="0" cy="0" r="20" fill="#38bdf8" />
+    <rect x="60" y="-12" width="120" height="24" rx="12" fill="#22c55e" />
+    <circle cx="240" cy="0" r="20" fill="#38bdf8" />
+    <circle cx="320" cy="0" r="20" fill="#38bdf8" />
+    <rect x="380" y="-12" width="120" height="24" rx="12" fill="#22c55e" />
+  </g>
+  <g transform="translate(120,360)">
+    <rect x="0" y="-12" width="120" height="24" rx="12" fill="#22c55e" />
+    <circle cx="180" cy="0" r="20" fill="#38bdf8" />
+    <rect x="240" y="-12" width="120" height="24" rx="12" fill="#22c55e" />
+    <circle cx="420" cy="0" r="20" fill="#38bdf8" />
+  </g>
+  <g transform="translate(120,460)">
+    <circle cx="0" cy="0" r="20" fill="#38bdf8" />
+    <circle cx="80" cy="0" r="20" fill="#38bdf8" />
+    <rect x="140" y="-12" width="120" height="24" rx="12" fill="#22c55e" />
+    <circle cx="320" cy="0" r="20" fill="#38bdf8" />
+    <rect x="380" y="-12" width="120" height="24" rx="12" fill="#22c55e" />
+  </g>
+</svg>

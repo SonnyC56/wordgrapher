@@ -1,0 +1,34 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8fafc" />
+      <stop offset="1" stop-color="#e0f2fe" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)" />
+
+  <text x="70" y="120" fill="#0f172a" font-family="Arial, sans-serif" font-size="60" font-weight="700">
+    Text Chord Diagram
+  </text>
+  <text x="70" y="175" fill="#334155" font-family="Arial, sans-serif" font-size="26">
+    Character transitions as curved links
+  </text>
+
+  <circle cx="830" cy="350" r="190" stroke="rgba(15,23,42,0.2)" stroke-width="2" fill="none" />
+
+  <path d="M830 160 Q920 260 1010 310" stroke="#0ea5e9" stroke-width="7" stroke-linecap="round" opacity="0.7" />
+  <path d="M1010 310 Q920 430 760 510" stroke="#0ea5e9" stroke-width="6" stroke-linecap="round" opacity="0.55" />
+  <path d="M760 510 Q650 360 640 240" stroke="#0ea5e9" stroke-width="8" stroke-linecap="round" opacity="0.62" />
+  <path d="M640 240 Q760 150 830 160" stroke="#0ea5e9" stroke-width="5" stroke-linecap="round" opacity="0.5" />
+  <path d="M760 510 Q860 390 1010 310" stroke="#0284c7" stroke-width="4" stroke-linecap="round" opacity="0.65" />
+
+  <circle cx="830" cy="160" r="12" fill="#0f172a" />
+  <circle cx="1010" cy="310" r="12" fill="#0f172a" />
+  <circle cx="760" cy="510" r="12" fill="#0f172a" />
+  <circle cx="640" cy="240" r="12" fill="#0f172a" />
+
+  <text x="830" y="132" fill="#0f172a" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">A</text>
+  <text x="1038" y="316" fill="#0f172a" font-family="Arial, sans-serif" font-size="18">B</text>
+  <text x="760" y="548" fill="#0f172a" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">C</text>
+  <text x="612" y="245" fill="#0f172a" font-family="Arial, sans-serif" font-size="18">D</text>
+</svg>

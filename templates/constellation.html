@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Constellation Text Map - Starfield Word Visualization</title>
+    <meta
+      name="description"
+      content="Turn text into a glowing constellation map. Plot characters like stars, connect your word path, and download a poster-ready image instantly."
+    />
+    <meta
+      name="keywords"
+      content="constellation text, starfield text, word visualization, text art, generative art, letter constellation"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0d6efd" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://wordgrapher.com/templates/constellation.html"
+    />
+    <meta
+      property="og:title"
+      content="Constellation Text Map - Starfield Word Visualization"
+    />
+    <meta
+      property="og:description"
+      content="Turn text into a glowing constellation map. Plot characters like stars, connect your word path, and download a poster-ready image instantly."
+    />
+    <meta
+      property="og:image"
+      content="https://wordgrapher.com/constellation-preview.svg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:url"
+      content="https://wordgrapher.com/templates/constellation.html"
+    />
+    <meta
+      property="twitter:title"
+      content="Constellation Text Map"
+    />
+    <meta
+      property="twitter:description"
+      content="Turn text into a glowing constellation map and download it instantly."
+    />
+    <meta
+      property="twitter:image"
+      content="https://wordgrapher.com/constellation-preview.svg"
+    />
+
+    <link
+      rel="canonical"
+      href="https://wordgrapher.com/templates/constellation.html"
+    />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-C30PHQ1VGF"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-C30PHQ1VGF");
+    </script>
+    <style>
+      body {
+        background: #f8fafc;
+      }
+      canvas {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #0b1220;
+        max-width: 100%;
+        height: auto !important;
+      }
+      .main-content {
+        margin: 20px auto;
+        max-width: 100%;
+        padding: 0 15px 60px;
+      }
+      @media (min-width: 900px) {
+        .main-content {
+          max-width: 900px;
+        }
+      }
+      .btn {
+        margin: 5px;
+        white-space: nowrap;
+      }
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+        .btn {
+          padding: 0.375rem 0.75rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-content">
+      <div class="text-center mb-4">
+        <h1>Constellation Text Map</h1>
+        <p class="text-muted">
+          Plot characters like stars and connect your text into a glowing
+          constellation.
+        </p>
+        <a
+          href="../index.html"
+          class="btn btn-outline-secondary"
+          onclick="return goBack(this)"
+          >Back to Word Grapher</a
+        >
+      </div>
+
+      <!-- Google AdSense -->
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+        crossorigin="anonymous"
+      ></script>
+      <!-- wordgrapher1 -->
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-client="ca-pub-7049016882676520"
+        data-ad-slot="8204395909"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="text" class="form-label">Enter your text:</label>
+            <textarea class="form-control" id="text" rows="3" required></textarea>
+            <div class="text-muted small mt-2">
+              Characters: <span id="charCount">0</span>
+            </div>
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div>
+              <label for="lineColor" class="form-label">Line Color:</label>
+              <input
+                type="color"
+                class="form-control form-control-color"
+                id="lineColor"
+                value="#38bdf8"
+                aria-label="Choose line color"
+              />
+            </div>
+            <div>
+              <label for="starColor" class="form-label">Star Color:</label>
+              <input
+                type="color"
+                class="form-control form-control-color"
+                id="starColor"
+                value="#e2e8f0"
+                aria-label="Choose star color"
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="starDensity" class="form-label"
+              >Starfield Density: <span id="starDensityValue">140</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="starDensity"
+              min="40"
+              max="320"
+              step="10"
+              value="140"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="curve" class="form-label"
+              >Curve: <span id="curveValue">0.25</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="curve"
+              min="0"
+              max="0.6"
+              step="0.05"
+              value="0.25"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="glow" class="form-label"
+              >Glow: <span id="glowValue">14</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="glow"
+              min="0"
+              max="30"
+              step="1"
+              value="14"
+            />
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="showLabels" checked />
+              <label class="form-check-label" for="showLabels">Show labels</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="cleanText" />
+              <label class="form-check-label" for="cleanText">
+                Remove spaces and punctuation
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <div class="container-fluid">
+          <canvas id="constellationGraph" class="img-fluid"></canvas>
+        </div>
+      </div>
+
+      <div class="text-center mt-3">
+        <button onclick="downloadVisualization()" class="btn btn-success">
+          Download Image
+        </button>
+        <button onclick="copyShareLink()" class="btn btn-outline-secondary">
+          Copy Share Link
+        </button>
+        <span id="copyStatus" class="text-muted ms-2"></span>
+      </div>
+    </div>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Constellation Text Map",
+        "description": "Turn text into a glowing constellation map. Plot characters like stars, connect your word path, and download a poster-ready image instantly.",
+        "url": "https://wordgrapher.com/templates/constellation.html",
+        "applicationCategory": "Visualization Tool",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+    <script>
+      const canvas = document.getElementById("constellationGraph");
+      const ctx = canvas.getContext("2d");
+      let animationFrame;
+
+      const CHAR_SET = "abcdefghijklmnopqrstuvwxyz0123456789";
+      const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+
+      function cleanInputText(text) {
+        return text.replace(/[^a-zA-Z0-9]/g, "");
+      }
+
+      function updateCharCount(text) {
+        document.getElementById("charCount").textContent = text.length;
+      }
+
+      function fnv1a32(input) {
+        let hash = 0x811c9dc5;
+        for (let i = 0; i < input.length; i++) {
+          hash ^= input.charCodeAt(i);
+          hash = Math.imul(hash, 0x01000193);
+        }
+        return hash >>> 0;
+      }
+
+      function mulberry32(seed) {
+        let t = seed >>> 0;
+        return function () {
+          t += 0x6d2b79f5;
+          let x = Math.imul(t ^ (t >>> 15), 1 | t);
+          x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
+          return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      function resizeCanvas() {
+        const containerWidth = canvas.parentElement.offsetWidth;
+        const width = Math.min(900, Math.max(320, containerWidth - 20));
+        canvas.width = width;
+        canvas.height = 520;
+      }
+
+      function buildPositions() {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const maxRadius = Math.min(canvas.width, canvas.height) * 0.4;
+        const positions = {};
+
+        for (let i = 0; i < CHAR_SET.length; i++) {
+          const t = i / CHAR_SET.length;
+          const r = Math.sqrt(t) * maxRadius;
+          const theta = i * GOLDEN_ANGLE;
+          positions[CHAR_SET[i]] = {
+            x: centerX + Math.cos(theta) * r,
+            y: centerY + Math.sin(theta) * r,
+          };
+        }
+
+        return positions;
+      }
+
+      function drawBackground(text) {
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, "#0b1220");
+        gradient.addColorStop(1, "#111827");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const density = parseInt(document.getElementById("starDensity").value, 10);
+        const rng = mulberry32(fnv1a32(text || "wordgrapher"));
+        for (let i = 0; i < density; i++) {
+          const x = rng() * canvas.width;
+          const y = rng() * canvas.height;
+          const r = rng() * 1.8 + 0.2;
+          const alpha = rng() * 0.6 + 0.1;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+          ctx.fill();
+        }
+      }
+
+      function drawConstellation(inputText) {
+        resizeCanvas();
+
+        const rawText = inputText;
+        updateCharCount(rawText);
+
+        const text = document.getElementById("cleanText").checked
+          ? cleanInputText(rawText)
+          : rawText;
+
+        drawBackground(text);
+
+        if (!text) return;
+
+        const positions = buildPositions();
+        const used = new Set(
+          text
+            .toLowerCase()
+            .split("")
+            .filter((char) => CHAR_SET.includes(char))
+        );
+
+        const starColor = document.getElementById("starColor").value;
+        const lineColor = document.getElementById("lineColor").value;
+        const glow = parseInt(document.getElementById("glow").value, 10);
+        const curve = parseFloat(document.getElementById("curve").value);
+        const showLabels = document.getElementById("showLabels").checked;
+
+        // Draw connection path
+        ctx.save();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = lineColor;
+        ctx.globalAlpha = 0.85;
+        ctx.shadowColor = lineColor;
+        ctx.shadowBlur = glow;
+
+        const textSeed = fnv1a32(text);
+        for (let i = 0; i < text.length - 1; i++) {
+          const a = text[i].toLowerCase();
+          const b = text[i + 1].toLowerCase();
+
+          // Treat non-mappable characters as breaks.
+          if (!positions[a] || !positions[b]) {
+            continue;
+          }
+
+          const start = positions[a];
+          const end = positions[b];
+          const dx = end.x - start.x;
+          const dy = end.y - start.y;
+          const dist = Math.max(1, Math.hypot(dx, dy));
+
+          const midX = (start.x + end.x) / 2;
+          const midY = (start.y + end.y) / 2;
+          const perpX = -dy / dist;
+          const perpY = dx / dist;
+
+          const sign = (fnv1a32(`${textSeed}:${i}`) & 1) === 1 ? 1 : -1;
+          const strength = curve * dist;
+          const ctrlX = midX + perpX * strength * sign;
+          const ctrlY = midY + perpY * strength * sign;
+
+          ctx.beginPath();
+          ctx.moveTo(start.x, start.y);
+          if (curve > 0) {
+            ctx.quadraticCurveTo(ctrlX, ctrlY, end.x, end.y);
+          } else {
+            ctx.lineTo(end.x, end.y);
+          }
+          ctx.stroke();
+        }
+
+        ctx.restore();
+
+        // Draw stars
+        ctx.save();
+        ctx.fillStyle = starColor;
+        ctx.shadowColor = starColor;
+        ctx.shadowBlur = Math.max(0, Math.round(glow * 0.7));
+
+        for (const char of CHAR_SET) {
+          const pos = positions[char];
+          const isUsed = used.has(char);
+          const radius = isUsed ? 5 : 2.5;
+          const alpha = isUsed ? 0.95 : 0.35;
+
+          ctx.globalAlpha = alpha;
+          ctx.beginPath();
+          ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (showLabels && isUsed) {
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = 0.9;
+            ctx.font = "13px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "top";
+            ctx.fillStyle = "#e2e8f0";
+            ctx.fillText(char.toUpperCase(), pos.x, pos.y + 8);
+            ctx.fillStyle = starColor;
+            ctx.shadowBlur = Math.max(0, Math.round(glow * 0.7));
+          }
+        }
+
+        ctx.restore();
+
+        // Caption
+        ctx.save();
+        ctx.fillStyle = "rgba(226, 232, 240, 0.85)";
+        ctx.font = "14px Arial";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "bottom";
+        ctx.fillText(
+          `Word Grapher · Constellation Map · ${new Date().getFullYear()}`,
+          14,
+          canvas.height - 12
+        );
+        ctx.restore();
+      }
+
+      function scheduleDraw() {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = requestAnimationFrame(() =>
+          drawConstellation(document.getElementById("text").value)
+        );
+      }
+
+      function downloadVisualization() {
+        const link = document.createElement("a");
+        link.download = "constellation_visualization.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }
+
+      async function copyShareLink() {
+        const status = document.getElementById("copyStatus");
+        const text = document.getElementById("text").value;
+        const url = new URL(window.location.href);
+        if (text) {
+          url.searchParams.set("text", text);
+        } else {
+          url.searchParams.delete("text");
+        }
+        try {
+          await navigator.clipboard.writeText(url.toString());
+          status.textContent = "Link copied!";
+        } catch (error) {
+          status.textContent = "Copy failed. Use your browser menu.";
+        }
+        setTimeout(() => {
+          status.textContent = "";
+        }, 2000);
+      }
+
+      window.addEventListener("resize", scheduleDraw);
+
+      window.addEventListener("load", () => {
+        resizeCanvas();
+        const urlParams = new URLSearchParams(window.location.search);
+        const text = urlParams.get("text");
+        if (text) {
+          document.getElementById("text").value = text;
+        }
+        scheduleDraw();
+      });
+
+      [
+        "text",
+        "lineColor",
+        "starColor",
+        "starDensity",
+        "curve",
+        "glow",
+        "showLabels",
+        "cleanText",
+      ].forEach((id) => {
+        const eventName = id === "cleanText" || id === "showLabels" ? "change" : "input";
+        document.getElementById(id).addEventListener(eventName, scheduleDraw);
+      });
+
+      document.getElementById("starDensity").addEventListener("input", (e) => {
+        document.getElementById("starDensityValue").textContent = e.target.value;
+      });
+      document.getElementById("curve").addEventListener("input", (e) => {
+        document.getElementById("curveValue").textContent = e.target.value;
+      });
+      document.getElementById("glow").addEventListener("input", (e) => {
+        document.getElementById("glowValue").textContent = e.target.value;
+      });
+
+      function goBack(link) {
+        const text = document.getElementById("text").value;
+        if (text) {
+          link.href = link.href + "?text=" + encodeURIComponent(text);
+        }
+        return true;
+      }
+    </script>
+  </body>
+</html>

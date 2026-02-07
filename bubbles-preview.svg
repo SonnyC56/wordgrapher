@@ -1,0 +1,32 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff7ed" />
+      <stop offset="1" stop-color="#eff6ff" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)" />
+
+  <text x="70" y="120" fill="#0f172a" font-family="Arial, sans-serif" font-size="60" font-weight="700">
+    Bubble Frequency Map
+  </text>
+  <text x="70" y="175" fill="#334155" font-family="Arial, sans-serif" font-size="26">
+    Character counts packed into bubbles
+  </text>
+
+  <circle cx="790" cy="330" r="120" fill="#f97316" fill-opacity="0.85" stroke="#c2410c" stroke-width="3" />
+  <circle cx="930" cy="320" r="88" fill="#fb923c" fill-opacity="0.85" stroke="#c2410c" stroke-width="3" />
+  <circle cx="690" cy="430" r="90" fill="#38bdf8" fill-opacity="0.85" stroke="#0369a1" stroke-width="3" />
+  <circle cx="880" cy="460" r="74" fill="#0ea5e9" fill-opacity="0.85" stroke="#0369a1" stroke-width="3" />
+  <circle cx="1010" cy="430" r="62" fill="#7dd3fc" fill-opacity="0.9" stroke="#0369a1" stroke-width="3" />
+  <circle cx="610" cy="320" r="60" fill="#fdba74" fill-opacity="0.85" stroke="#c2410c" stroke-width="3" />
+
+  <text x="790" y="340" fill="#fff" font-family="Arial, sans-serif" font-size="54" font-weight="700" text-anchor="middle">E</text>
+  <text x="790" y="376" fill="#fff" font-family="Arial, sans-serif" font-size="26" text-anchor="middle">132</text>
+
+  <text x="930" y="332" fill="#fff" font-family="Arial, sans-serif" font-size="40" font-weight="700" text-anchor="middle">A</text>
+  <text x="930" y="360" fill="#fff" font-family="Arial, sans-serif" font-size="20" text-anchor="middle">87</text>
+
+  <text x="690" y="438" fill="#fff" font-family="Arial, sans-serif" font-size="38" font-weight="700" text-anchor="middle">T</text>
+  <text x="690" y="464" fill="#fff" font-family="Arial, sans-serif" font-size="20" text-anchor="middle">76</text>
+</svg>

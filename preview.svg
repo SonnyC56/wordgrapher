@@ -1,0 +1,28 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0f172a" />
+      <stop offset="1" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)" />
+  <rect x="60" y="260" width="1080" height="290" rx="24" fill="rgba(255,255,255,0.1)" />
+  <text x="70" y="120" fill="#ffffff" font-family="Arial, sans-serif" font-size="64" font-weight="700">
+    Word Grapher
+  </text>
+  <text x="70" y="180" fill="#cbd5f5" font-family="Arial, sans-serif" font-size="28">
+    Text to Visual Patterns
+  </text>
+  <polyline
+    points="100,500 180,420 260,460 340,360 420,380 500,300 580,340 660,260 740,300 820,240 900,280 980,210 1060,260"
+    fill="none"
+    stroke="#38bdf8"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <circle cx="180" cy="420" r="8" fill="#38bdf8" />
+  <circle cx="420" cy="380" r="8" fill="#38bdf8" />
+  <circle cx="740" cy="300" r="8" fill="#38bdf8" />
+  <circle cx="980" cy="210" r="8" fill="#38bdf8" />
+</svg>

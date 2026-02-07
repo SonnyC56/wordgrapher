@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Chord Diagram - Letter Transition Visualization</title>
+    <meta
+      name="description"
+      content="Generate a chord-style diagram from text. Visualize character transitions as curved links around a circular node map and export as PNG."
+    />
+    <meta
+      name="keywords"
+      content="chord diagram text, letter transition graph, text visualization, circular links, word analysis"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0d6efd" />
+
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://wordgrapher.com/templates/chord.html"
+    />
+    <meta
+      property="og:title"
+      content="Text Chord Diagram - Letter Transition Visualization"
+    />
+    <meta
+      property="og:description"
+      content="Visualize character transitions as curved links around a circular node map."
+    />
+    <meta
+      property="og:image"
+      content="https://wordgrapher.com/chord-preview.svg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:url"
+      content="https://wordgrapher.com/templates/chord.html"
+    />
+    <meta
+      property="twitter:title"
+      content="Text Chord Diagram"
+    />
+    <meta
+      property="twitter:description"
+      content="Visualize letter transitions as curved links in a circular diagram."
+    />
+    <meta
+      property="twitter:image"
+      content="https://wordgrapher.com/chord-preview.svg"
+    />
+
+    <link rel="canonical" href="https://wordgrapher.com/templates/chord.html" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-C30PHQ1VGF"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-C30PHQ1VGF");
+    </script>
+    <style>
+      body {
+        background: #f8fafc;
+      }
+      canvas {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #ffffff;
+        max-width: 100%;
+        height: auto !important;
+      }
+      .main-content {
+        margin: 20px auto;
+        max-width: 100%;
+        padding: 0 15px 60px;
+      }
+      @media (min-width: 920px) {
+        .main-content {
+          max-width: 920px;
+        }
+      }
+      .btn {
+        margin: 5px;
+        white-space: nowrap;
+      }
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+        .btn {
+          padding: 0.375rem 0.75rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-content">
+      <div class="text-center mb-4">
+        <h1>Text Chord Diagram</h1>
+        <p class="text-muted">
+          Map character transitions into curved links around a circular node
+          layout.
+        </p>
+        <a
+          href="../index.html"
+          class="btn btn-outline-secondary"
+          onclick="return goBack(this)"
+          >Back to Word Grapher</a
+        >
+      </div>
+
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-client="ca-pub-7049016882676520"
+        data-ad-slot="8204395909"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="text" class="form-label">Enter your text:</label>
+            <textarea class="form-control" id="text" rows="3" required></textarea>
+            <div class="text-muted small mt-2">
+              Characters: <span id="charCount">0</span>
+            </div>
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div>
+              <label for="lineColor" class="form-label">Link Color:</label>
+              <input
+                type="color"
+                class="form-control form-control-color"
+                id="lineColor"
+                value="#0ea5e9"
+                aria-label="Choose link color"
+              />
+            </div>
+            <div>
+              <label for="nodeColor" class="form-label">Node Color:</label>
+              <input
+                type="color"
+                class="form-control form-control-color"
+                id="nodeColor"
+                value="#0f172a"
+                aria-label="Choose node color"
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="maxNodes" class="form-label"
+              >Max Nodes: <span id="maxNodesValue">14</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="maxNodes"
+              min="6"
+              max="24"
+              step="1"
+              value="14"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="curve" class="form-label"
+              >Curve: <span id="curveValue">0.45</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="curve"
+              min="0"
+              max="0.9"
+              step="0.05"
+              value="0.45"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="lineOpacity" class="form-label"
+              >Link Opacity: <span id="lineOpacityValue">0.45</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="lineOpacity"
+              min="0.1"
+              max="1"
+              step="0.05"
+              value="0.45"
+            />
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="showLabels" checked />
+              <label class="form-check-label" for="showLabels">Show labels</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="ignoreCase" checked />
+              <label class="form-check-label" for="ignoreCase">Ignore case</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="cleanText" />
+              <label class="form-check-label" for="cleanText">
+                Remove spaces and punctuation
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <div class="container-fluid">
+          <canvas id="chordGraph" class="img-fluid"></canvas>
+        </div>
+      </div>
+
+      <div class="text-center mt-3">
+        <button onclick="downloadVisualization()" class="btn btn-success">
+          Download Image
+        </button>
+        <button onclick="copyShareLink()" class="btn btn-outline-secondary">
+          Copy Share Link
+        </button>
+        <span id="copyStatus" class="text-muted ms-2"></span>
+      </div>
+    </div>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Text Chord Diagram",
+        "description": "Generate a chord-style diagram from text and visualize character transitions as curved links.",
+        "url": "https://wordgrapher.com/templates/chord.html",
+        "applicationCategory": "Visualization Tool",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+    <script>
+      const canvas = document.getElementById("chordGraph");
+      const ctx = canvas.getContext("2d");
+      let animationFrame;
+
+      const ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+      function cleanInputText(text) {
+        return text.replace(/[^a-zA-Z0-9]/g, "");
+      }
+
+      function updateCharCount(text) {
+        document.getElementById("charCount").textContent = text.length;
+      }
+
+      function resizeCanvas() {
+        const containerWidth = canvas.parentElement.offsetWidth;
+        const width = Math.min(900, Math.max(320, containerWidth - 20));
+        canvas.width = width;
+        canvas.height = 560;
+      }
+
+      function hexToRgb(hex) {
+        const value = hex.replace("#", "");
+        const full =
+          value.length === 3
+            ? value
+                .split("")
+                .map((char) => char + char)
+                .join("")
+            : value;
+        const intValue = parseInt(full, 16);
+        return {
+          r: (intValue >> 16) & 255,
+          g: (intValue >> 8) & 255,
+          b: intValue & 255,
+        };
+      }
+
+      function asRgba(hex, alpha) {
+        const rgb = hexToRgb(hex);
+        return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+      }
+
+      function drawBackground() {
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, "#f8fafc");
+        gradient.addColorStop(1, "#eef2ff");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      function buildData(inputText) {
+        let text = inputText;
+        if (document.getElementById("cleanText").checked) {
+          text = cleanInputText(text);
+        }
+        if (document.getElementById("ignoreCase").checked) {
+          text = text.toLowerCase();
+        }
+
+        const chars = Array.from(text).filter((char) =>
+          ALLOWED_CHARS.includes(char.toLowerCase())
+        );
+        if (chars.length === 0) {
+          return { text, nodes: [], transitions: [] };
+        }
+
+        const frequency = new Map();
+        for (const char of chars) {
+          frequency.set(char, (frequency.get(char) || 0) + 1);
+        }
+
+        const maxNodes = parseInt(document.getElementById("maxNodes").value, 10);
+        const nodes = [...frequency.entries()]
+          .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
+          .slice(0, maxNodes)
+          .map((entry) => entry[0]);
+        const nodeSet = new Set(nodes);
+
+        const transitionMap = new Map();
+        for (let i = 0; i < chars.length - 1; i++) {
+          const source = chars[i];
+          const target = chars[i + 1];
+          if (!nodeSet.has(source) || !nodeSet.has(target)) {
+            continue;
+          }
+          const key = `${source}|${target}`;
+          transitionMap.set(key, (transitionMap.get(key) || 0) + 1);
+        }
+
+        const transitions = [...transitionMap.entries()].map(([key, count]) => {
+          const [source, target] = key.split("|");
+          return { source, target, count };
+        });
+
+        return { text, nodes, transitions };
+      }
+
+      function drawChord(inputText) {
+        resizeCanvas();
+        drawBackground();
+
+        updateCharCount(inputText);
+        const { text, nodes, transitions } = buildData(inputText);
+
+        if (!text || nodes.length === 0) {
+          return;
+        }
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const nodeRadius = Math.min(canvas.width, canvas.height) * 0.37;
+        const nodeDotRadius = Math.max(6, Math.round(nodeRadius * 0.035));
+
+        const angleOffset = -Math.PI / 2;
+        const positions = new Map();
+        nodes.forEach((char, index) => {
+          const angle = angleOffset + (index / nodes.length) * Math.PI * 2;
+          positions.set(char, {
+            x: centerX + Math.cos(angle) * nodeRadius,
+            y: centerY + Math.sin(angle) * nodeRadius,
+            angle,
+          });
+        });
+
+        const lineColor = document.getElementById("lineColor").value;
+        const nodeColor = document.getElementById("nodeColor").value;
+        const curveFactor = parseFloat(document.getElementById("curve").value);
+        const lineOpacity = parseFloat(document.getElementById("lineOpacity").value);
+        const showLabels = document.getElementById("showLabels").checked;
+
+        const maxCount = Math.max(
+          1,
+          ...transitions.map((transition) => transition.count)
+        );
+
+        // Draw transition links first so nodes stay readable on top.
+        for (const transition of transitions) {
+          const sourcePos = positions.get(transition.source);
+          const targetPos = positions.get(transition.target);
+          if (!sourcePos || !targetPos) {
+            continue;
+          }
+
+          const width = 1 + (transition.count / maxCount) * 7;
+          ctx.lineWidth = width;
+          ctx.strokeStyle = asRgba(lineColor, lineOpacity);
+          ctx.lineCap = "round";
+
+          ctx.beginPath();
+          if (transition.source === transition.target) {
+            const loopRadius = nodeDotRadius * 2.2;
+            ctx.arc(
+              sourcePos.x,
+              sourcePos.y,
+              loopRadius,
+              sourcePos.angle - 0.8,
+              sourcePos.angle + 0.8
+            );
+          } else {
+            const midX = (sourcePos.x + targetPos.x) / 2;
+            const midY = (sourcePos.y + targetPos.y) / 2;
+            const dx = targetPos.x - sourcePos.x;
+            const dy = targetPos.y - sourcePos.y;
+            const distance = Math.max(1, Math.hypot(dx, dy));
+            const perpX = -dy / distance;
+            const perpY = dx / distance;
+            const curveStrength = curveFactor * distance;
+            const ctrlX = midX + perpX * curveStrength;
+            const ctrlY = midY + perpY * curveStrength;
+
+            ctx.moveTo(sourcePos.x, sourcePos.y);
+            ctx.quadraticCurveTo(ctrlX, ctrlY, targetPos.x, targetPos.y);
+          }
+          ctx.stroke();
+        }
+
+        // Draw outer guide ring.
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, nodeRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(15, 23, 42, 0.12)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Draw nodes and labels.
+        for (const char of nodes) {
+          const pos = positions.get(char);
+          if (!pos) {
+            continue;
+          }
+
+          ctx.beginPath();
+          ctx.arc(pos.x, pos.y, nodeDotRadius, 0, Math.PI * 2);
+          ctx.fillStyle = nodeColor;
+          ctx.fill();
+
+          if (showLabels) {
+            const labelRadius = nodeRadius + 22;
+            const lx = centerX + Math.cos(pos.angle) * labelRadius;
+            const ly = centerY + Math.sin(pos.angle) * labelRadius;
+            ctx.fillStyle = "#0f172a";
+            ctx.font = "13px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(char.toUpperCase(), lx, ly);
+          }
+        }
+
+        ctx.fillStyle = "rgba(15, 23, 42, 0.65)";
+        ctx.font = "13px Arial";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "bottom";
+        ctx.fillText("Word Grapher · Chord Diagram", 12, canvas.height - 10);
+      }
+
+      function scheduleDraw() {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = requestAnimationFrame(() =>
+          drawChord(document.getElementById("text").value)
+        );
+      }
+
+      function downloadVisualization() {
+        const link = document.createElement("a");
+        link.download = "chord_visualization.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }
+
+      async function copyShareLink() {
+        const status = document.getElementById("copyStatus");
+        const text = document.getElementById("text").value;
+        const url = new URL(window.location.href);
+        if (text) {
+          url.searchParams.set("text", text);
+        } else {
+          url.searchParams.delete("text");
+        }
+        try {
+          await navigator.clipboard.writeText(url.toString());
+          status.textContent = "Link copied!";
+        } catch (error) {
+          status.textContent = "Copy failed. Use your browser menu.";
+        }
+        setTimeout(() => {
+          status.textContent = "";
+        }, 2000);
+      }
+
+      window.addEventListener("resize", scheduleDraw);
+      window.addEventListener("load", () => {
+        resizeCanvas();
+        const urlParams = new URLSearchParams(window.location.search);
+        const text = urlParams.get("text");
+        if (text) {
+          document.getElementById("text").value = text;
+        }
+        scheduleDraw();
+      });
+
+      [
+        "text",
+        "lineColor",
+        "nodeColor",
+        "maxNodes",
+        "curve",
+        "lineOpacity",
+        "showLabels",
+        "ignoreCase",
+        "cleanText",
+      ].forEach((id) => {
+        const eventName =
+          id === "showLabels" || id === "ignoreCase" || id === "cleanText"
+            ? "change"
+            : "input";
+        document.getElementById(id).addEventListener(eventName, scheduleDraw);
+      });
+
+      document.getElementById("maxNodes").addEventListener("input", (event) => {
+        document.getElementById("maxNodesValue").textContent = event.target.value;
+      });
+      document.getElementById("curve").addEventListener("input", (event) => {
+        document.getElementById("curveValue").textContent = event.target.value;
+      });
+      document.getElementById("lineOpacity").addEventListener("input", (event) => {
+        document.getElementById("lineOpacityValue").textContent = event.target.value;
+      });
+
+      function goBack(link) {
+        const text = document.getElementById("text").value;
+        if (text) {
+          link.href = link.href + "?text=" + encodeURIComponent(text);
+        }
+        return true;
+      }
+    </script>
+  </body>
+</html>

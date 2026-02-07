@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Host: wordgrapher.com
+Sitemap: https://wordgrapher.com/sitemap.xml

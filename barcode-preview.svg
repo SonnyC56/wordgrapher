@@ -1,0 +1,42 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0f172a" />
+      <stop offset="1" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="bars" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#38bdf8" />
+      <stop offset="1" stop-color="#22d3ee" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)" />
+  <text x="70" y="120" fill="#ffffff" font-family="Arial, sans-serif" font-size="60" font-weight="700">
+    Barcode Text Visualization
+  </text>
+  <text x="70" y="175" fill="#cbd5f5" font-family="Arial, sans-serif" font-size="26">
+    Gradient bars from your words
+  </text>
+  <g transform="translate(120,250)" fill="url(#bars)">
+    <rect x="0" y="160" width="18" height="170" />
+    <rect x="30" y="80" width="12" height="250" />
+    <rect x="54" y="120" width="18" height="210" />
+    <rect x="84" y="40" width="10" height="290" />
+    <rect x="104" y="100" width="20" height="230" />
+    <rect x="134" y="60" width="12" height="270" />
+    <rect x="156" y="20" width="18" height="310" />
+    <rect x="186" y="90" width="10" height="240" />
+    <rect x="206" y="50" width="16" height="280" />
+    <rect x="232" y="110" width="12" height="220" />
+    <rect x="252" y="30" width="20" height="300" />
+    <rect x="284" y="140" width="12" height="190" />
+    <rect x="304" y="70" width="16" height="260" />
+    <rect x="328" y="40" width="12" height="290" />
+    <rect x="348" y="120" width="18" height="210" />
+    <rect x="378" y="60" width="12" height="270" />
+    <rect x="398" y="90" width="16" height="240" />
+    <rect x="422" y="30" width="12" height="300" />
+    <rect x="442" y="80" width="18" height="250" />
+    <rect x="472" y="110" width="12" height="220" />
+    <rect x="492" y="40" width="18" height="290" />
+  </g>
+</svg>

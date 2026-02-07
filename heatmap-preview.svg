@@ -1,0 +1,37 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f97316" />
+      <stop offset="1" stop-color="#0ea5e9" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)" />
+  <text x="70" y="120" fill="#ffffff" font-family="Arial, sans-serif" font-size="60" font-weight="700">
+    Text Heatmap Grid
+  </text>
+  <text x="70" y="175" fill="#fff7ed" font-family="Arial, sans-serif" font-size="26">
+    ASCII intensity mapped to color
+  </text>
+  <g transform="translate(120,250)" stroke="rgba(255,255,255,0.2)">
+    <rect x="0" y="0" width="70" height="70" fill="#fb923c" />
+    <rect x="80" y="0" width="70" height="70" fill="#f97316" />
+    <rect x="160" y="0" width="70" height="70" fill="#facc15" />
+    <rect x="240" y="0" width="70" height="70" fill="#38bdf8" />
+    <rect x="320" y="0" width="70" height="70" fill="#0ea5e9" />
+    <rect x="400" y="0" width="70" height="70" fill="#0284c7" />
+
+    <rect x="0" y="80" width="70" height="70" fill="#fdba74" />
+    <rect x="80" y="80" width="70" height="70" fill="#fb923c" />
+    <rect x="160" y="80" width="70" height="70" fill="#f59e0b" />
+    <rect x="240" y="80" width="70" height="70" fill="#7dd3fc" />
+    <rect x="320" y="80" width="70" height="70" fill="#38bdf8" />
+    <rect x="400" y="80" width="70" height="70" fill="#0ea5e9" />
+
+    <rect x="0" y="160" width="70" height="70" fill="#fed7aa" />
+    <rect x="80" y="160" width="70" height="70" fill="#fdba74" />
+    <rect x="160" y="160" width="70" height="70" fill="#f59e0b" />
+    <rect x="240" y="160" width="70" height="70" fill="#bae6fd" />
+    <rect x="320" y="160" width="70" height="70" fill="#7dd3fc" />
+    <rect x="400" y="160" width="70" height="70" fill="#38bdf8" />
+  </g>
+</svg>

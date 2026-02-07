@@ -1,0 +1,35 @@
+{
+  "name": "Word Grapher",
+  "short_name": "WordGrapher",
+  "description": "Transform text into ASCII graphs, spirals, morse art, heatmaps, chords, bubbles, and more.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0d6efd",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48 64x64 128x128",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Circular",
+      "url": "/templates/circular.html"
+    },
+    {
+      "name": "Heatmap",
+      "url": "/templates/heatmap.html"
+    },
+    {
+      "name": "Chord",
+      "url": "/templates/chord.html"
+    },
+    {
+      "name": "Bubbles",
+      "url": "/templates/bubbles.html"
+    }
+  ]
+}

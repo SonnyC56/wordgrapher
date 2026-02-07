@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Morse Code Visualization - Text to Morse Pattern Generator</title>
+    <title>Barcode Text Visualization - ASCII Barcode Generator</title>
     <meta
       name="description"
-      content="Convert text to visual morse code patterns. Create colorful dot-dash visualizations from any text with our free online morse code generator."
+      content="Turn text into barcode-style visualizations with gradient bars, adjustable spacing, and instant downloads."
     />
     <meta
       name="keywords"
-      content="morse code generator, morse code visualization, text to morse, morse code patterns, morse code art, morse code converter"
+      content="barcode text, ascii barcode, text visualization, bar graph text, barcode art"
     />
     <meta name="robots" content="index,follow" />
     <meta name="theme-color" content="#0d6efd" />
@@ -19,19 +19,19 @@
     <meta property="og:type" content="website" />
     <meta
       property="og:url"
-      content="https://wordgrapher.com/templates/morse.html"
+      content="https://wordgrapher.com/templates/barcode.html"
     />
     <meta
       property="og:title"
-      content="Morse Code Visualization - Text to Morse Patterns"
+      content="Barcode Text Visualization - ASCII Barcode Generator"
     />
     <meta
       property="og:description"
-      content="Transform text into colorful morse code patterns. Free online tool for creating visual morse code art from any text."
+      content="Turn text into barcode-style visualizations with gradient bars and instant downloads."
     />
     <meta
       property="og:image"
-      content="https://wordgrapher.com/morse-preview.svg"
+      content="https://wordgrapher.com/barcode-preview.svg"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -40,22 +40,25 @@
     <meta property="twitter:card" content="summary_large_image" />
     <meta
       property="twitter:url"
-      content="https://wordgrapher.com/templates/morse.html"
+      content="https://wordgrapher.com/templates/barcode.html"
     />
     <meta
       property="twitter:title"
-      content="Visual Morse Code Generator"
+      content="Barcode Text Visualization"
     />
     <meta
       property="twitter:description"
-      content="Create beautiful morse code visualizations from text. Free online text-to-morse pattern converter."
+      content="Turn text into barcode-style visuals with gradient bars and instant downloads."
     />
     <meta
       property="twitter:image"
-      content="https://wordgrapher.com/morse-preview.svg"
+      content="https://wordgrapher.com/barcode-preview.svg"
     />
 
-    <link rel="canonical" href="https://wordgrapher.com/templates/morse.html" />
+    <link
+      rel="canonical"
+      href="https://wordgrapher.com/templates/barcode.html"
+    />
     <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <script
@@ -88,7 +91,7 @@
       canvas {
         border: 1px solid #ddd;
         border-radius: 4px;
-        background-color: #f8f9fa;
+        background-color: #ffffff;
         max-width: 100%;
         height: auto !important;
       }
@@ -120,10 +123,10 @@
   <body>
     <div class="main-content">
       <div class="text-center mb-4">
-        <h1>Morse Code Visualization</h1>
+        <h1>Barcode Text Visualization</h1>
         <p class="text-muted">
-          Convert text into bold dot-dash patterns with custom colors and
-          downloadable output.
+          Turn each character into a barcode-style bar. Adjust spacing, height,
+          and gradient colors to get the vibe you want.
         </p>
         <a
           href="../index.html"
@@ -157,28 +160,59 @@
           <div class="mb-3">
             <label for="text" class="form-label">Enter your text:</label>
             <textarea class="form-control" id="text" rows="3" required></textarea>
+            <div class="text-muted small mt-2">
+              Bars: <span id="barCount">0</span>
+            </div>
           </div>
-          <div class="mb-3 d-flex flex-wrap align-items-center gap-2">
+          <div class="mb-3 d-flex flex-wrap gap-3">
             <div>
-              <label for="dotColor" class="form-label">Dot Color:</label>
+              <label for="startColor" class="form-label">Gradient Start:</label>
               <input
                 type="color"
                 class="form-control form-control-color"
-                id="dotColor"
-                value="#0275d8"
-                aria-label="Choose dot color"
+                id="startColor"
+                value="#1d4ed8"
+                aria-label="Choose gradient start color"
               />
             </div>
             <div>
-              <label for="dashColor" class="form-label">Dash Color:</label>
+              <label for="endColor" class="form-label">Gradient End:</label>
               <input
                 type="color"
                 class="form-control form-control-color"
-                id="dashColor"
-                value="#5cb85c"
-                aria-label="Choose dash color"
+                id="endColor"
+                value="#22d3ee"
+                aria-label="Choose gradient end color"
               />
             </div>
+          </div>
+          <div class="mb-3">
+            <label for="barGap" class="form-label"
+              >Bar Gap: <span id="barGapValue">2</span>px</label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="barGap"
+              min="0"
+              max="8"
+              step="1"
+              value="2"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="heightScale" class="form-label"
+              >Height Scale: <span id="heightScaleValue">1.0</span>x</label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="heightScale"
+              min="0.6"
+              max="1.6"
+              step="0.1"
+              value="1"
+            />
           </div>
           <div class="mb-3">
             <div class="form-check">
@@ -193,7 +227,7 @@
 
       <div class="text-center mt-4">
         <div class="container-fluid">
-          <canvas id="morseGraph" class="img-fluid"></canvas>
+          <canvas id="barcodeGraph" class="img-fluid"></canvas>
         </div>
       </div>
 
@@ -212,9 +246,9 @@
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "Morse Code Visualization",
-        "description": "Convert text to visual morse code patterns and create colorful dot-dash visualizations.",
-        "url": "https://wordgrapher.com/templates/morse.html",
+        "name": "Barcode Text Visualization",
+        "description": "Turn text into barcode-style visualizations with gradient bars and instant downloads.",
+        "url": "https://wordgrapher.com/templates/barcode.html",
         "applicationCategory": "Visualization Tool",
         "operatingSystem": "Any",
         "offers": {
@@ -225,57 +259,9 @@
       }
     </script>
     <script>
-      const MORSE_CODE = {
-        A: ".-",
-        B: "-...",
-        C: "-.-.",
-        D: "-..",
-        E: ".",
-        F: "..-.",
-        G: "--.",
-        H: "....",
-        I: "..",
-        J: ".---",
-        K: "-.-",
-        L: ".-..",
-        M: "--",
-        N: "-.",
-        O: "---",
-        P: ".--.",
-        Q: "--.-",
-        R: ".-.",
-        S: "...",
-        T: "-",
-        U: "..-",
-        V: "...-",
-        W: ".--",
-        X: "-..-",
-        Y: "-.--",
-        Z: "--..",
-        0: "-----",
-        1: ".----",
-        2: "..---",
-        3: "...--",
-        4: "....-",
-        5: ".....",
-        6: "-....",
-        7: "--...",
-        8: "---..",
-        9: "----.",
-        " ": " ",
-      };
-
-      const canvas = document.getElementById("morseGraph");
+      const canvas = document.getElementById("barcodeGraph");
       const ctx = canvas.getContext("2d");
       let animationFrame;
-
-      function textToMorse(text) {
-        return text
-          .toUpperCase()
-          .split("")
-          .map((char) => MORSE_CODE[char] || char)
-          .join(" ");
-      }
 
       function cleanInputText(text) {
         return text.replace(/[^a-zA-Z0-9]/g, "");
@@ -285,86 +271,91 @@
         const containerWidth = canvas.parentElement.offsetWidth;
         const width = Math.min(900, Math.max(320, containerWidth - 20));
         canvas.width = width;
+        canvas.height = 320;
       }
 
-      function measureLines(morse, width, unitSize, spacing) {
-        let x = 40;
-        let lines = 1;
-        morse.split("").forEach((char) => {
-          if (char === ".") {
-            x += unitSize + spacing;
-          } else if (char === "-") {
-            x += unitSize * 3 + spacing;
-          } else if (char === " ") {
-            x += unitSize * 2;
-          }
-          if (x > width - 60) {
-            lines += 1;
-            x = 40;
-          }
-        });
-        return lines;
+      function hexToRgb(hex) {
+        const normalized = hex.replace("#", "");
+        const value =
+          normalized.length === 3
+            ? normalized
+                .split("")
+                .map((c) => c + c)
+                .join("")
+            : normalized;
+        const intValue = parseInt(value, 16);
+        return {
+          r: (intValue >> 16) & 255,
+          g: (intValue >> 8) & 255,
+          b: intValue & 255,
+        };
       }
 
-      function drawMorseVisualization(inputText) {
+      function lerpColor(start, end, t) {
+        const startRgb = hexToRgb(start);
+        const endRgb = hexToRgb(end);
+        const r = Math.round(startRgb.r + (endRgb.r - startRgb.r) * t);
+        const g = Math.round(startRgb.g + (endRgb.g - startRgb.g) * t);
+        const b = Math.round(startRgb.b + (endRgb.b - startRgb.b) * t);
+        return `rgb(${r}, ${g}, ${b})`;
+      }
+
+      function drawBarcode(inputText) {
+        const rawText = inputText;
         const text = document.getElementById("cleanText").checked
-          ? cleanInputText(inputText)
-          : inputText;
+          ? cleanInputText(rawText)
+          : rawText;
 
         resizeCanvas();
-        ctx.fillStyle = "#f8f9fa";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        document.getElementById("barCount").textContent = text.length;
 
         if (!text) return;
 
-        const morse = textToMorse(text);
-        const dotColor = document.getElementById("dotColor").value;
-        const dashColor = document.getElementById("dashColor").value;
+        const asciiValues = Array.from(text).map((char) => char.charCodeAt(0));
+        const min = Math.min(...asciiValues);
+        const max = Math.max(...asciiValues);
+        const range = Math.max(1, max - min);
 
-        const unitSize = 20;
-        const spacing = 10;
-        const lineHeight = 40;
-        const lines = measureLines(morse, canvas.width, unitSize, spacing);
-        canvas.height = Math.max(220, 40 + lines * lineHeight);
+        const barGap = parseInt(document.getElementById("barGap").value, 10);
+        const heightScale = parseFloat(
+          document.getElementById("heightScale").value
+        );
+        const startColor = document.getElementById("startColor").value;
+        const endColor = document.getElementById("endColor").value;
 
-        ctx.fillStyle = "#f8f9fa";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const availableWidth =
+          canvas.width - barGap * Math.max(0, asciiValues.length - 1);
+        const barWidth = Math.max(1, Math.floor(availableWidth / asciiValues.length));
 
-        let x = 40;
-        let y = 50;
-
-        morse.split("").forEach((char) => {
-          if (char === ".") {
-            ctx.beginPath();
-            ctx.arc(x + unitSize / 2, y, unitSize / 2, 0, Math.PI * 2);
-            ctx.fillStyle = dotColor;
-            ctx.fill();
-            x += unitSize + spacing;
-          } else if (char === "-") {
-            ctx.fillStyle = dashColor;
-            ctx.fillRect(x, y - unitSize / 4, unitSize * 3, unitSize / 2);
-            x += unitSize * 3 + spacing;
-          } else if (char === " ") {
-            x += unitSize * 2;
-          }
-
-          if (x > canvas.width - 60) {
-            x = 40;
-            y += lineHeight;
-          }
+        asciiValues.forEach((value, index) => {
+          const t = (value - min) / range;
+          const barHeight = Math.max(20, t * (canvas.height - 40) * heightScale);
+          const x = index * (barWidth + barGap);
+          const y = canvas.height - barHeight;
+          ctx.fillStyle = lerpColor(startColor, endColor, t);
+          ctx.fillRect(x, y, barWidth, barHeight);
         });
+
+        ctx.strokeStyle = "rgba(15, 23, 42, 0.1)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height - 20);
+        ctx.lineTo(canvas.width, canvas.height - 20);
+        ctx.stroke();
       }
 
       function scheduleDraw() {
         cancelAnimationFrame(animationFrame);
         animationFrame = requestAnimationFrame(() =>
-          drawMorseVisualization(document.getElementById("text").value)
+          drawBarcode(document.getElementById("text").value)
         );
       }
 
       function downloadVisualization() {
         const link = document.createElement("a");
-        link.download = "morse_visualization.png";
+        link.download = "barcode_visualization.png";
         link.href = canvas.toDataURL("image/png");
         link.click();
       }
@@ -391,7 +382,6 @@
 
       window.addEventListener("resize", scheduleDraw);
 
-      // Load text from URL params if present
       window.addEventListener("load", () => {
         resizeCanvas();
         const urlParams = new URLSearchParams(window.location.search);
@@ -402,9 +392,18 @@
         scheduleDraw();
       });
 
-      ["text", "dotColor", "dashColor", "cleanText"].forEach((id) => {
-        const eventName = id === "cleanText" ? "change" : "input";
-        document.getElementById(id).addEventListener(eventName, scheduleDraw);
+      ["text", "startColor", "endColor", "barGap", "heightScale", "cleanText"].forEach(
+        (id) => {
+          const eventName = id === "cleanText" ? "change" : "input";
+          document.getElementById(id).addEventListener(eventName, scheduleDraw);
+        }
+      );
+
+      document.getElementById("barGap").addEventListener("input", (e) => {
+        document.getElementById("barGapValue").textContent = e.target.value;
+      });
+      document.getElementById("heightScale").addEventListener("input", (e) => {
+        document.getElementById("heightScaleValue").textContent = e.target.value;
       });
 
       function goBack(link) {

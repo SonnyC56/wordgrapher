@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Bubble Frequency Map - Character Bubble Visualization</title>
+    <meta
+      name="description"
+      content="Visualize character frequency as packed bubbles. Size maps to count, color maps to rank, and output is downloadable as PNG."
+    />
+    <meta
+      name="keywords"
+      content="bubble chart text, character frequency, text visualization, letter counts, packed bubbles"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0d6efd" />
+
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://wordgrapher.com/templates/bubbles.html"
+    />
+    <meta
+      property="og:title"
+      content="Text Bubble Frequency Map - Character Bubble Visualization"
+    />
+    <meta
+      property="og:description"
+      content="Visualize character frequency as packed bubbles with download support."
+    />
+    <meta
+      property="og:image"
+      content="https://wordgrapher.com/bubbles-preview.svg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:url"
+      content="https://wordgrapher.com/templates/bubbles.html"
+    />
+    <meta
+      property="twitter:title"
+      content="Text Bubble Frequency Map"
+    />
+    <meta
+      property="twitter:description"
+      content="Visualize letter frequency as packed bubbles with color and size controls."
+    />
+    <meta
+      property="twitter:image"
+      content="https://wordgrapher.com/bubbles-preview.svg"
+    />
+
+    <link rel="canonical" href="https://wordgrapher.com/templates/bubbles.html" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-C30PHQ1VGF"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-C30PHQ1VGF");
+    </script>
+    <style>
+      body {
+        background: #f8fafc;
+      }
+      canvas {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #ffffff;
+        max-width: 100%;
+        height: auto !important;
+      }
+      .main-content {
+        margin: 20px auto;
+        max-width: 100%;
+        padding: 0 15px 60px;
+      }
+      @media (min-width: 920px) {
+        .main-content {
+          max-width: 920px;
+        }
+      }
+      .btn {
+        margin: 5px;
+        white-space: nowrap;
+      }
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+        .btn {
+          padding: 0.375rem 0.75rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-content">
+      <div class="text-center mb-4">
+        <h1>Text Bubble Frequency Map</h1>
+        <p class="text-muted">
+          Pack character counts into bubbles where size maps to frequency and
+          color maps to rank.
+        </p>
+        <a
+          href="../index.html"
+          class="btn btn-outline-secondary"
+          onclick="return goBack(this)"
+          >Back to Word Grapher</a
+        >
+      </div>
+
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-client="ca-pub-7049016882676520"
+        data-ad-slot="8204395909"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="text" class="form-label">Enter your text:</label>
+            <textarea class="form-control" id="text" rows="3" required></textarea>
+            <div class="text-muted small mt-2">
+              Characters: <span id="charCount">0</span>
+            </div>
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div>
+              <label for="startColor" class="form-label">Palette Start:</label>
+              <input
+                type="color"
+                class="form-control form-control-color"
+                id="startColor"
+                value="#f97316"
+                aria-label="Choose start color"
+              />
+            </div>
+            <div>
+              <label for="endColor" class="form-label">Palette End:</label>
+              <input
+                type="color"
+                class="form-control form-control-color"
+                id="endColor"
+                value="#0ea5e9"
+                aria-label="Choose end color"
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="maxBubbles" class="form-label"
+              >Max Bubbles: <span id="maxBubblesValue">18</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="maxBubbles"
+              min="6"
+              max="40"
+              step="1"
+              value="18"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="bubblePadding" class="form-label"
+              >Bubble Padding: <span id="bubblePaddingValue">6</span>px</label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="bubblePadding"
+              min="0"
+              max="20"
+              step="1"
+              value="6"
+            />
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="showCounts" checked />
+              <label class="form-check-label" for="showCounts">Show counts</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="ignoreCase" checked />
+              <label class="form-check-label" for="ignoreCase">Ignore case</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="cleanText" />
+              <label class="form-check-label" for="cleanText">
+                Remove spaces and punctuation
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <div class="container-fluid">
+          <canvas id="bubbleGraph" class="img-fluid"></canvas>
+        </div>
+      </div>
+
+      <div class="text-center mt-3">
+        <button onclick="downloadVisualization()" class="btn btn-success">
+          Download Image
+        </button>
+        <button onclick="copyShareLink()" class="btn btn-outline-secondary">
+          Copy Share Link
+        </button>
+        <span id="copyStatus" class="text-muted ms-2"></span>
+      </div>
+    </div>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Text Bubble Frequency Map",
+        "description": "Visualize character frequency as packed bubbles where size maps to count.",
+        "url": "https://wordgrapher.com/templates/bubbles.html",
+        "applicationCategory": "Visualization Tool",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+    <script>
+      const canvas = document.getElementById("bubbleGraph");
+      const ctx = canvas.getContext("2d");
+      let animationFrame;
+
+      function cleanInputText(text) {
+        return text.replace(/[^a-zA-Z0-9]/g, "");
+      }
+
+      function updateCharCount(text) {
+        document.getElementById("charCount").textContent = text.length;
+      }
+
+      function resizeCanvas() {
+        const containerWidth = canvas.parentElement.offsetWidth;
+        const width = Math.min(900, Math.max(320, containerWidth - 20));
+        canvas.width = width;
+        canvas.height = 560;
+      }
+
+      function hexToRgb(hex) {
+        const value = hex.replace("#", "");
+        const full =
+          value.length === 3
+            ? value
+                .split("")
+                .map((char) => char + char)
+                .join("")
+            : value;
+        const intValue = parseInt(full, 16);
+        return {
+          r: (intValue >> 16) & 255,
+          g: (intValue >> 8) & 255,
+          b: intValue & 255,
+        };
+      }
+
+      function lerpColor(startHex, endHex, t) {
+        const start = hexToRgb(startHex);
+        const end = hexToRgb(endHex);
+        const r = Math.round(start.r + (end.r - start.r) * t);
+        const g = Math.round(start.g + (end.g - start.g) * t);
+        const b = Math.round(start.b + (end.b - start.b) * t);
+        return { r, g, b };
+      }
+
+      function contrastColor(color) {
+        const luminance =
+          0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
+        return luminance > 150 ? "#0f172a" : "#f8fafc";
+      }
+
+      function drawBackground() {
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, "#fff7ed");
+        gradient.addColorStop(1, "#eff6ff");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      function buildFrequency(text) {
+        let processed = text;
+        if (document.getElementById("cleanText").checked) {
+          processed = cleanInputText(processed);
+        }
+        if (document.getElementById("ignoreCase").checked) {
+          processed = processed.toLowerCase();
+        }
+
+        const chars = Array.from(processed).filter((char) => /\S/.test(char));
+        const counts = new Map();
+
+        for (const char of chars) {
+          counts.set(char, (counts.get(char) || 0) + 1);
+        }
+
+        const maxBubbles = parseInt(
+          document.getElementById("maxBubbles").value,
+          10
+        );
+        return [...counts.entries()]
+          .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
+          .slice(0, maxBubbles)
+          .map(([char, count]) => ({ char, count }));
+      }
+
+      function placeBubbles(items) {
+        if (items.length === 0) {
+          return [];
+        }
+
+        const maxCount = Math.max(1, ...items.map((item) => item.count));
+        const padding = parseInt(document.getElementById("bubblePadding").value, 10);
+        const minRadius = 24;
+        const maxRadius = Math.min(canvas.width, canvas.height) * 0.15;
+
+        const withRadius = items.map((item) => ({
+          ...item,
+          radius:
+            minRadius +
+            Math.sqrt(item.count / maxCount) * (maxRadius - minRadius),
+        }));
+
+        const placed = [];
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        for (const bubble of withRadius) {
+          let found = null;
+
+          // Spiral search for non-overlapping placement.
+          for (let step = 0; step < 1800; step++) {
+            const angle = step * 0.32;
+            const distance = step * 0.45;
+            const x = centerX + Math.cos(angle) * distance;
+            const y = centerY + Math.sin(angle) * distance;
+
+            if (
+              x - bubble.radius < 8 ||
+              x + bubble.radius > canvas.width - 8 ||
+              y - bubble.radius < 8 ||
+              y + bubble.radius > canvas.height - 8
+            ) {
+              continue;
+            }
+
+            let collides = false;
+            for (const existing of placed) {
+              const dx = x - existing.x;
+              const dy = y - existing.y;
+              const minDistance = bubble.radius + existing.radius + padding;
+              if (dx * dx + dy * dy < minDistance * minDistance) {
+                collides = true;
+                break;
+              }
+            }
+
+            if (!collides) {
+              found = { ...bubble, x, y };
+              break;
+            }
+          }
+
+          if (!found) {
+            found = { ...bubble, x: centerX, y: centerY };
+          }
+          placed.push(found);
+        }
+
+        return placed;
+      }
+
+      function drawBubbles(inputText) {
+        resizeCanvas();
+        drawBackground();
+
+        updateCharCount(inputText);
+        const items = buildFrequency(inputText);
+
+        if (items.length === 0) {
+          return;
+        }
+
+        const startColor = document.getElementById("startColor").value;
+        const endColor = document.getElementById("endColor").value;
+        const showCounts = document.getElementById("showCounts").checked;
+
+        const bubbles = placeBubbles(items);
+        const max = Math.max(1, bubbles.length - 1);
+
+        bubbles.forEach((bubble, index) => {
+          const t = index / max;
+          const rgb = lerpColor(startColor, endColor, t);
+          const fill = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.86)`;
+          const stroke = `rgba(${Math.max(0, rgb.r - 30)}, ${Math.max(
+            0,
+            rgb.g - 30
+          )}, ${Math.max(0, rgb.b - 30)}, 0.95)`;
+          const textColor = contrastColor(rgb);
+
+          ctx.beginPath();
+          ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+          ctx.fillStyle = fill;
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = stroke;
+          ctx.stroke();
+
+          ctx.fillStyle = textColor;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+          const charFontSize = Math.max(12, Math.floor(bubble.radius * 0.48));
+          ctx.font = `600 ${charFontSize}px Arial`;
+          ctx.fillText(String(bubble.char).toUpperCase(), bubble.x, bubble.y - 5);
+
+          if (showCounts) {
+            const countFontSize = Math.max(10, Math.floor(bubble.radius * 0.22));
+            ctx.font = `${countFontSize}px Arial`;
+            ctx.fillText(`${bubble.count}`, bubble.x, bubble.y + charFontSize * 0.45);
+          }
+        });
+
+        ctx.fillStyle = "rgba(15, 23, 42, 0.65)";
+        ctx.font = "13px Arial";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "bottom";
+        ctx.fillText("Word Grapher · Bubble Frequency", 12, canvas.height - 10);
+      }
+
+      function scheduleDraw() {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = requestAnimationFrame(() =>
+          drawBubbles(document.getElementById("text").value)
+        );
+      }
+
+      function downloadVisualization() {
+        const link = document.createElement("a");
+        link.download = "bubble_frequency_visualization.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }
+
+      async function copyShareLink() {
+        const status = document.getElementById("copyStatus");
+        const text = document.getElementById("text").value;
+        const url = new URL(window.location.href);
+        if (text) {
+          url.searchParams.set("text", text);
+        } else {
+          url.searchParams.delete("text");
+        }
+        try {
+          await navigator.clipboard.writeText(url.toString());
+          status.textContent = "Link copied!";
+        } catch (error) {
+          status.textContent = "Copy failed. Use your browser menu.";
+        }
+        setTimeout(() => {
+          status.textContent = "";
+        }, 2000);
+      }
+
+      window.addEventListener("resize", scheduleDraw);
+      window.addEventListener("load", () => {
+        resizeCanvas();
+        const urlParams = new URLSearchParams(window.location.search);
+        const text = urlParams.get("text");
+        if (text) {
+          document.getElementById("text").value = text;
+        }
+        scheduleDraw();
+      });
+
+      [
+        "text",
+        "startColor",
+        "endColor",
+        "maxBubbles",
+        "bubblePadding",
+        "showCounts",
+        "ignoreCase",
+        "cleanText",
+      ].forEach((id) => {
+        const eventName =
+          id === "showCounts" || id === "ignoreCase" || id === "cleanText"
+            ? "change"
+            : "input";
+        document.getElementById(id).addEventListener(eventName, scheduleDraw);
+      });
+
+      document.getElementById("maxBubbles").addEventListener("input", (event) => {
+        document.getElementById("maxBubblesValue").textContent = event.target.value;
+      });
+      document.getElementById("bubblePadding").addEventListener("input", (event) => {
+        document.getElementById("bubblePaddingValue").textContent = event.target.value;
+      });
+
+      function goBack(link) {
+        const text = document.getElementById("text").value;
+        if (text) {
+          link.href = link.href + "?text=" + encodeURIComponent(text);
+        }
+        return true;
+      }
+    </script>
+  </body>
+</html>

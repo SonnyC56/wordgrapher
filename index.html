@@ -3,15 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Word Grapher - Convert Text to ASCII Graph & Visual Patterns</title>
+    <title>Word Grapher - Convert Text to ASCII Graphs & Visual Patterns</title>
     <meta
       name="description"
-      content="Transform your text into beautiful ASCII graphs and visual patterns. Free online tool for creating unique text visualizations, morse code patterns, and circular letter arrangements."
+      content="Transform text into ASCII graphs, circular patterns, morse code art, barcodes, heatmap grids, constellation maps, waveforms, chord diagrams, and bubble frequency maps. Free online text visualization tools with downloadable images."
     />
     <meta
       name="keywords"
-      content="word graph, text visualization, ASCII art, text to graph, letter patterns, word patterns, text analysis, visual text converter"
+      content="word graph, text visualization, ASCII art, text to graph, letter patterns, word patterns, text analysis, visual text converter, barcode text, heatmap text, text waveform, constellation text, chord diagram text, bubble chart text"
     />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0d6efd" />
+    <meta name="author" content="Word Grapher" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -22,9 +25,14 @@
     />
     <meta
       property="og:description"
-      content="Create beautiful visual patterns from your text with our free online tool. Convert words into ASCII graphs, morse code, and circular visualizations."
+      content="Create visual patterns from your text with ASCII graphs, morse code, circular art, barcodes, heatmaps, constellations, waveforms, chord diagrams, and bubble maps."
     />
-    <meta property="og:image" content="https://wordgrapher.com/preview.jpg" />
+    <meta property="og:image" content="https://wordgrapher.com/preview.svg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Word Grapher text visualization previews" />
+    <meta property="og:site_name" content="Word Grapher" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -35,15 +43,20 @@
     />
     <meta
       property="twitter:description"
-      content="Transform text into stunning visual patterns. Free online text-to-graph converter with multiple visualization options."
+      content="Transform text into visual patterns with multiple visualization types and downloadable images."
     />
     <meta
       property="twitter:image"
-      content="https://wordgrapher.com/preview.jpg"
+      content="https://wordgrapher.com/preview.svg"
     />
+    <meta name="twitter:image:alt" content="Word Grapher text visualization previews" />
 
     <link rel="canonical" href="https://wordgrapher.com/" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
@@ -69,18 +82,20 @@
       gtag("config", "G-C30PHQ1VGF");
     </script>
     <style>
+      body {
+        background: #f8fafc;
+      }
       .main-content {
         margin: 20px auto;
         max-width: 100%;
-        padding: 0 15px;
+        padding: 0 15px 60px;
       }
       @media (min-width: 1300px) {
         .main-content {
           max-width: 1300px;
         }
       }
-      #graphContainer,
-      #lineOnlyContainer {
+      #graphContainer {
         display: none;
         margin-top: 20px;
         width: 100%;
@@ -94,6 +109,46 @@
         margin: 5px;
         white-space: nowrap;
       }
+      .section {
+        margin-top: 3rem;
+      }
+      .lead {
+        font-size: 1.1rem;
+        color: #6c757d;
+        max-width: 900px;
+        margin: 0 auto 2rem;
+      }
+      .pill-nav .btn {
+        border-radius: 999px;
+      }
+      .visual-card {
+        transition: transform 120ms ease, box-shadow 120ms ease;
+      }
+      .visual-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
+      }
+      .visual-card img {
+        border-radius: 0.5rem;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+      }
+      .example-btn {
+        margin: 4px;
+      }
+      .stat-badge {
+        background: #e0f2fe;
+        color: #0369a1;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+      }
+      .faq-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 0.75rem;
+        padding: 1rem 1.25rem;
+        background: #fff;
+      }
       @media (max-width: 768px) {
         h1 {
           font-size: 1.8rem;
@@ -103,21 +158,26 @@
           font-size: 0.9rem;
         }
       }
-      .lead {
-        font-size: 1.1rem;
-        color: #6c757d;
-        max-width: 800px;
-        margin: 0 auto 2rem;
-      }
     </style>
   </head>
   <body>
     <div class="main-content mt-5">
-      <h1 class="text-center mb-4">Word Grapher</h1>
-      <p class="text-center lead">
-        Transform text into beautiful ASCII graphs and visual patterns. Free
-        online tool for creating unique text visualizations.
-      </p>
+      <header class="text-center mb-4">
+        <h1 class="text-center mb-3">Word Grapher</h1>
+        <p class="text-center lead">
+          Transform text into beautiful ASCII graphs, circular patterns, morse
+          code art, barcodes, heatmap grids, chord diagrams, bubble maps, and
+          more. Free online tool for creating unique text visualizations.
+        </p>
+        <div class="pill-nav d-flex flex-wrap justify-content-center">
+          <a class="btn btn-primary" href="#get-started">Get Started</a>
+          <a class="btn btn-outline-primary" href="#examples">Examples</a>
+          <a class="btn btn-outline-primary" href="#visualizations">
+            Visualizations
+          </a>
+          <a class="btn btn-outline-primary" href="#faq">FAQ</a>
+        </div>
+      </header>
 
       <!-- Google AdSense -->
       <script
@@ -138,7 +198,7 @@
         (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
 
-      <div class="text-center mb-4">
+      <section class="text-center mb-4">
         <a
           href="templates/circular.html"
           class="btn btn-outline-primary me-2"
@@ -151,106 +211,538 @@
           onclick="return openWithText(this)"
           >Try Morse Code Visualization</a
         >
-      </div>
+        <a
+          href="templates/barcode.html"
+          class="btn btn-outline-primary"
+          onclick="return openWithText(this)"
+          >Try Barcode Visualization</a
+        >
+        <a
+          href="templates/heatmap.html"
+          class="btn btn-outline-primary"
+          onclick="return openWithText(this)"
+          >Try Heatmap Grid</a
+        >
+        <a
+          href="templates/constellation.html"
+          class="btn btn-outline-primary"
+          onclick="return openWithText(this)"
+          >Try Constellation Map</a
+        >
+        <a
+          href="templates/waveform.html"
+          class="btn btn-outline-primary"
+          onclick="return openWithText(this)"
+          >Try Waveform</a
+        >
+        <a
+          href="templates/chord.html"
+          class="btn btn-outline-primary"
+          onclick="return openWithText(this)"
+          >Try Chord Diagram</a
+        >
+        <a
+          href="templates/bubbles.html"
+          class="btn btn-outline-primary"
+          onclick="return openWithText(this)"
+          >Try Bubble Map</a
+        >
+      </section>
 
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="card">
-            <div class="card-body">
-              <div class="mb-3">
-                <label for="text" class="form-label">Enter your text:</label>
-                <textarea
-                  class="form-control"
-                  id="text"
-                  rows="3"
-                  required
-                ></textarea>
-              </div>
-              <div class="mb-3">
-                <div class="d-flex align-items-center">
-                  <label for="lineColor" class="form-label mb-0 me-2"
-                    >Line Color:</label
-                  >
-                  <input
-                    type="color"
-                    class="form-control form-control-color"
-                    id="lineColor"
-                    value="#4BC0C0"
-                  />
-                </div>
-              </div>
-              <div class="mb-3">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="cleanText"
-                  />
-                  <label class="form-check-label" for="cleanText">
-                    Remove spaces and punctuation
-                  </label>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="tension" class="form-label">Line Smoothness:</label>
-                <div class="d-flex align-items-center">
-                  <span class="me-2">min</span>
-                  <input
-                    type="range"
-                    class="form-control"
-                    id="tension"
-                    min="0"
-                    max="1"
-                    step="0.1"
-                    value="0.1"
-                    style="background-color: #f8f9fa"
-                  />
-                  <span class="ms-2">max</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="graphContainer" class="card mt-4 mb-4">
-            <div class="card-body">
-              <div class="text-center mb-3">
+      <section id="get-started">
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-body">
                 <div class="mb-3">
-                  <div class="form-check form-switch d-inline-block">
+                  <label for="text" class="form-label">Enter your text:</label>
+                  <textarea
+                    class="form-control"
+                    id="text"
+                    rows="3"
+                    placeholder="Type or paste your text here"
+                    required
+                  ></textarea>
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                    <span class="text-muted small">
+                      Characters: <span id="charCount">0</span>
+                    </span>
+                    <span class="stat-badge">Client-side only</span>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="d-flex align-items-center">
+                    <label for="lineColor" class="form-label mb-0 me-2"
+                      >Line Color:</label
+                    >
+                    <input
+                      type="color"
+                      class="form-control form-control-color"
+                      id="lineColor"
+                      value="#4BC0C0"
+                      aria-label="Choose line color"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="form-check">
                     <input
                       class="form-check-input"
                       type="checkbox"
-                      id="showFullGraph"
+                      id="cleanText"
                     />
-                    <label class="form-check-label" for="showFullGraph"
-                      >Show Full Graph</label
-                    >
+                    <label class="form-check-label" for="cleanText">
+                      Remove spaces and punctuation
+                    </label>
                   </div>
                 </div>
-                <div>
-                  <button onclick="downloadLineOnly()" class="btn btn-info">
-                    Download Line Only
-                  </button>
-                  <button
-                    onclick="downloadGraph()"
-                    class="btn btn-success"
-                    id="downloadFullBtn"
-                    style="display: none"
+                <div class="mb-3">
+                  <label for="tension" class="form-label"
+                    >Line Smoothness: <span id="tensionValue">0.1</span></label
                   >
-                    Download Full Graph
+                  <div class="d-flex align-items-center">
+                    <span class="me-2">min</span>
+                    <input
+                      type="range"
+                      class="form-control"
+                      id="tension"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value="0.1"
+                      style="background-color: #f8f9fa"
+                    />
+                    <span class="ms-2">max</span>
+                  </div>
+                </div>
+                <div class="d-flex flex-wrap">
+                  <button onclick="copyShareLink()" class="btn btn-outline-secondary">
+                    Copy Share Link
                   </button>
-                  <button onclick="resetForm()" class="btn btn-primary">
-                    Create Another Graph
-                  </button>
+                  <span id="copyStatus" class="align-self-center text-muted ms-2"></span>
                 </div>
               </div>
+            </div>
+
+            <section id="examples" class="section">
               <div class="text-center">
-                <canvas id="asciiGraph" style="display: none"></canvas>
-                <canvas id="lineOnlyGraph"></canvas>
+                <h2>Examples to Try</h2>
+                <p class="text-muted">
+                  Tap a sample to instantly generate a graph. Great for quick
+                  demos, classroom ideas, or social posts.
+                </p>
+              </div>
+              <div class="d-flex flex-wrap justify-content-center">
+                <button class="btn btn-outline-secondary example-btn" data-text="HELLO WORLD">
+                  HELLO WORLD
+                </button>
+                <button class="btn btn-outline-secondary example-btn" data-text="The quick brown fox jumps over the lazy dog">
+                  Pangram
+                </button>
+                <button class="btn btn-outline-secondary example-btn" data-text="2026 VIBES">
+                  2026 VIBES
+                </button>
+                <button class="btn btn-outline-secondary example-btn" data-text="MEET ME AT MIDNIGHT">
+                  MIDNIGHT
+                </button>
+                <button class="btn btn-outline-secondary example-btn" data-text="ABCDEFGHIJKLMNOPQRSTUVWXYZ">
+                  Alphabet
+                </button>
+                <button class="btn btn-outline-secondary example-btn" data-text="1234567890">
+                  Numbers
+                </button>
+                <button class="btn btn-outline-primary" id="randomExample">
+                  Random Example
+                </button>
+              </div>
+            </section>
+
+            <div id="graphContainer" class="card mt-4 mb-4">
+              <div class="card-body">
+                <div class="text-center mb-3">
+                  <div class="mb-3">
+                    <div class="form-check form-switch d-inline-block">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="showFullGraph"
+                      />
+                      <label class="form-check-label" for="showFullGraph"
+                        >Show Full Graph</label
+                      >
+                    </div>
+                  </div>
+                  <div>
+                    <button onclick="downloadLineOnly()" class="btn btn-info">
+                      Download Line Only
+                    </button>
+                    <button
+                      onclick="downloadGraph()"
+                      class="btn btn-success"
+                      id="downloadFullBtn"
+                      style="display: none"
+                    >
+                      Download Full Graph
+                    </button>
+                    <button onclick="resetForm()" class="btn btn-primary">
+                      Create Another Graph
+                    </button>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <canvas
+                    id="asciiGraph"
+                    style="display: none"
+                    aria-label="ASCII value chart"
+                  ></canvas>
+                  <canvas
+                    id="lineOnlyGraph"
+                    aria-label="Line only chart"
+                  ></canvas>
+                </div>
+                <div class="mt-3">
+                  <div class="text-muted small">Input text</div>
+                  <div id="originalText" class="fw-semibold"></div>
+                </div>
+                <div class="mt-2" id="processedTextRow" style="display: none">
+                  <div class="text-muted small">Processed text</div>
+                  <div id="processedText" class="fw-semibold"></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <section id="visualizations" class="section">
+        <div class="text-center mb-4">
+          <h2>Visualization Gallery</h2>
+          <p class="text-muted">
+            Explore different ways to turn your words into visuals. Each tool
+            includes downloads and shareable links.
+          </p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card h-100 visual-card">
+              <div class="card-body">
+                <img
+                  src="preview.svg"
+                  alt="ASCII line graph preview"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                />
+                <h3 class="h5">ASCII Line Graph</h3>
+                <p class="text-muted">
+                  Classic line graph of ASCII values with smoothing controls and
+                  downloadable PNGs.
+                </p>
+                <a href="#get-started" class="btn btn-outline-primary">
+                  Build a Graph
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 visual-card">
+              <div class="card-body">
+                <img
+                  src="circular-preview.svg"
+                  alt="Circular visualization preview"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                />
+                <h3 class="h5">Circular Spiral</h3>
+                <p class="text-muted">
+                  Arrange letters around a golden-ratio spiral and trace your
+                  word path.
+                </p>
+                <a
+                  href="templates/circular.html"
+                  class="btn btn-outline-primary"
+                  onclick="return openWithText(this)"
+                >
+                  Open Circular
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 visual-card">
+              <div class="card-body">
+                <img
+                  src="morse-preview.svg"
+                  alt="Morse code visualization preview"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                />
+                <h3 class="h5">Morse Code Art</h3>
+                <p class="text-muted">
+                  Dot-dash patterns rendered as color blocks with adjustable
+                  colors and spacing.
+                </p>
+                <a
+                  href="templates/morse.html"
+                  class="btn btn-outline-primary"
+                  onclick="return openWithText(this)"
+                >
+                  Open Morse
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 visual-card">
+              <div class="card-body">
+                <img
+                  src="barcode-preview.svg"
+                  alt="Barcode visualization preview"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                />
+                <h3 class="h5">Barcode Sweep</h3>
+                <p class="text-muted">
+                  Turn characters into vertical bars with height and gradient
+                  controls.
+                </p>
+                <a
+                  href="templates/barcode.html"
+                  class="btn btn-outline-primary"
+                  onclick="return openWithText(this)"
+                >
+                  Open Barcode
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 visual-card">
+              <div class="card-body">
+                <img
+                  src="heatmap-preview.svg"
+                  alt="Heatmap grid visualization preview"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                />
+                <h3 class="h5">Heatmap Grid</h3>
+                <p class="text-muted">
+                  See ASCII intensity as a color grid with optional letter
+                  overlay.
+                </p>
+                <a
+                  href="templates/heatmap.html"
+                  class="btn btn-outline-primary"
+                  onclick="return openWithText(this)"
+                >
+                  Open Heatmap
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 visual-card">
+              <div class="card-body">
+                <img
+                  src="constellation-preview.svg"
+                  alt="Constellation map visualization preview"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                />
+                <h3 class="h5">Constellation Map</h3>
+                <p class="text-muted">
+                  Plot characters like stars and connect your text into a glowing
+                  constellation.
+                </p>
+                <a
+                  href="templates/constellation.html"
+                  class="btn btn-outline-primary"
+                  onclick="return openWithText(this)"
+                >
+                  Open Constellation
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 visual-card">
+              <div class="card-body">
+                <img
+                  src="waveform-preview.svg"
+                  alt="Waveform visualization preview"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                />
+                <h3 class="h5">Waveform</h3>
+                <p class="text-muted">
+                  Render your text as an audio-style waveform with optional glow
+                  and fill.
+                </p>
+                <a
+                  href="templates/waveform.html"
+                  class="btn btn-outline-primary"
+                  onclick="return openWithText(this)"
+                >
+                  Open Waveform
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 visual-card">
+              <div class="card-body">
+                <img
+                  src="chord-preview.svg"
+                  alt="Chord diagram visualization preview"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                />
+                <h3 class="h5">Chord Diagram</h3>
+                <p class="text-muted">
+                  Visualize character-to-character transitions as curved links
+                  around a circular node map.
+                </p>
+                <a
+                  href="templates/chord.html"
+                  class="btn btn-outline-primary"
+                  onclick="return openWithText(this)"
+                >
+                  Open Chord
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 visual-card">
+              <div class="card-body">
+                <img
+                  src="bubbles-preview.svg"
+                  alt="Bubble frequency map preview"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                />
+                <h3 class="h5">Bubble Frequency</h3>
+                <p class="text-muted">
+                  Character counts packed into bubbles where size and color
+                  reveal dominant letters.
+                </p>
+                <a
+                  href="templates/bubbles.html"
+                  class="btn btn-outline-primary"
+                  onclick="return openWithText(this)"
+                >
+                  Open Bubbles
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="text-center mb-3">
+          <h2>How It Works</h2>
+          <p class="text-muted">
+            Every visualization is generated in your browser. Nothing is sent to
+            a server.
+          </p>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="faq-card h-100">
+              <strong>1. Convert</strong>
+              <p class="mb-0 text-muted">
+                We map each character to an ASCII value (or morse symbols) to
+                build visual patterns.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="faq-card h-100">
+              <strong>2. Style</strong>
+              <p class="mb-0 text-muted">
+                Adjust colors, smoothing, and layouts to match the vibe you want.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="faq-card h-100">
+              <strong>3. Download</strong>
+              <p class="mb-0 text-muted">
+                Export PNG images and share via a custom URL with your text
+                embedded.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="section">
+        <div class="text-center mb-4">
+          <h2>FAQ</h2>
+          <p class="text-muted">Quick answers about Word Grapher.</p>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="faq-card h-100">
+              <strong>Is my text uploaded anywhere?</strong>
+              <p class="mb-0 text-muted">
+                No. Everything runs locally in your browser, and no text is
+                stored on a server.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="faq-card h-100">
+              <strong>Can I share a visualization?</strong>
+              <p class="mb-0 text-muted">
+                Yes. Use “Copy Share Link” to generate a URL that reloads your
+                text on any device.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="faq-card h-100">
+              <strong>What texts work best?</strong>
+              <p class="mb-0 text-muted">
+                Short phrases show the strongest visual rhythm, but long passages
+                work too.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="faq-card h-100">
+              <strong>Can I download the output?</strong>
+              <p class="mb-0 text-muted">
+                Every visualization includes a one-click PNG download for easy
+                sharing.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="faq-card h-100">
+              <strong>Which visualization types are available?</strong>
+              <p class="mb-0 text-muted">
+                ASCII line, circular spiral, morse art, barcode sweep, heatmap,
+                constellation, waveform, chord diagram, and bubble frequency.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="section text-center text-muted small">
+        <div class="mb-2">
+          Explore more: <a href="templates/circular.html">Circular</a> ·
+          <a href="templates/morse.html">Morse</a> ·
+          <a href="templates/barcode.html">Barcode</a> ·
+          <a href="templates/heatmap.html">Heatmap</a> ·
+          <a href="templates/constellation.html">Constellation</a> ·
+          <a href="templates/waveform.html">Waveform</a> ·
+          <a href="templates/chord.html">Chord</a> ·
+          <a href="templates/bubbles.html">Bubbles</a>
+        </div>
+        <div>© 2026 Word Grapher. Built for visual wordplay.</div>
+      </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -259,7 +751,7 @@
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Word Grapher",
-        "description": "Transform text into beautiful ASCII graphs and visual patterns. Free online tool for creating unique text visualizations.",
+        "description": "Transform text into beautiful ASCII graphs and visual patterns.",
         "url": "https://wordgrapher.com",
         "applicationCategory": "Visualization Tool",
         "operatingSystem": "Any",
@@ -270,8 +762,159 @@
         }
       }
     </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is my text uploaded anywhere?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Everything runs locally in your browser, and no text is stored on a server."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I share a visualization?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Use Copy Share Link to generate a URL that reloads your text on any device."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What texts work best?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Short phrases show the strongest visual rhythm, but long passages work too."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I download the output?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Every visualization includes a one-click PNG download for easy sharing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which visualization types are available?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ASCII line, circular spiral, morse art, barcode sweep, heatmap, constellation, waveform, chord diagram, and bubble frequency."
+            }
+          }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Word Grapher Visualizations",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "ASCII Line Graph",
+            "url": "https://wordgrapher.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Circular Spiral",
+            "url": "https://wordgrapher.com/templates/circular.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Morse Code Art",
+            "url": "https://wordgrapher.com/templates/morse.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Barcode Sweep",
+            "url": "https://wordgrapher.com/templates/barcode.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "name": "Heatmap Grid",
+            "url": "https://wordgrapher.com/templates/heatmap.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "name": "Constellation Map",
+            "url": "https://wordgrapher.com/templates/constellation.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "name": "Waveform",
+            "url": "https://wordgrapher.com/templates/waveform.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "name": "Chord Diagram",
+            "url": "https://wordgrapher.com/templates/chord.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "name": "Bubble Frequency Map",
+            "url": "https://wordgrapher.com/templates/bubbles.html"
+          }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to create a text visualization with Word Grapher",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Enter text",
+            "text": "Type or paste your text into the input box."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Pick a visualization",
+            "text": "Choose one of the visualization templates such as Circular, Heatmap, Chord, or Bubble."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Adjust style",
+            "text": "Tune colors, smoothing, density, and layout controls to shape the output."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Download or share",
+            "text": "Download as PNG or copy a share link with embedded text."
+          }
+        ]
+      }
+    </script>
     <script>
       let chart = null;
+
+      const exampleTexts = [
+        "HELLO WORLD",
+        "The quick brown fox jumps over the lazy dog",
+        "2026 VIBES",
+        "MEET ME AT MIDNIGHT",
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "1234567890",
+        "CREATE YOUR OWN PATTERN",
+        "NEON LETTER WAVES",
+      ];
 
       // Load text from URL params if present
       window.addEventListener("load", () => {
@@ -287,15 +930,34 @@
         return text.replace(/[^a-zA-Z0-9]/g, "");
       }
 
+      function updateCharCount(text) {
+        document.getElementById("charCount").textContent = text.length;
+      }
+
       function updateGraph() {
-        let text = document.getElementById("text").value;
-        if (document.getElementById("cleanText").checked) {
+        const rawText = document.getElementById("text").value;
+        updateCharCount(rawText);
+
+        let text = rawText;
+        const clean = document.getElementById("cleanText").checked;
+        if (clean) {
           text = cleanInputText(text);
         }
+
+        const processedRow = document.getElementById("processedTextRow");
+        const processedText = document.getElementById("processedText");
+        processedRow.style.display = clean && rawText ? "block" : "none";
+        processedText.textContent = text;
+        document.getElementById("originalText").textContent = rawText;
+
         if (!text) {
           if (chart) {
             chart.destroy();
             chart = null;
+          }
+          if (window.lineOnlyChart) {
+            window.lineOnlyChart.destroy();
+            window.lineOnlyChart = null;
           }
           document.getElementById("graphContainer").style.display = "none";
           return;
@@ -414,8 +1076,6 @@
               animation: true,
             },
           });
-
-          document.getElementById("originalText").textContent = text;
         } else {
           // Update existing chart
           chart.data.labels = labels;
@@ -453,9 +1113,30 @@
         link.click();
       }
 
+      async function copyShareLink() {
+        const status = document.getElementById("copyStatus");
+        const text = document.getElementById("text").value;
+        const url = new URL(window.location.href);
+        if (text) {
+          url.searchParams.set("text", text);
+        } else {
+          url.searchParams.delete("text");
+        }
+        try {
+          await navigator.clipboard.writeText(url.toString());
+          status.textContent = "Link copied!";
+        } catch (error) {
+          status.textContent = "Copy failed. Use your browser menu.";
+        }
+        setTimeout(() => {
+          status.textContent = "";
+        }, 2000);
+      }
+
       // Add event listeners for real-time updates
       ["text", "tension", "lineColor", "cleanText"].forEach((id) => {
-        document.getElementById(id).addEventListener("input", updateGraph);
+        const eventName = id === "cleanText" ? "change" : "input";
+        document.getElementById(id).addEventListener(eventName, updateGraph);
       });
       document
         .getElementById("showFullGraph")
@@ -471,6 +1152,9 @@
       function resetForm() {
         document.getElementById("text").value = "";
         document.getElementById("graphContainer").style.display = "none";
+        document.getElementById("charCount").textContent = "0";
+        document.getElementById("originalText").textContent = "";
+        document.getElementById("processedTextRow").style.display = "none";
         if (chart) {
           chart.destroy();
           chart = null;
@@ -479,7 +1163,6 @@
           window.lineOnlyChart.destroy();
           window.lineOnlyChart = null;
         }
-        document.getElementById("lineOnlyContainer").style.display = "none";
       }
       function openWithText(link) {
         const text = document.getElementById("text").value;
@@ -488,6 +1171,32 @@
         }
         return true;
       }
+
+      function applyExample(text) {
+        document.getElementById("text").value = text;
+        updateGraph();
+        document
+          .getElementById("graphContainer")
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      document.querySelectorAll(".example-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          applyExample(btn.dataset.text);
+        });
+      });
+
+      document
+        .getElementById("randomExample")
+        .addEventListener("click", () => {
+          const randomText =
+            exampleTexts[Math.floor(Math.random() * exampleTexts.length)];
+          applyExample(randomText);
+        });
+
+      document.getElementById("tension").addEventListener("input", (e) => {
+        document.getElementById("tensionValue").textContent = e.target.value;
+      });
     </script>
   </body>
 </html>

@@ -1,0 +1,46 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b1220" />
+      <stop offset="1" stop-color="#111827" />
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)" />
+
+  <text x="70" y="120" fill="#ffffff" font-family="Arial, sans-serif" font-size="60" font-weight="700">
+    Text Waveform
+  </text>
+  <text x="70" y="175" fill="#cbd5f5" font-family="Arial, sans-serif" font-size="26">
+    Audio-style waveform from ASCII
+  </text>
+
+  <line x1="120" y1="360" x2="1080" y2="360" stroke="rgba(226,232,240,0.2)" stroke-width="2" />
+
+  <path
+    d="M120 360 C180 300 240 420 300 360 C360 260 420 460 480 360 C540 310 600 410 660 360 C720 250 780 470 840 360 C900 295 960 425 1020 360 C1050 335 1065 385 1080 360"
+    stroke="#38bdf8"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    filter="url(#glow)"
+    fill="none"
+  />
+
+  <path
+    d="M120 360 C180 420 240 300 300 360 C360 460 420 260 480 360 C540 410 600 310 660 360 C720 470 780 250 840 360 C900 425 960 295 1020 360 C1050 385 1065 335 1080 360"
+    stroke="#22d3ee"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    opacity="0.7"
+    filter="url(#glow)"
+    fill="none"
+  />
+</svg>

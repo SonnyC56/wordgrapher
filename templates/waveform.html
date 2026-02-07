@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Waveform - Audio-Style ASCII Visualization</title>
+    <meta
+      name="description"
+      content="Render text as an audio-style waveform. Map characters to amplitude, add glow and fill, and download a high-contrast image instantly."
+    />
+    <meta
+      name="keywords"
+      content="text waveform, ascii waveform, text visualization, audio style, waveform art, generative art"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0d6efd" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://wordgrapher.com/templates/waveform.html"
+    />
+    <meta
+      property="og:title"
+      content="Text Waveform - Audio-Style ASCII Visualization"
+    />
+    <meta
+      property="og:description"
+      content="Render text as an audio-style waveform. Map characters to amplitude, add glow and fill, and download instantly."
+    />
+    <meta
+      property="og:image"
+      content="https://wordgrapher.com/waveform-preview.svg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:url"
+      content="https://wordgrapher.com/templates/waveform.html"
+    />
+    <meta
+      property="twitter:title"
+      content="Text Waveform"
+    />
+    <meta
+      property="twitter:description"
+      content="Render text as an audio-style waveform with glow and fill."
+    />
+    <meta
+      property="twitter:image"
+      content="https://wordgrapher.com/waveform-preview.svg"
+    />
+
+    <link rel="canonical" href="https://wordgrapher.com/templates/waveform.html" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-C30PHQ1VGF"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-C30PHQ1VGF");
+    </script>
+    <style>
+      body {
+        background: #f8fafc;
+      }
+      canvas {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #0b1220;
+        max-width: 100%;
+        height: auto !important;
+      }
+      .main-content {
+        margin: 20px auto;
+        max-width: 100%;
+        padding: 0 15px 60px;
+      }
+      @media (min-width: 900px) {
+        .main-content {
+          max-width: 900px;
+        }
+      }
+      .btn {
+        margin: 5px;
+        white-space: nowrap;
+      }
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+        .btn {
+          padding: 0.375rem 0.75rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-content">
+      <div class="text-center mb-4">
+        <h1>Text Waveform</h1>
+        <p class="text-muted">
+          Render your text as an audio-style waveform. Great for posters,
+          playlists, and high-contrast social images.
+        </p>
+        <a
+          href="../index.html"
+          class="btn btn-outline-secondary"
+          onclick="return goBack(this)"
+          >Back to Word Grapher</a
+        >
+      </div>
+
+      <!-- Google AdSense -->
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+        crossorigin="anonymous"
+      ></script>
+      <!-- wordgrapher1 -->
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-client="ca-pub-7049016882676520"
+        data-ad-slot="8204395909"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="text" class="form-label">Enter your text:</label>
+            <textarea class="form-control" id="text" rows="3" required></textarea>
+            <div class="text-muted small mt-2">
+              Characters: <span id="charCount">0</span>
+            </div>
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div>
+              <label for="lineColor" class="form-label">Line Color:</label>
+              <input
+                type="color"
+                class="form-control form-control-color"
+                id="lineColor"
+                value="#38bdf8"
+                aria-label="Choose waveform line color"
+              />
+            </div>
+            <div>
+              <label for="fillColor" class="form-label">Fill Color:</label>
+              <input
+                type="color"
+                class="form-control form-control-color"
+                id="fillColor"
+                value="#22d3ee"
+                aria-label="Choose waveform fill color"
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="amplitude" class="form-label"
+              >Amplitude: <span id="amplitudeValue">1.0</span>x</label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="amplitude"
+              min="0.5"
+              max="2"
+              step="0.1"
+              value="1"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="strokeWidth" class="form-label"
+              >Stroke Width: <span id="strokeWidthValue">3</span>px</label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="strokeWidth"
+              min="1"
+              max="10"
+              step="1"
+              value="3"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="glow" class="form-label"
+              >Glow: <span id="glowValue">16</span></label
+            >
+            <input
+              type="range"
+              class="form-control"
+              id="glow"
+              min="0"
+              max="30"
+              step="1"
+              value="16"
+            />
+          </div>
+          <div class="mb-3 d-flex flex-wrap gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="mirror" checked />
+              <label class="form-check-label" for="mirror">Mirror</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="fill" checked />
+              <label class="form-check-label" for="fill">Fill</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="cleanText" />
+              <label class="form-check-label" for="cleanText">
+                Remove spaces and punctuation
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <div class="container-fluid">
+          <canvas id="waveformGraph" class="img-fluid"></canvas>
+        </div>
+      </div>
+
+      <div class="text-center mt-3">
+        <button onclick="downloadVisualization()" class="btn btn-success">
+          Download Image
+        </button>
+        <button onclick="copyShareLink()" class="btn btn-outline-secondary">
+          Copy Share Link
+        </button>
+        <span id="copyStatus" class="text-muted ms-2"></span>
+      </div>
+    </div>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Text Waveform",
+        "description": "Render text as an audio-style waveform. Map characters to amplitude, add glow and fill, and download a high-contrast image instantly.",
+        "url": "https://wordgrapher.com/templates/waveform.html",
+        "applicationCategory": "Visualization Tool",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+    <script>
+      const canvas = document.getElementById("waveformGraph");
+      const ctx = canvas.getContext("2d");
+      let animationFrame;
+
+      function cleanInputText(text) {
+        return text.replace(/[^a-zA-Z0-9]/g, "");
+      }
+
+      function updateCharCount(text) {
+        document.getElementById("charCount").textContent = text.length;
+      }
+
+      function resizeCanvas() {
+        const containerWidth = canvas.parentElement.offsetWidth;
+        const width = Math.min(900, Math.max(320, containerWidth - 20));
+        canvas.width = width;
+        canvas.height = 420;
+      }
+
+      function drawBackground() {
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, "#0b1220");
+        gradient.addColorStop(1, "#111827");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Subtle grid
+        ctx.save();
+        ctx.globalAlpha = 0.12;
+        ctx.strokeStyle = "#94a3b8";
+        ctx.lineWidth = 1;
+        const step = 40;
+        for (let x = 0; x <= canvas.width; x += step) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, canvas.height);
+          ctx.stroke();
+        }
+        for (let y = 0; y <= canvas.height; y += step) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function buildPoints(asciiValues, padding, amplitudeScale) {
+        const min = Math.min(...asciiValues);
+        const max = Math.max(...asciiValues);
+        const range = Math.max(1, max - min);
+
+        const usableWidth = canvas.width - padding * 2;
+        const step = asciiValues.length > 1 ? usableWidth / (asciiValues.length - 1) : 0;
+        const centerY = canvas.height / 2;
+        const maxAmp = (canvas.height / 2 - padding) * amplitudeScale;
+
+        const top = [];
+        const bottom = [];
+
+        asciiValues.forEach((value, index) => {
+          const t = (value - min) / range;
+          const amp = (t - 0.5) * 2 * maxAmp;
+          const x = padding + index * step;
+          top.push({ x, y: centerY - amp });
+          bottom.push({ x, y: centerY + amp });
+        });
+
+        return { top, bottom, centerY };
+      }
+
+      function drawSmoothLine(points) {
+        if (points.length === 0) return;
+        if (points.length === 1) {
+          ctx.beginPath();
+          ctx.arc(points[0].x, points[0].y, 2, 0, Math.PI * 2);
+          ctx.fill();
+          return;
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+
+        for (let i = 1; i < points.length - 1; i++) {
+          const midX = (points[i].x + points[i + 1].x) / 2;
+          const midY = (points[i].y + points[i + 1].y) / 2;
+          ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
+        }
+
+        const last = points[points.length - 1];
+        ctx.lineTo(last.x, last.y);
+      }
+
+      function drawWaveform(inputText) {
+        resizeCanvas();
+        drawBackground();
+
+        const rawText = inputText;
+        updateCharCount(rawText);
+
+        const text = document.getElementById("cleanText").checked
+          ? cleanInputText(rawText)
+          : rawText;
+
+        if (!text) return;
+
+        const asciiValues = Array.from(text).map((char) => char.charCodeAt(0));
+
+        const amplitudeScale = parseFloat(document.getElementById("amplitude").value);
+        const strokeWidth = parseInt(document.getElementById("strokeWidth").value, 10);
+        const glow = parseInt(document.getElementById("glow").value, 10);
+        const lineColor = document.getElementById("lineColor").value;
+        const fillColor = document.getElementById("fillColor").value;
+        const mirror = document.getElementById("mirror").checked;
+        const fill = document.getElementById("fill").checked;
+
+        const padding = 32;
+        const points = buildPoints(asciiValues, padding, amplitudeScale);
+
+        // Center line
+        ctx.save();
+        ctx.globalAlpha = 0.35;
+        ctx.strokeStyle = "rgba(226, 232, 240, 0.25)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padding, points.centerY);
+        ctx.lineTo(canvas.width - padding, points.centerY);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.save();
+        ctx.lineWidth = strokeWidth;
+        ctx.strokeStyle = lineColor;
+        ctx.shadowColor = lineColor;
+        ctx.shadowBlur = glow;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+
+        if (fill && mirror) {
+          ctx.save();
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 0.22;
+          ctx.fillStyle = fillColor;
+
+          drawSmoothLine(points.top);
+          const lastBottom = points.bottom[points.bottom.length - 1];
+          ctx.lineTo(lastBottom.x, lastBottom.y);
+          drawSmoothLine(points.bottom.slice().reverse());
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+
+        ctx.globalAlpha = 0.95;
+        drawSmoothLine(points.top);
+        ctx.stroke();
+
+        if (mirror) {
+          ctx.globalAlpha = 0.85;
+          drawSmoothLine(points.bottom);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+
+        // Caption
+        ctx.save();
+        ctx.fillStyle = "rgba(226, 232, 240, 0.85)";
+        ctx.font = "14px Arial";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "bottom";
+        ctx.fillText(
+          `Word Grapher · Waveform · ${new Date().getFullYear()}`,
+          14,
+          canvas.height - 12
+        );
+        ctx.restore();
+      }
+
+      function scheduleDraw() {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = requestAnimationFrame(() =>
+          drawWaveform(document.getElementById("text").value)
+        );
+      }
+
+      function downloadVisualization() {
+        const link = document.createElement("a");
+        link.download = "waveform_visualization.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }
+
+      async function copyShareLink() {
+        const status = document.getElementById("copyStatus");
+        const text = document.getElementById("text").value;
+        const url = new URL(window.location.href);
+        if (text) {
+          url.searchParams.set("text", text);
+        } else {
+          url.searchParams.delete("text");
+        }
+        try {
+          await navigator.clipboard.writeText(url.toString());
+          status.textContent = "Link copied!";
+        } catch (error) {
+          status.textContent = "Copy failed. Use your browser menu.";
+        }
+        setTimeout(() => {
+          status.textContent = "";
+        }, 2000);
+      }
+
+      window.addEventListener("resize", scheduleDraw);
+
+      window.addEventListener("load", () => {
+        resizeCanvas();
+        const urlParams = new URLSearchParams(window.location.search);
+        const text = urlParams.get("text");
+        if (text) {
+          document.getElementById("text").value = text;
+        }
+        scheduleDraw();
+      });
+
+      [
+        "text",
+        "lineColor",
+        "fillColor",
+        "amplitude",
+        "strokeWidth",
+        "glow",
+        "mirror",
+        "fill",
+        "cleanText",
+      ].forEach((id) => {
+        const eventName = id === "cleanText" || id === "mirror" || id === "fill" ? "change" : "input";
+        document.getElementById(id).addEventListener(eventName, scheduleDraw);
+      });
+
+      document.getElementById("amplitude").addEventListener("input", (e) => {
+        document.getElementById("amplitudeValue").textContent = e.target.value;
+      });
+      document.getElementById("strokeWidth").addEventListener("input", (e) => {
+        document.getElementById("strokeWidthValue").textContent = e.target.value;
+      });
+      document.getElementById("glow").addEventListener("input", (e) => {
+        document.getElementById("glowValue").textContent = e.target.value;
+      });
+
+      function goBack(link) {
+        const text = document.getElementById("text").value;
+        if (text) {
+          link.href = link.href + "?text=" + encodeURIComponent(text);
+        }
+        return true;
+      }
+    </script>
+  </body>
+</html>

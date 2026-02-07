@@ -1,372 +1,467 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Circular Word Visualization - Text to Spiral Pattern Generator 📈</title>
-    <meta name="description" content="Create beautiful circular visualizations from text using golden ratio spirals. Transform words into elegant circular patterns with our free online tool.">
-    <meta name="keywords" content="circular text, spiral visualization, golden ratio text, word patterns, text art, circular word art, fibonacci spiral text">
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Circular Word Visualization - Text to Spiral Pattern Generator</title>
+    <meta
+      name="description"
+      content="Create circular text visualizations using golden ratio spirals. Transform words into elegant circular patterns and download the result instantly."
+    />
+    <meta
+      name="keywords"
+      content="circular text, spiral visualization, golden ratio text, word patterns, text art, circular word art, fibonacci spiral text"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0d6efd" />
+
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://wordgrapher.com/templates/circular.html">
-    <meta property="og:title" content="Circular Word Visualization - Text to Spiral Patterns">
-    <meta property="og:description" content="Transform text into elegant circular patterns using golden ratio spirals. Create beautiful word art with our free visualization tool.">
-    <meta property="og:image" content="https://wordgrapher.com/circular-preview.jpg">
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://wordgrapher.com/templates/circular.html"
+    />
+    <meta
+      property="og:title"
+      content="Circular Word Visualization - Text to Spiral Patterns"
+    />
+    <meta
+      property="og:description"
+      content="Transform text into elegant circular patterns using golden ratio spirals. Create beautiful word art with our free visualization tool."
+    />
+    <meta
+      property="og:image"
+      content="https://wordgrapher.com/circular-preview.svg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://wordgrapher.com/templates/circular.html">
-    <meta property="twitter:title" content="Circular Word Visualization Tool">
-    <meta property="twitter:description" content="Create stunning circular patterns from text using golden ratio spirals. Free online text-to-art converter.">
-    <meta property="twitter:image" content="https://wordgrapher.com/circular-preview.jpg">
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:url"
+      content="https://wordgrapher.com/templates/circular.html"
+    />
+    <meta
+      property="twitter:title"
+      content="Circular Word Visualization Tool"
+    />
+    <meta
+      property="twitter:description"
+      content="Create stunning circular patterns from text using golden ratio spirals. Free online text-to-art converter."
+    />
+    <meta
+      property="twitter:image"
+      content="https://wordgrapher.com/circular-preview.svg"
+    />
 
-    <link rel="canonical" href="https://wordgrapher.com/templates/circular.html">
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
-     crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      rel="canonical"
+      href="https://wordgrapher.com/templates/circular.html"
+    />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C30PHQ1VGF"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-C30PHQ1VGF"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-      gtag('config', 'G-C30PHQ1VGF');
+      gtag("config", "G-C30PHQ1VGF");
     </script>
     <style>
-        canvas {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            max-width: 100%;
-            height: auto !important;
-        }
+      body {
+        background: #f8fafc;
+      }
+      canvas {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        max-width: 100%;
+        height: auto !important;
+      }
+      .main-content {
+        margin: 20px auto;
+        max-width: 100%;
+        padding: 0 15px 60px;
+      }
+      @media (min-width: 900px) {
         .main-content {
-            margin: 20px auto;
-            max-width: 100%;
-            padding: 0 15px;
+          max-width: 900px;
         }
-        @media (min-width: 800px) {
-            .main-content {
-                max-width: 800px;
-            }
+      }
+      .btn {
+        margin: 5px;
+        white-space: nowrap;
+      }
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+        .lead {
+          font-size: 1rem;
         }
         .btn {
-            margin: 5px;
-            white-space: nowrap;
+          padding: 0.375rem 0.75rem;
+          font-size: 0.9rem;
         }
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-            .lead {
-                font-size: 1rem;
-            }
-            .btn {
-                padding: 0.375rem 0.75rem;
-                font-size: 0.9rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="main-content">
-        <div class="text-center mb-4">
-            <h1>Circular Word Visualization 📈</h1>
-            <p class="lead">
-                This visualization creates an elegant circular representation of text using mathematical principles.
-                Characters are arranged in a circle, connected by Fibonacci spiral curves that follow the golden ratio (φ ≈ 1.618),
-                creating a natural and aesthetically pleasing flow between letters.
-            </p>
-            <a href="../index.html" class="btn btn-outline-secondary" onclick="return goBack(this)">Back to Word Grapher</a>
-        </div>
+      <div class="text-center mb-4">
+        <h1>Circular Word Visualization</h1>
+        <p class="lead">
+          Arrange letters around a golden-ratio spiral and trace the path your
+          text creates. Perfect for logos, posters, and generative art ideas.
+        </p>
+        <a
+          href="../index.html"
+          class="btn btn-outline-secondary"
+          onclick="return goBack(this)"
+          >Back to Word Grapher</a
+        >
+      </div>
 
-        <!-- Google AdSense -->
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
-             crossorigin="anonymous"></script>
-        <!-- wordgrapher1 -->
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-7049016882676520"
-             data-ad-slot="8204395909"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+      <!-- Google AdSense -->
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7049016882676520"
+        crossorigin="anonymous"
+      ></script>
+      <!-- wordgrapher1 -->
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-client="ca-pub-7049016882676520"
+        data-ad-slot="8204395909"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
 
-        <div class="card">
-            <div class="card-body">
-                <div class="mb-3">
-                    <label for="text" class="form-label">Enter your text:</label>
-                    <textarea class="form-control" id="text" rows="3" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="colorPicker" class="form-label">Line Color:</label>
-                    <input type="color" class="form-control form-control-color" id="colorPicker" value="#4BC0C0">
-                </div>
-                <div class="mb-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="cleanText">
-                        <label class="form-check-label" for="cleanText">
-                            Remove spaces and punctuation
-                        </label>
-                    </div>
-                </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="text" class="form-label">Enter your text:</label>
+            <textarea class="form-control" id="text" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="colorPicker" class="form-label">Line Color:</label>
+            <input
+              type="color"
+              class="form-control form-control-color"
+              id="colorPicker"
+              value="#4BC0C0"
+              aria-label="Choose line color"
+            />
+          </div>
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="cleanText" />
+              <label class="form-check-label" for="cleanText">
+                Remove spaces and punctuation
+              </label>
             </div>
+          </div>
         </div>
+      </div>
 
-        <div class="text-center mt-4">
-            <div class="row justify-content-center">
-                <div class="col-md-6 mb-4">
-                    <canvas id="circularGraph" width="600" height="600" class="img-fluid"></canvas>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <canvas id="blackGraph" width="600" height="600" class="img-fluid"></canvas>
-                </div>
-            </div>
+      <div class="text-center mt-4">
+        <div class="row justify-content-center">
+          <div class="col-md-6 mb-4">
+            <canvas id="circularGraph" class="img-fluid"></canvas>
+          </div>
+          <div class="col-md-6 mb-4">
+            <canvas id="blackGraph" class="img-fluid"></canvas>
+          </div>
         </div>
+      </div>
 
-        <div class="text-center mt-3">
-            <button onclick="downloadVisualization()" class="btn btn-success">Download Image</button>
-        </div>
+      <div class="text-center mt-3">
+        <button onclick="downloadVisualization()" class="btn btn-success">
+          Download Color
+        </button>
+        <button onclick="downloadBlackVisualization()" class="btn btn-dark">
+          Download Black
+        </button>
+        <button onclick="copyShareLink()" class="btn btn-outline-secondary">
+          Copy Share Link
+        </button>
+        <span id="copyStatus" class="text-muted ms-2"></span>
+      </div>
     </div>
 
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Circular Word Visualization",
-      "description": "Create beautiful circular visualizations from text using golden ratio spirals.",
-      "url": "https://wordgrapher.com/templates/circular.html",
-      "applicationCategory": "Visualization Tool",
-      "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Circular Word Visualization",
+        "description": "Create beautiful circular visualizations from text using golden ratio spirals.",
+        "url": "https://wordgrapher.com/templates/circular.html",
+        "applicationCategory": "Visualization Tool",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
       }
-    }
     </script>
     <script>
-        const canvas = document.getElementById('circularGraph');
-        const ctx = canvas.getContext('2d');
-        let animationFrame;
+      const canvas = document.getElementById("circularGraph");
+      const ctx = canvas.getContext("2d");
+      const blackCanvas = document.getElementById("blackGraph");
+      const blackCtx = blackCanvas.getContext("2d");
+      let animationFrame;
 
-        function cleanInputText(text) {
-            return text.replace(/[^a-zA-Z0-9]/g, '');
-        }
+      function cleanInputText(text) {
+        return text.replace(/[^a-zA-Z0-9]/g, "");
+      }
 
-        function drawCircularVisualization(inputText) {
-            let text = document.getElementById('cleanText').checked ? cleanInputText(inputText) : inputText;
-            const radius = 250;
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            if (!text) return;
+      function resizeCanvases() {
+        const containerWidth = canvas.parentElement.offsetWidth;
+        const size = Math.min(600, Math.max(280, containerWidth - 20));
+        canvas.width = size;
+        canvas.height = size;
+        blackCanvas.width = size;
+        blackCanvas.height = size;
+      }
 
-            // Create positions for all letters A-Z
-            const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
-            const positions = {};
-            
-            // Calculate positions for each letter
-            alphabet.forEach((char, index) => {
-                // Start at top (-π/2) and go clockwise
-                const angle = (-Math.PI/2) + (index / alphabet.length) * Math.PI * 2;
-                positions[char] = {
-                    x: centerX + radius * Math.cos(angle),
-                    y: centerY + radius * Math.sin(angle)
-                };
-            });
+      function getPositions(radius, centerX, centerY) {
+        const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+        const positions = {};
+        alphabet.forEach((char, index) => {
+          const angle = -Math.PI / 2 + (index / alphabet.length) * Math.PI * 2;
+          positions[char] = {
+            x: centerX + radius * Math.cos(angle),
+            y: centerY + radius * Math.sin(angle),
+          };
+        });
+        return positions;
+      }
 
-            // Draw character nodes
-            ctx.font = '16px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            
-            // Draw all letter nodes
-            Object.entries(positions).forEach(([char, pos]) => {
-                // Draw circle behind character
-                ctx.beginPath();
-                ctx.arc(pos.x, pos.y, 15, 0, Math.PI * 2);
-                
-                // Highlight letters that are used in the text
-                if (text.toLowerCase().includes(char)) {
-                    ctx.fillStyle = '#e3f2fd';
-                    ctx.strokeStyle = '#2196f3';
-                } else {
-                    ctx.fillStyle = '#f5f5f5';
-                    ctx.strokeStyle = '#e0e0e0';
-                }
-                
-                ctx.fill();
-                ctx.stroke();
-                
-                // Draw character
-                ctx.fillStyle = text.toLowerCase().includes(char) ? '#000' : '#757575';
-                ctx.fillText(char, pos.x, pos.y);
-            });
+      function drawCircularVisualization(inputText) {
+        const text = document.getElementById("cleanText").checked
+          ? cleanInputText(inputText)
+          : inputText;
+        const radius = Math.min(canvas.width, canvas.height) * 0.38;
+        const nodeRadius = Math.max(10, Math.round(radius * 0.08));
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
 
-            // Draw connections using Fibonacci spiral pattern
-            const lineColor = document.getElementById('colorPicker').value;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (!text) return;
+
+        const positions = getPositions(radius, centerX, centerY);
+
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        Object.entries(positions).forEach(([char, pos]) => {
+          ctx.beginPath();
+          ctx.arc(pos.x, pos.y, nodeRadius, 0, Math.PI * 2);
+
+          if (text.toLowerCase().includes(char)) {
+            ctx.fillStyle = "#e3f2fd";
+            ctx.strokeStyle = "#2196f3";
+          } else {
+            ctx.fillStyle = "#f5f5f5";
+            ctx.strokeStyle = "#e0e0e0";
+          }
+
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = text.toLowerCase().includes(char) ? "#000" : "#757575";
+          ctx.fillText(char, pos.x, pos.y);
+        });
+
+        const lineColor = document.getElementById("colorPicker").value;
+        ctx.strokeStyle = lineColor;
+        ctx.lineWidth = 2;
+
+        const phi = (1 + Math.sqrt(5)) / 2;
+        const angleIncrement = Math.PI * 2 * (1 - 1 / phi);
+
+        for (let i = 0; i < text.length - 1; i++) {
+          const char1 = text[i].toLowerCase();
+          const char2 = text[i + 1].toLowerCase();
+
+          if (positions[char1] && positions[char2]) {
+            const start = positions[char1];
+            const end = positions[char2];
+
+            const angle = angleIncrement * i;
+            const spiralRadius = radius * (1 - i / (text.length * 2));
+
+            const ctrl1X = centerX + Math.cos(angle) * spiralRadius;
+            const ctrl1Y = centerY + Math.sin(angle) * spiralRadius;
+            const ctrl2X =
+              centerX + Math.cos(angle + angleIncrement) * spiralRadius;
+            const ctrl2Y =
+              centerY + Math.sin(angle + angleIncrement) * spiralRadius;
+
+            ctx.beginPath();
+            ctx.moveTo(start.x, start.y);
+            ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, end.x, end.y);
+            ctx.stroke();
+
+            ctx.save();
+            ctx.shadowColor = lineColor;
+            ctx.shadowBlur = 10;
             ctx.strokeStyle = lineColor;
-            ctx.lineWidth = 2;
-            
-            const phi = (1 + Math.sqrt(5)) / 2; // Golden ratio
-            const angleIncrement = Math.PI * 2 * (1 - 1/phi); // Golden angle
-            
-            for (let i = 0; i < text.length - 1; i++) {
-                const char1 = text[i].toLowerCase();
-                const char2 = text[i + 1].toLowerCase();
-                
-                if (positions[char1] && positions[char2]) {
-                    const start = positions[char1];
-                    const end = positions[char2];
-                    
-                    // Calculate spiral control points
-                    const angle = angleIncrement * i;
-                    const spiralRadius = radius * (1 - i/(text.length * 2));
-                    
-                    const ctrl1X = centerX + Math.cos(angle) * spiralRadius;
-                    const ctrl1Y = centerY + Math.sin(angle) * spiralRadius;
-                    const ctrl2X = centerX + Math.cos(angle + angleIncrement) * spiralRadius;
-                    const ctrl2Y = centerY + Math.sin(angle + angleIncrement) * spiralRadius;
-                    
-                    // Draw curved line using bezier curve
-                    ctx.beginPath();
-                    ctx.moveTo(start.x, start.y);
-                    ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, end.x, end.y);
-                    ctx.stroke();
-                    
-                    // Add glow effect
-                    ctx.save();
-                    ctx.shadowColor = lineColor;
-                    ctx.shadowBlur = 10;
-                    ctx.strokeStyle = lineColor;
-                    ctx.globalAlpha = 0.3;
-                    ctx.stroke();
-                    ctx.restore();
-                }
-            }
+            ctx.globalAlpha = 0.3;
+            ctx.stroke();
+            ctx.restore();
+          }
         }
+      }
 
-        function downloadVisualization() {
-            const link = document.createElement('a');
-            link.download = 'circular_visualization.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        }
+      function drawBlackVisualization(inputText) {
+        const text = document.getElementById("cleanText").checked
+          ? cleanInputText(inputText)
+          : inputText;
+        const radius = Math.min(blackCanvas.width, blackCanvas.height) * 0.38;
+        const nodeRadius = Math.max(10, Math.round(radius * 0.08));
+        const centerX = blackCanvas.width / 2;
+        const centerY = blackCanvas.height / 2;
 
-        // Add event listeners for real-time updates
-        document.getElementById('text').addEventListener('input', (e) => {
-            cancelAnimationFrame(animationFrame);
-            animationFrame = requestAnimationFrame(() => drawCircularVisualization(e.target.value));
+        blackCtx.clearRect(0, 0, blackCanvas.width, blackCanvas.height);
+        if (!text) return;
+
+        const positions = getPositions(radius, centerX, centerY);
+
+        Object.entries(positions).forEach(([char, pos]) => {
+          blackCtx.beginPath();
+          blackCtx.arc(pos.x, pos.y, nodeRadius, 0, Math.PI * 2);
+          blackCtx.fillStyle = "#000";
+          blackCtx.fill();
         });
 
-        document.getElementById('colorPicker').addEventListener('input', (e) => {
-            cancelAnimationFrame(animationFrame);
-            animationFrame = requestAnimationFrame(() => 
-                drawCircularVisualization(document.getElementById('text').value)
-            );
-        });
+        const phi = (1 + Math.sqrt(5)) / 2;
+        const angleIncrement = Math.PI * 2 * (1 - 1 / phi);
 
-        // Draw the black version
-        const blackCanvas = document.getElementById('blackGraph');
-        const blackCtx = blackCanvas.getContext('2d');
-        
-        // Copy the visualization but in black
-        function drawBlackVisualization(text) {
-            const radius = 250;
-            const centerX = blackCanvas.width / 2;
-            const centerY = blackCanvas.height / 2;
-            
-            // Clear canvas
-            blackCtx.clearRect(0, 0, blackCanvas.width, blackCanvas.height);
-            
-            if (!text) return;
+        blackCtx.strokeStyle = "#000";
+        blackCtx.lineWidth = 2;
 
-            // Create positions for all letters A-Z
-            const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
-            const positions = {};
-            
-            // Calculate positions for each letter
-            alphabet.forEach((char, index) => {
-                const angle = (-Math.PI/2) + (index / alphabet.length) * Math.PI * 2;
-                positions[char] = {
-                    x: centerX + radius * Math.cos(angle),
-                    y: centerY + radius * Math.sin(angle)
-                };
-            });
-            
-            // Draw all nodes in black
-            Object.entries(positions).forEach(([char, pos]) => {
-                blackCtx.beginPath();
-                blackCtx.arc(pos.x, pos.y, 15, 0, Math.PI * 2);
-                blackCtx.fillStyle = '#000';
-                blackCtx.fill();
-            });
+        for (let i = 0; i < text.length - 1; i++) {
+          const char1 = text[i].toLowerCase();
+          const char2 = text[i + 1].toLowerCase();
 
-            // Draw connections
-            const phi = (1 + Math.sqrt(5)) / 2;
-            const angleIncrement = Math.PI * 2 * (1 - 1/phi);
-            
-            blackCtx.strokeStyle = '#000';
-            blackCtx.lineWidth = 2;
-            
-            for (let i = 0; i < text.length - 1; i++) {
-                const char1 = text[i].toLowerCase();
-                const char2 = text[i + 1].toLowerCase();
-                
-                if (positions[char1] && positions[char2]) {
-                    const start = positions[char1];
-                    const end = positions[char2];
-                    
-                    const angle = angleIncrement * i;
-                    const spiralRadius = radius * (1 - i/(text.length * 2));
-                    
-                    const ctrl1X = centerX + Math.cos(angle) * spiralRadius;
-                    const ctrl1Y = centerY + Math.sin(angle) * spiralRadius;
-                    const ctrl2X = centerX + Math.cos(angle + angleIncrement) * spiralRadius;
-                    const ctrl2Y = centerY + Math.sin(angle + angleIncrement) * spiralRadius;
-                    
-                    blackCtx.beginPath();
-                    blackCtx.moveTo(start.x, start.y);
-                    blackCtx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, end.x, end.y);
-                    blackCtx.stroke();
-                }
-            }
+          if (positions[char1] && positions[char2]) {
+            const start = positions[char1];
+            const end = positions[char2];
+
+            const angle = angleIncrement * i;
+            const spiralRadius = radius * (1 - i / (text.length * 2));
+
+            const ctrl1X = centerX + Math.cos(angle) * spiralRadius;
+            const ctrl1Y = centerY + Math.sin(angle) * spiralRadius;
+            const ctrl2X =
+              centerX + Math.cos(angle + angleIncrement) * spiralRadius;
+            const ctrl2Y =
+              centerY + Math.sin(angle + angleIncrement) * spiralRadius;
+
+            blackCtx.beginPath();
+            blackCtx.moveTo(start.x, start.y);
+            blackCtx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, end.x, end.y);
+            blackCtx.stroke();
+          }
         }
+      }
 
-        // Load text from URL params if present
-        window.addEventListener('load', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const text = urlParams.get('text');
-            if (text) {
-                document.getElementById('text').value = text;
-                drawCircularVisualization(text);
-                drawBlackVisualization(text);
-            }
-        });
+      function drawBoth() {
+        const text = document.getElementById("text").value;
+        drawCircularVisualization(text);
+        drawBlackVisualization(text);
+      }
 
-        // Update both visualizations when inputs change
-        ['text', 'colorPicker', 'cleanText'].forEach(id => {
-            cancelAnimationFrame(animationFrame);
-            animationFrame = requestAnimationFrame(() => {
-                drawCircularVisualization(document.getElementById('text').value);
-                drawBlackVisualization(document.getElementById('text').value);
-            });
-        });
-        function goBack(link) {
-            const text = document.getElementById('text').value;
-            if (text) {
-                link.href = link.href + '?text=' + encodeURIComponent(text);
-            }
-            return true;
+      function scheduleDraw() {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = requestAnimationFrame(drawBoth);
+      }
+
+      function downloadVisualization() {
+        const link = document.createElement("a");
+        link.download = "circular_visualization.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }
+
+      function downloadBlackVisualization() {
+        const link = document.createElement("a");
+        link.download = "circular_visualization_black.png";
+        link.href = blackCanvas.toDataURL("image/png");
+        link.click();
+      }
+
+      async function copyShareLink() {
+        const status = document.getElementById("copyStatus");
+        const text = document.getElementById("text").value;
+        const url = new URL(window.location.href);
+        if (text) {
+          url.searchParams.set("text", text);
+        } else {
+          url.searchParams.delete("text");
         }
+        try {
+          await navigator.clipboard.writeText(url.toString());
+          status.textContent = "Link copied!";
+        } catch (error) {
+          status.textContent = "Copy failed. Use your browser menu.";
+        }
+        setTimeout(() => {
+          status.textContent = "";
+        }, 2000);
+      }
+
+      window.addEventListener("resize", () => {
+        resizeCanvases();
+        scheduleDraw();
+      });
+
+      // Load text from URL params if present
+      window.addEventListener("load", () => {
+        resizeCanvases();
+        const urlParams = new URLSearchParams(window.location.search);
+        const text = urlParams.get("text");
+        if (text) {
+          document.getElementById("text").value = text;
+        }
+        drawBoth();
+      });
+
+      ["text", "colorPicker", "cleanText"].forEach((id) => {
+        const eventName = id === "cleanText" ? "change" : "input";
+        document.getElementById(id).addEventListener(eventName, scheduleDraw);
+      });
+
+      function goBack(link) {
+        const text = document.getElementById("text").value;
+        if (text) {
+          link.href = link.href + "?text=" + encodeURIComponent(text);
+        }
+        return true;
+      }
     </script>
-</body>
+  </body>
 </html>
